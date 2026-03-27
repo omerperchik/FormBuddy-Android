@@ -1,0 +1,161 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">FormBuddy</string>
+
+    <!-- Tabs -->
+    <string name="tab_docs">Dokumente</string>
+    <string name="tab_profiles">Profile</string>
+    <string name="tab_settings">Einstellungen</string>
+
+    <!-- Actions -->
+    <string name="action_add">Hinzufügen</string>
+    <string name="action_scan">Scannen</string>
+    <string name="action_upload">Hochladen</string>
+    <string name="action_library">Bibliothek</string>
+    <string name="action_save">Speichern</string>
+    <string name="action_share">Teilen</string>
+    <string name="action_edit">Bearbeiten</string>
+    <string name="action_delete">Löschen</string>
+    <string name="action_back">Zurück</string>
+    <string name="action_close">Schließen</string>
+    <string name="action_done">Fertig</string>
+    <string name="action_cancel">Abbrechen</string>
+    <string name="action_clear">Leeren</string>
+    <string name="action_send">Senden</string>
+    <string name="action_skip">Überspringen</string>
+    <string name="action_next">Weiter</string>
+    <string name="action_undo">Rückgängig</string>
+    <string name="action_skip_to_end">Zum Ende springen</string>
+    <string name="action_get_started">Jetzt starten</string>
+
+    <!-- Docs -->
+    <string name="docs_empty_title">Noch keine Dokumente</string>
+    <string name="docs_empty_subtitle">Scannen, hochladen oder in der Bibliothek stöbern, um loszulegen</string>
+
+    <!-- Profiles -->
+    <string name="profile_section_personal">Persönlich</string>
+    <string name="profile_section_family">Familie</string>
+    <string name="profile_section_business">Unternehmen</string>
+    <string name="profile_create_personal">Persönliches Profil erstellen</string>
+    <string name="profile_add_family">Familienmitglied hinzufügen</string>
+    <string name="profile_add_business">Unternehmensprofil hinzufügen</string>
+    <string name="profile_personal">Persönliches Profil</string>
+    <string name="profile_family">Familienprofil</string>
+    <string name="profile_business">Unternehmensprofil</string>
+    <string name="profile_setup">Profil einrichten</string>
+
+    <!-- Profile Fields -->
+    <string name="profile_name_section">Name</string>
+    <string name="profile_contact_section">Kontakt</string>
+    <string name="profile_address_section">Adresse</string>
+    <string name="profile_signature_section">Unterschrift</string>
+    <string name="profile_company_section">Unternehmen</string>
+    <string name="profile_edit_signature">Unterschrift bearbeiten</string>
+    <string name="profile_biometric_lock">Biometrische Sperre</string>
+    <string name="profile_biometric_description">Face ID oder Fingerabdruck zum Anzeigen erforderlich</string>
+
+    <!-- Field Labels -->
+    <string name="field_first_name">Vorname</string>
+    <string name="field_middle_name">Zweiter Vorname</string>
+    <string name="field_last_name">Nachname</string>
+    <string name="field_email">E-Mail</string>
+    <string name="field_phone">Telefon</string>
+    <string name="field_birth_date">Geburtsdatum</string>
+    <string name="field_home_address">Privatadresse</string>
+    <string name="field_work_address">Geschäftsadresse</string>
+    <string name="field_city">Stadt</string>
+    <string name="field_state">Bundesland / Kanton</string>
+    <string name="field_postal_code">Postleitzahl</string>
+    <string name="field_country">Land</string>
+    <string name="field_company_name">Firmenname</string>
+    <string name="field_tax_id">Steuernummer</string>
+    <string name="field_registration_number">Registrierungsnummer</string>
+    <string name="field_industry">Branche</string>
+    <string name="field_business_address">Firmenadresse</string>
+    <string name="field_business_phone">Geschäftstelefon</string>
+    <string name="field_business_email">Geschäfts-E-Mail</string>
+    <string name="field_website">Webseite</string>
+
+    <!-- Signature -->
+    <string name="signature_title">Unterschrift</string>
+    <string name="signature_placeholder">Zeichnen Sie hier Ihre Unterschrift</string>
+    <string name="signature_instruction">Zeichnen Sie mit dem Finger Ihre Unterschrift unten</string>
+
+    <!-- Chat -->
+    <string name="chat_input_placeholder">Geben Sie Ihre Antwort ein…</string>
+    <string name="chat_use_suggestion">Verwenden: %1$s</string>
+
+    <!-- Filling -->
+    <string name="filling_processing">Verarbeitung…</string>
+    <string name="filling_analyzing">Ihr Dokument wird analysiert…</string>
+    <string name="mode_chat">Chat</string>
+    <string name="mode_voice">Sprache</string>
+    <string name="mode_agent">Agent</string>
+
+    <!-- Voice -->
+    <string name="voice_listening">Hört zu…</string>
+    <string name="voice_start">Aufnahme starten</string>
+    <string name="voice_stop">Aufnahme stoppen</string>
+
+    <!-- Agent -->
+    <string name="agent_title">Agent-Modus</string>
+    <string name="agent_description">Lassen Sie den KI-Agenten Ihr Formular automatisch mit Ihren Profildaten ausfüllen</string>
+    <string name="agent_using_profile">Verwendetes Profil: %1$s</string>
+    <string name="agent_start">Automatisches Ausfüllen starten</string>
+    <string name="agent_no_profile">Bitte erstellen Sie zuerst ein Profil</string>
+    <string name="agent_filling">Automatisches Ausfüllen…</string>
+    <string name="agent_complete">Automatisches Ausfüllen abgeschlossen!</string>
+    <string name="agent_remaining">%1$d Felder benötigen noch Ihre Eingabe</string>
+
+    <!-- Editor -->
+    <string name="editor_rename">Dokument umbenennen</string>
+    <string name="editor_document_name">Dokumentname</string>
+    <string name="editor_delete_title">Dokument löschen</string>
+    <string name="editor_delete_message">Sind Sie sicher, dass Sie dieses Dokument löschen möchten? Dies kann nicht rückgängig gemacht werden.</string>
+    <string name="editor_field_value">Feldwert</string>
+
+    <!-- Scanner -->
+    <string name="scanner_instruction">Positionieren Sie das Dokument innerhalb des Rahmens</string>
+
+    <!-- Library -->
+    <string name="library_title">Formularbibliothek</string>
+    <string name="library_search_placeholder">Formulare suchen…</string>
+
+    <!-- Onboarding -->
+    <string name="onboarding_title_1">Willkommen bei FormBuddy</string>
+    <string name="onboarding_desc_1">Füllen Sie jedes Formular durch Sprechen, Chatten oder lassen Sie unseren KI-Agenten die Arbeit erledigen</string>
+    <string name="onboarding_title_2">Ihr Profil, Ihre Daten</string>
+    <string name="onboarding_desc_2">Richten Sie Ihr Profil einmal ein und füllen Sie Formulare sofort automatisch aus. Alle Daten bleiben auf Ihrem Gerät, vollständig verschlüsselt</string>
+    <string name="onboarding_title_3">Sprachassistent</string>
+    <string name="onboarding_desc_3">Sprechen Sie einfach — unser Sprachassistent führt Sie natürlich durch jedes Feld</string>
+    <string name="onboarding_title_4">Bereit loszulegen</string>
+    <string name="onboarding_desc_4">Scannen Sie ein Dokument, laden Sie ein PDF hoch oder wählen Sie aus unserer Bibliothek</string>
+
+    <!-- Paywall -->
+    <string name="paywall_title">FormBuddy Pro freischalten</string>
+    <string name="paywall_subtitle">Formulare schneller mit Premium-Funktionen ausfüllen</string>
+    <string name="paywall_feature_agent">Agent-Modus — Automatisches Ausfüllen aus dem Profil</string>
+    <string name="paywall_feature_voice">Sprachmodus — Sprechen zum Ausfüllen</string>
+    <string name="paywall_feature_profiles">Erweiterte Profile — Familie &amp; Unternehmen</string>
+    <string name="paywall_feature_biometric">Biometrische Sperre — Daten sichern</string>
+    <string name="paywall_plan_weekly">Wöchentlich</string>
+    <string name="paywall_plan_monthly">Monatlich</string>
+    <string name="paywall_plan_yearly">Jährlich</string>
+    <string name="paywall_price_weekly">2,99 $/Wo.</string>
+    <string name="paywall_price_monthly">7,99 $/Mo.</string>
+    <string name="paywall_price_yearly">49,99 $/Jahr</string>
+    <string name="paywall_best_value">BESTER WERT</string>
+    <string name="paywall_subscribe">Abonnieren</string>
+    <string name="paywall_restore">Käufe wiederherstellen</string>
+
+    <!-- Settings -->
+    <string name="settings_form_mode">Standard-Formularmodus</string>
+    <string name="settings_voice_section">Sprachassistent</string>
+    <string name="settings_subscription_section">Abonnement</string>
+    <string name="settings_manage_subscription">Abonnement verwalten</string>
+    <string name="settings_about_section">Über</string>
+    <string name="settings_privacy_policy">Datenschutzrichtlinie</string>
+    <string name="settings_terms">Nutzungsbedingungen</string>
+    <string name="settings_contact_support">Support kontaktieren</string>
+    <string name="settings_share_app">FormBuddy teilen</string>
+</resources>

@@ -1,0 +1,161 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">FormBuddy</string>
+
+    <!-- Tabs -->
+    <string name="tab_docs">מסמכים</string>
+    <string name="tab_profiles">פרופילים</string>
+    <string name="tab_settings">הגדרות</string>
+
+    <!-- Actions -->
+    <string name="action_add">הוספה</string>
+    <string name="action_scan">סריקה</string>
+    <string name="action_upload">העלאה</string>
+    <string name="action_library">ספרייה</string>
+    <string name="action_save">שמירה</string>
+    <string name="action_share">שיתוף</string>
+    <string name="action_edit">עריכה</string>
+    <string name="action_delete">מחיקה</string>
+    <string name="action_back">חזרה</string>
+    <string name="action_close">סגירה</string>
+    <string name="action_done">סיום</string>
+    <string name="action_cancel">ביטול</string>
+    <string name="action_clear">ניקוי</string>
+    <string name="action_send">שליחה</string>
+    <string name="action_skip">דילוג</string>
+    <string name="action_next">הבא</string>
+    <string name="action_undo">ביטול פעולה</string>
+    <string name="action_skip_to_end">דלג לסוף</string>
+    <string name="action_get_started">בואו נתחיל</string>
+
+    <!-- Docs -->
+    <string name="docs_empty_title">אין מסמכים עדיין</string>
+    <string name="docs_empty_subtitle">סרוק, העלה, או עיין בספרייה כדי להתחיל</string>
+
+    <!-- Profiles -->
+    <string name="profile_section_personal">אישי</string>
+    <string name="profile_section_family">משפחה</string>
+    <string name="profile_section_business">עסקי</string>
+    <string name="profile_create_personal">צור פרופיל אישי</string>
+    <string name="profile_add_family">הוסף בן משפחה</string>
+    <string name="profile_add_business">הוסף פרופיל עסקי</string>
+    <string name="profile_personal">פרופיל אישי</string>
+    <string name="profile_family">פרופיל משפחתי</string>
+    <string name="profile_business">פרופיל עסקי</string>
+    <string name="profile_setup">הגדרת פרופיל</string>
+
+    <!-- Profile Fields -->
+    <string name="profile_name_section">שם</string>
+    <string name="profile_contact_section">פרטי קשר</string>
+    <string name="profile_address_section">כתובת</string>
+    <string name="profile_signature_section">חתימה</string>
+    <string name="profile_company_section">חברה</string>
+    <string name="profile_edit_signature">ערוך חתימה</string>
+    <string name="profile_biometric_lock">נעילה ביומטרית</string>
+    <string name="profile_biometric_description">דרוש זיהוי פנים או טביעת אצבע לצפייה</string>
+
+    <!-- Field Labels -->
+    <string name="field_first_name">שם פרטי</string>
+    <string name="field_middle_name">שם אמצעי</string>
+    <string name="field_last_name">שם משפחה</string>
+    <string name="field_email">דוא״ל</string>
+    <string name="field_phone">טלפון</string>
+    <string name="field_birth_date">תאריך לידה</string>
+    <string name="field_home_address">כתובת בית</string>
+    <string name="field_work_address">כתובת עבודה</string>
+    <string name="field_city">עיר</string>
+    <string name="field_state">מדינה / מחוז</string>
+    <string name="field_postal_code">מיקוד</string>
+    <string name="field_country">מדינה</string>
+    <string name="field_company_name">שם חברה</string>
+    <string name="field_tax_id">מספר עוסק</string>
+    <string name="field_registration_number">מספר רישום</string>
+    <string name="field_industry">תעשייה</string>
+    <string name="field_business_address">כתובת עסק</string>
+    <string name="field_business_phone">טלפון עסקי</string>
+    <string name="field_business_email">דוא״ל עסקי</string>
+    <string name="field_website">אתר אינטרנט</string>
+
+    <!-- Signature -->
+    <string name="signature_title">חתימה</string>
+    <string name="signature_placeholder">צייר את חתימתך כאן</string>
+    <string name="signature_instruction">השתמש באצבע כדי לצייר את חתימתך למטה</string>
+
+    <!-- Chat -->
+    <string name="chat_input_placeholder">הקלד את תשובתך…</string>
+    <string name="chat_use_suggestion">השתמש: %1$s</string>
+
+    <!-- Filling -->
+    <string name="filling_processing">מעבד…</string>
+    <string name="filling_analyzing">מנתח את המסמך שלך…</string>
+    <string name="mode_chat">צ׳אט</string>
+    <string name="mode_voice">קול</string>
+    <string name="mode_agent">סוכן</string>
+
+    <!-- Voice -->
+    <string name="voice_listening">מקשיב…</string>
+    <string name="voice_start">התחל הקלטה</string>
+    <string name="voice_stop">עצור הקלטה</string>
+
+    <!-- Agent -->
+    <string name="agent_title">מצב סוכן</string>
+    <string name="agent_description">תן לסוכן AI למלא את הטופס אוטומטית באמצעות נתוני הפרופיל שלך</string>
+    <string name="agent_using_profile">משתמש בפרופיל: %1$s</string>
+    <string name="agent_start">התחל מילוי אוטומטי</string>
+    <string name="agent_no_profile">אנא צור פרופיל תחילה</string>
+    <string name="agent_filling">ממלא אוטומטית…</string>
+    <string name="agent_complete">המילוי האוטומטי הושלם!</string>
+    <string name="agent_remaining">%1$d שדות עדיין דורשים את הקלט שלך</string>
+
+    <!-- Editor -->
+    <string name="editor_rename">שנה שם מסמך</string>
+    <string name="editor_document_name">שם המסמך</string>
+    <string name="editor_delete_title">מחק מסמך</string>
+    <string name="editor_delete_message">האם אתה בטוח שברצונך למחוק מסמך זה? לא ניתן לבטל פעולה זו.</string>
+    <string name="editor_field_value">ערך שדה</string>
+
+    <!-- Scanner -->
+    <string name="scanner_instruction">מקם את המסמך בתוך המסגרת</string>
+
+    <!-- Library -->
+    <string name="library_title">ספריית טפסים</string>
+    <string name="library_search_placeholder">חיפוש טפסים…</string>
+
+    <!-- Onboarding -->
+    <string name="onboarding_title_1">ברוכים הבאים ל-FormBuddy</string>
+    <string name="onboarding_desc_1">מלא כל טופס על ידי דיבור, צ׳אט, או תן לסוכן AI שלנו לעשות את העבודה</string>
+    <string name="onboarding_title_2">הפרופיל שלך, הנתונים שלך</string>
+    <string name="onboarding_desc_2">הגדר את הפרופיל שלך פעם אחת ומלא טפסים אוטומטית באופן מיידי. כל הנתונים נשארים במכשיר שלך, מוצפנים לחלוטין</string>
+    <string name="onboarding_title_3">עוזר קולי</string>
+    <string name="onboarding_desc_3">פשוט דבר — העוזר הקולי שלנו ידריך אותך בכל שדה בצורה טבעית</string>
+    <string name="onboarding_title_4">מוכן לצאת לדרך</string>
+    <string name="onboarding_desc_4">סרוק מסמך, העלה PDF, או בחר מהספרייה שלנו כדי להתחיל</string>
+
+    <!-- Paywall -->
+    <string name="paywall_title">שחרר את FormBuddy Pro</string>
+    <string name="paywall_subtitle">מלא טפסים מהר יותר עם תכונות פרימיום</string>
+    <string name="paywall_feature_agent">מצב סוכן — מילוי אוטומטי מפרופיל</string>
+    <string name="paywall_feature_voice">מצב קולי — דבר כדי למלא טפסים</string>
+    <string name="paywall_feature_profiles">פרופילים מתקדמים — משפחה ועסק</string>
+    <string name="paywall_feature_biometric">נעילה ביומטרית — אבטח את הנתונים שלך</string>
+    <string name="paywall_plan_weekly">שבועי</string>
+    <string name="paywall_plan_monthly">חודשי</string>
+    <string name="paywall_plan_yearly">שנתי</string>
+    <string name="paywall_price_weekly">$2.99/שבוע</string>
+    <string name="paywall_price_monthly">$7.99/חודש</string>
+    <string name="paywall_price_yearly">$49.99/שנה</string>
+    <string name="paywall_best_value">הכי משתלם</string>
+    <string name="paywall_subscribe">הירשם</string>
+    <string name="paywall_restore">שחזר רכישות</string>
+
+    <!-- Settings -->
+    <string name="settings_form_mode">מצב טופס ברירת מחדל</string>
+    <string name="settings_voice_section">עוזר קולי</string>
+    <string name="settings_subscription_section">מנוי</string>
+    <string name="settings_manage_subscription">נהל מנוי</string>
+    <string name="settings_about_section">אודות</string>
+    <string name="settings_privacy_policy">מדיניות פרטיות</string>
+    <string name="settings_terms">תנאי שימוש</string>
+    <string name="settings_contact_support">צור קשר עם התמיכה</string>
+    <string name="settings_share_app">שתף את FormBuddy</string>
+</resources>

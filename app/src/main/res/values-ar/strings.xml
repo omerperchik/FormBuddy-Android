@@ -1,0 +1,161 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">FormBuddy</string>
+
+    <!-- Tabs -->
+    <string name="tab_docs">المستندات</string>
+    <string name="tab_profiles">الملفات الشخصية</string>
+    <string name="tab_settings">الإعدادات</string>
+
+    <!-- Actions -->
+    <string name="action_add">إضافة</string>
+    <string name="action_scan">مسح ضوئي</string>
+    <string name="action_upload">رفع</string>
+    <string name="action_library">المكتبة</string>
+    <string name="action_save">حفظ</string>
+    <string name="action_share">مشاركة</string>
+    <string name="action_edit">تعديل</string>
+    <string name="action_delete">حذف</string>
+    <string name="action_back">رجوع</string>
+    <string name="action_close">إغلاق</string>
+    <string name="action_done">تم</string>
+    <string name="action_cancel">إلغاء</string>
+    <string name="action_clear">مسح</string>
+    <string name="action_send">إرسال</string>
+    <string name="action_skip">تخطي</string>
+    <string name="action_next">التالي</string>
+    <string name="action_undo">تراجع</string>
+    <string name="action_skip_to_end">تخطي إلى النهاية</string>
+    <string name="action_get_started">ابدأ الآن</string>
+
+    <!-- Docs -->
+    <string name="docs_empty_title">لا توجد مستندات بعد</string>
+    <string name="docs_empty_subtitle">امسح ضوئياً أو ارفع أو تصفح المكتبة للبدء</string>
+
+    <!-- Profiles -->
+    <string name="profile_section_personal">شخصي</string>
+    <string name="profile_section_family">عائلي</string>
+    <string name="profile_section_business">تجاري</string>
+    <string name="profile_create_personal">إنشاء ملف شخصي</string>
+    <string name="profile_add_family">إضافة فرد من العائلة</string>
+    <string name="profile_add_business">إضافة ملف تجاري</string>
+    <string name="profile_personal">الملف الشخصي</string>
+    <string name="profile_family">الملف العائلي</string>
+    <string name="profile_business">الملف التجاري</string>
+    <string name="profile_setup">إعداد الملف الشخصي</string>
+
+    <!-- Profile Fields -->
+    <string name="profile_name_section">الاسم</string>
+    <string name="profile_contact_section">التواصل</string>
+    <string name="profile_address_section">العنوان</string>
+    <string name="profile_signature_section">التوقيع</string>
+    <string name="profile_company_section">الشركة</string>
+    <string name="profile_edit_signature">تعديل التوقيع</string>
+    <string name="profile_biometric_lock">القفل البيومتري</string>
+    <string name="profile_biometric_description">يتطلب التعرف على الوجه أو بصمة الإصبع للعرض</string>
+
+    <!-- Field Labels -->
+    <string name="field_first_name">الاسم الأول</string>
+    <string name="field_middle_name">الاسم الأوسط</string>
+    <string name="field_last_name">اسم العائلة</string>
+    <string name="field_email">البريد الإلكتروني</string>
+    <string name="field_phone">الهاتف</string>
+    <string name="field_birth_date">تاريخ الميلاد</string>
+    <string name="field_home_address">عنوان المنزل</string>
+    <string name="field_work_address">عنوان العمل</string>
+    <string name="field_city">المدينة</string>
+    <string name="field_state">الولاية / المحافظة</string>
+    <string name="field_postal_code">الرمز البريدي</string>
+    <string name="field_country">البلد</string>
+    <string name="field_company_name">اسم الشركة</string>
+    <string name="field_tax_id">الرقم الضريبي</string>
+    <string name="field_registration_number">رقم التسجيل</string>
+    <string name="field_industry">القطاع</string>
+    <string name="field_business_address">عنوان الشركة</string>
+    <string name="field_business_phone">هاتف العمل</string>
+    <string name="field_business_email">البريد الإلكتروني للعمل</string>
+    <string name="field_website">الموقع الإلكتروني</string>
+
+    <!-- Signature -->
+    <string name="signature_title">التوقيع</string>
+    <string name="signature_placeholder">ارسم توقيعك هنا</string>
+    <string name="signature_instruction">استخدم إصبعك لرسم توقيعك أدناه</string>
+
+    <!-- Chat -->
+    <string name="chat_input_placeholder">اكتب إجابتك…</string>
+    <string name="chat_use_suggestion">استخدام: %1$s</string>
+
+    <!-- Filling -->
+    <string name="filling_processing">جارٍ المعالجة…</string>
+    <string name="filling_analyzing">جارٍ تحليل مستندك…</string>
+    <string name="mode_chat">محادثة</string>
+    <string name="mode_voice">صوت</string>
+    <string name="mode_agent">وكيل</string>
+
+    <!-- Voice -->
+    <string name="voice_listening">جارٍ الاستماع…</string>
+    <string name="voice_start">بدء التسجيل</string>
+    <string name="voice_stop">إيقاف التسجيل</string>
+
+    <!-- Agent -->
+    <string name="agent_title">وضع الوكيل</string>
+    <string name="agent_description">دع وكيل الذكاء الاصطناعي يملأ النموذج تلقائياً باستخدام بيانات ملفك الشخصي</string>
+    <string name="agent_using_profile">باستخدام الملف: %1$s</string>
+    <string name="agent_start">بدء الملء التلقائي</string>
+    <string name="agent_no_profile">يرجى إنشاء ملف شخصي أولاً</string>
+    <string name="agent_filling">جارٍ الملء التلقائي…</string>
+    <string name="agent_complete">اكتمل الملء التلقائي!</string>
+    <string name="agent_remaining">%1$d حقول لا تزال بحاجة إلى إدخالك</string>
+
+    <!-- Editor -->
+    <string name="editor_rename">إعادة تسمية المستند</string>
+    <string name="editor_document_name">اسم المستند</string>
+    <string name="editor_delete_title">حذف المستند</string>
+    <string name="editor_delete_message">هل أنت متأكد أنك تريد حذف هذا المستند؟ لا يمكن التراجع عن هذا الإجراء.</string>
+    <string name="editor_field_value">قيمة الحقل</string>
+
+    <!-- Scanner -->
+    <string name="scanner_instruction">ضع المستند داخل الإطار</string>
+
+    <!-- Library -->
+    <string name="library_title">مكتبة النماذج</string>
+    <string name="library_search_placeholder">البحث عن نماذج…</string>
+
+    <!-- Onboarding -->
+    <string name="onboarding_title_1">مرحباً بك في FormBuddy</string>
+    <string name="onboarding_desc_1">املأ أي نموذج بالتحدث أو المحادثة أو دع وكيل الذكاء الاصطناعي يقوم بالعمل</string>
+    <string name="onboarding_title_2">ملفك الشخصي، بياناتك</string>
+    <string name="onboarding_desc_2">أعد ملفك الشخصي مرة واحدة واملأ النماذج فوراً. جميع البيانات تبقى على جهازك، مشفرة بالكامل</string>
+    <string name="onboarding_title_3">المساعد الصوتي</string>
+    <string name="onboarding_desc_3">تحدث فقط — سيرشدك مساعدنا الصوتي عبر كل حقل بشكل طبيعي</string>
+    <string name="onboarding_title_4">جاهز للانطلاق</string>
+    <string name="onboarding_desc_4">امسح مستنداً ضوئياً أو ارفع ملف PDF أو اختر من مكتبتنا للبدء</string>
+
+    <!-- Paywall -->
+    <string name="paywall_title">افتح FormBuddy Pro</string>
+    <string name="paywall_subtitle">أكمل النماذج بشكل أسرع مع الميزات المتقدمة</string>
+    <string name="paywall_feature_agent">وضع الوكيل — ملء تلقائي من الملف الشخصي</string>
+    <string name="paywall_feature_voice">وضع الصوت — تحدث لملء النماذج</string>
+    <string name="paywall_feature_profiles">ملفات متقدمة — عائلية وتجارية</string>
+    <string name="paywall_feature_biometric">القفل البيومتري — أمّن بياناتك</string>
+    <string name="paywall_plan_weekly">أسبوعي</string>
+    <string name="paywall_plan_monthly">شهري</string>
+    <string name="paywall_plan_yearly">سنوي</string>
+    <string name="paywall_price_weekly">$2.99/أسبوع</string>
+    <string name="paywall_price_monthly">$7.99/شهر</string>
+    <string name="paywall_price_yearly">$49.99/سنة</string>
+    <string name="paywall_best_value">أفضل قيمة</string>
+    <string name="paywall_subscribe">اشترك</string>
+    <string name="paywall_restore">استعادة المشتريات</string>
+
+    <!-- Settings -->
+    <string name="settings_form_mode">وضع النموذج الافتراضي</string>
+    <string name="settings_voice_section">المساعد الصوتي</string>
+    <string name="settings_subscription_section">الاشتراك</string>
+    <string name="settings_manage_subscription">إدارة الاشتراك</string>
+    <string name="settings_about_section">حول</string>
+    <string name="settings_privacy_policy">سياسة الخصوصية</string>
+    <string name="settings_terms">شروط الخدمة</string>
+    <string name="settings_contact_support">التواصل مع الدعم</string>
+    <string name="settings_share_app">مشاركة FormBuddy</string>
+</resources>

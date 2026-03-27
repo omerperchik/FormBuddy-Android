@@ -1,0 +1,161 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">FormBuddy</string>
+
+    <!-- Tabs -->
+    <string name="tab_docs">文档</string>
+    <string name="tab_profiles">档案</string>
+    <string name="tab_settings">设置</string>
+
+    <!-- Actions -->
+    <string name="action_add">添加</string>
+    <string name="action_scan">扫描</string>
+    <string name="action_upload">上传</string>
+    <string name="action_library">表单库</string>
+    <string name="action_save">保存</string>
+    <string name="action_share">分享</string>
+    <string name="action_edit">编辑</string>
+    <string name="action_delete">删除</string>
+    <string name="action_back">返回</string>
+    <string name="action_close">关闭</string>
+    <string name="action_done">完成</string>
+    <string name="action_cancel">取消</string>
+    <string name="action_clear">清除</string>
+    <string name="action_send">发送</string>
+    <string name="action_skip">跳过</string>
+    <string name="action_next">下一步</string>
+    <string name="action_undo">撤销</string>
+    <string name="action_skip_to_end">跳到最后</string>
+    <string name="action_get_started">开始使用</string>
+
+    <!-- Docs -->
+    <string name="docs_empty_title">暂无文档</string>
+    <string name="docs_empty_subtitle">扫描、上传或浏览表单库以开始</string>
+
+    <!-- Profiles -->
+    <string name="profile_section_personal">个人</string>
+    <string name="profile_section_family">家庭</string>
+    <string name="profile_section_business">企业</string>
+    <string name="profile_create_personal">创建个人档案</string>
+    <string name="profile_add_family">添加家庭成员</string>
+    <string name="profile_add_business">添加企业档案</string>
+    <string name="profile_personal">个人档案</string>
+    <string name="profile_family">家庭档案</string>
+    <string name="profile_business">企业档案</string>
+    <string name="profile_setup">档案设置</string>
+
+    <!-- Profile Fields -->
+    <string name="profile_name_section">姓名</string>
+    <string name="profile_contact_section">联系方式</string>
+    <string name="profile_address_section">地址</string>
+    <string name="profile_signature_section">签名</string>
+    <string name="profile_company_section">公司</string>
+    <string name="profile_edit_signature">编辑签名</string>
+    <string name="profile_biometric_lock">生物识别锁定</string>
+    <string name="profile_biometric_description">需要面容识别或指纹才能查看</string>
+
+    <!-- Field Labels -->
+    <string name="field_first_name">名</string>
+    <string name="field_middle_name">中间名</string>
+    <string name="field_last_name">姓</string>
+    <string name="field_email">电子邮箱</string>
+    <string name="field_phone">电话</string>
+    <string name="field_birth_date">出生日期</string>
+    <string name="field_home_address">家庭地址</string>
+    <string name="field_work_address">工作地址</string>
+    <string name="field_city">城市</string>
+    <string name="field_state">省 / 州</string>
+    <string name="field_postal_code">邮政编码</string>
+    <string name="field_country">国家</string>
+    <string name="field_company_name">公司名称</string>
+    <string name="field_tax_id">税号</string>
+    <string name="field_registration_number">注册号</string>
+    <string name="field_industry">行业</string>
+    <string name="field_business_address">公司地址</string>
+    <string name="field_business_phone">公司电话</string>
+    <string name="field_business_email">公司邮箱</string>
+    <string name="field_website">网站</string>
+
+    <!-- Signature -->
+    <string name="signature_title">签名</string>
+    <string name="signature_placeholder">在此处绘制您的签名</string>
+    <string name="signature_instruction">用手指在下方绘制您的签名</string>
+
+    <!-- Chat -->
+    <string name="chat_input_placeholder">输入您的回答…</string>
+    <string name="chat_use_suggestion">使用：%1$s</string>
+
+    <!-- Filling -->
+    <string name="filling_processing">处理中…</string>
+    <string name="filling_analyzing">正在分析您的文档…</string>
+    <string name="mode_chat">聊天</string>
+    <string name="mode_voice">语音</string>
+    <string name="mode_agent">智能助手</string>
+
+    <!-- Voice -->
+    <string name="voice_listening">正在聆听…</string>
+    <string name="voice_start">开始录音</string>
+    <string name="voice_stop">停止录音</string>
+
+    <!-- Agent -->
+    <string name="agent_title">智能助手模式</string>
+    <string name="agent_description">让AI智能助手使用您的档案数据自动填写表单</string>
+    <string name="agent_using_profile">使用档案：%1$s</string>
+    <string name="agent_start">开始自动填写</string>
+    <string name="agent_no_profile">请先创建档案</string>
+    <string name="agent_filling">自动填写中…</string>
+    <string name="agent_complete">自动填写完成！</string>
+    <string name="agent_remaining">还有 %1$d 个字段需要您填写</string>
+
+    <!-- Editor -->
+    <string name="editor_rename">重命名文档</string>
+    <string name="editor_document_name">文档名称</string>
+    <string name="editor_delete_title">删除文档</string>
+    <string name="editor_delete_message">确定要删除此文档吗？此操作无法撤销。</string>
+    <string name="editor_field_value">字段值</string>
+
+    <!-- Scanner -->
+    <string name="scanner_instruction">将文档放置在取景框内</string>
+
+    <!-- Library -->
+    <string name="library_title">表单库</string>
+    <string name="library_search_placeholder">搜索表单…</string>
+
+    <!-- Onboarding -->
+    <string name="onboarding_title_1">欢迎使用 FormBuddy</string>
+    <string name="onboarding_desc_1">通过语音、聊天或让我们的AI智能助手为您填写任何表单</string>
+    <string name="onboarding_title_2">您的档案，您的数据</string>
+    <string name="onboarding_desc_2">只需设置一次档案，即可立即自动填写表单。所有数据保存在您的设备上，完全加密</string>
+    <string name="onboarding_title_3">语音助手</string>
+    <string name="onboarding_desc_3">只需说话 — 我们的语音助手会自然地引导您填写每个字段</string>
+    <string name="onboarding_title_4">准备就绪</string>
+    <string name="onboarding_desc_4">扫描文档、上传PDF或从我们的表单库中选择以开始</string>
+
+    <!-- Paywall -->
+    <string name="paywall_title">解锁 FormBuddy Pro</string>
+    <string name="paywall_subtitle">使用高级功能更快地填写表单</string>
+    <string name="paywall_feature_agent">智能助手模式 — 从档案自动填写</string>
+    <string name="paywall_feature_voice">语音模式 — 说话即可填写表单</string>
+    <string name="paywall_feature_profiles">高级档案 — 家庭和企业</string>
+    <string name="paywall_feature_biometric">生物识别锁定 — 保护您的数据</string>
+    <string name="paywall_plan_weekly">每周</string>
+    <string name="paywall_plan_monthly">每月</string>
+    <string name="paywall_plan_yearly">每年</string>
+    <string name="paywall_price_weekly">$2.99/周</string>
+    <string name="paywall_price_monthly">$7.99/月</string>
+    <string name="paywall_price_yearly">$49.99/年</string>
+    <string name="paywall_best_value">最超值</string>
+    <string name="paywall_subscribe">订阅</string>
+    <string name="paywall_restore">恢复购买</string>
+
+    <!-- Settings -->
+    <string name="settings_form_mode">默认表单模式</string>
+    <string name="settings_voice_section">语音助手</string>
+    <string name="settings_subscription_section">订阅</string>
+    <string name="settings_manage_subscription">管理订阅</string>
+    <string name="settings_about_section">关于</string>
+    <string name="settings_privacy_policy">隐私政策</string>
+    <string name="settings_terms">服务条款</string>
+    <string name="settings_contact_support">联系支持</string>
+    <string name="settings_share_app">分享 FormBuddy</string>
+</resources>

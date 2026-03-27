@@ -1,0 +1,161 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">FormBuddy</string>
+
+    <!-- Tabs -->
+    <string name="tab_docs">Документы</string>
+    <string name="tab_profiles">Профили</string>
+    <string name="tab_settings">Настройки</string>
+
+    <!-- Actions -->
+    <string name="action_add">Добавить</string>
+    <string name="action_scan">Сканировать</string>
+    <string name="action_upload">Загрузить</string>
+    <string name="action_library">Библиотека</string>
+    <string name="action_save">Сохранить</string>
+    <string name="action_share">Поделиться</string>
+    <string name="action_edit">Изменить</string>
+    <string name="action_delete">Удалить</string>
+    <string name="action_back">Назад</string>
+    <string name="action_close">Закрыть</string>
+    <string name="action_done">Готово</string>
+    <string name="action_cancel">Отмена</string>
+    <string name="action_clear">Очистить</string>
+    <string name="action_send">Отправить</string>
+    <string name="action_skip">Пропустить</string>
+    <string name="action_next">Далее</string>
+    <string name="action_undo">Отменить</string>
+    <string name="action_skip_to_end">Перейти в конец</string>
+    <string name="action_get_started">Начать</string>
+
+    <!-- Docs -->
+    <string name="docs_empty_title">Документов пока нет</string>
+    <string name="docs_empty_subtitle">Сканируйте, загрузите или откройте библиотеку, чтобы начать</string>
+
+    <!-- Profiles -->
+    <string name="profile_section_personal">Личный</string>
+    <string name="profile_section_family">Семья</string>
+    <string name="profile_section_business">Бизнес</string>
+    <string name="profile_create_personal">Создать личный профиль</string>
+    <string name="profile_add_family">Добавить члена семьи</string>
+    <string name="profile_add_business">Добавить бизнес-профиль</string>
+    <string name="profile_personal">Личный профиль</string>
+    <string name="profile_family">Семейный профиль</string>
+    <string name="profile_business">Бизнес-профиль</string>
+    <string name="profile_setup">Настройка профиля</string>
+
+    <!-- Profile Fields -->
+    <string name="profile_name_section">Имя</string>
+    <string name="profile_contact_section">Контакты</string>
+    <string name="profile_address_section">Адрес</string>
+    <string name="profile_signature_section">Подпись</string>
+    <string name="profile_company_section">Компания</string>
+    <string name="profile_edit_signature">Редактировать подпись</string>
+    <string name="profile_biometric_lock">Биометрическая блокировка</string>
+    <string name="profile_biometric_description">Требовать Face ID или отпечаток пальца для просмотра</string>
+
+    <!-- Field Labels -->
+    <string name="field_first_name">Имя</string>
+    <string name="field_middle_name">Отчество</string>
+    <string name="field_last_name">Фамилия</string>
+    <string name="field_email">Электронная почта</string>
+    <string name="field_phone">Телефон</string>
+    <string name="field_birth_date">Дата рождения</string>
+    <string name="field_home_address">Домашний адрес</string>
+    <string name="field_work_address">Рабочий адрес</string>
+    <string name="field_city">Город</string>
+    <string name="field_state">Область / Регион</string>
+    <string name="field_postal_code">Почтовый индекс</string>
+    <string name="field_country">Страна</string>
+    <string name="field_company_name">Название компании</string>
+    <string name="field_tax_id">ИНН</string>
+    <string name="field_registration_number">Регистрационный номер</string>
+    <string name="field_industry">Отрасль</string>
+    <string name="field_business_address">Адрес компании</string>
+    <string name="field_business_phone">Рабочий телефон</string>
+    <string name="field_business_email">Рабочая почта</string>
+    <string name="field_website">Веб-сайт</string>
+
+    <!-- Signature -->
+    <string name="signature_title">Подпись</string>
+    <string name="signature_placeholder">Нарисуйте подпись здесь</string>
+    <string name="signature_instruction">Используйте палец, чтобы нарисовать подпись ниже</string>
+
+    <!-- Chat -->
+    <string name="chat_input_placeholder">Введите ваш ответ…</string>
+    <string name="chat_use_suggestion">Использовать: %1$s</string>
+
+    <!-- Filling -->
+    <string name="filling_processing">Обработка…</string>
+    <string name="filling_analyzing">Анализируем ваш документ…</string>
+    <string name="mode_chat">Чат</string>
+    <string name="mode_voice">Голос</string>
+    <string name="mode_agent">Агент</string>
+
+    <!-- Voice -->
+    <string name="voice_listening">Слушаю…</string>
+    <string name="voice_start">Начать запись</string>
+    <string name="voice_stop">Остановить запись</string>
+
+    <!-- Agent -->
+    <string name="agent_title">Режим агента</string>
+    <string name="agent_description">Позвольте ИИ-агенту автоматически заполнить форму, используя данные вашего профиля</string>
+    <string name="agent_using_profile">Используется профиль: %1$s</string>
+    <string name="agent_start">Начать автозаполнение</string>
+    <string name="agent_no_profile">Сначала создайте профиль</string>
+    <string name="agent_filling">Автозаполнение…</string>
+    <string name="agent_complete">Автозаполнение завершено!</string>
+    <string name="agent_remaining">%1$d полей ещё требуют вашего ввода</string>
+
+    <!-- Editor -->
+    <string name="editor_rename">Переименовать документ</string>
+    <string name="editor_document_name">Название документа</string>
+    <string name="editor_delete_title">Удалить документ</string>
+    <string name="editor_delete_message">Вы уверены, что хотите удалить этот документ? Это действие нельзя отменить.</string>
+    <string name="editor_field_value">Значение поля</string>
+
+    <!-- Scanner -->
+    <string name="scanner_instruction">Расположите документ внутри рамки</string>
+
+    <!-- Library -->
+    <string name="library_title">Библиотека форм</string>
+    <string name="library_search_placeholder">Поиск форм…</string>
+
+    <!-- Onboarding -->
+    <string name="onboarding_title_1">Добро пожаловать в FormBuddy</string>
+    <string name="onboarding_desc_1">Заполняйте любую форму голосом, в чате или позвольте нашему ИИ-агенту сделать работу за вас</string>
+    <string name="onboarding_title_2">Ваш профиль, ваши данные</string>
+    <string name="onboarding_desc_2">Настройте профиль один раз и заполняйте формы мгновенно. Все данные остаются на вашем устройстве, полностью зашифрованные</string>
+    <string name="onboarding_title_3">Голосовой помощник</string>
+    <string name="onboarding_desc_3">Просто говорите — наш голосовой помощник естественно проведёт вас через каждое поле</string>
+    <string name="onboarding_title_4">Всё готово</string>
+    <string name="onboarding_desc_4">Сканируйте документ, загрузите PDF или выберите из нашей библиотеки, чтобы начать</string>
+
+    <!-- Paywall -->
+    <string name="paywall_title">Разблокировать FormBuddy Pro</string>
+    <string name="paywall_subtitle">Заполняйте формы быстрее с премиум-функциями</string>
+    <string name="paywall_feature_agent">Режим агента — Автозаполнение из профиля</string>
+    <string name="paywall_feature_voice">Голосовой режим — Говорите, чтобы заполнить формы</string>
+    <string name="paywall_feature_profiles">Расширенные профили — Семья &amp; Бизнес</string>
+    <string name="paywall_feature_biometric">Биометрическая блокировка — Защитите свои данные</string>
+    <string name="paywall_plan_weekly">Еженедельно</string>
+    <string name="paywall_plan_monthly">Ежемесячно</string>
+    <string name="paywall_plan_yearly">Ежегодно</string>
+    <string name="paywall_price_weekly">$2.99/нед.</string>
+    <string name="paywall_price_monthly">$7.99/мес.</string>
+    <string name="paywall_price_yearly">$49.99/год</string>
+    <string name="paywall_best_value">ЛУЧШЕЕ ПРЕДЛОЖЕНИЕ</string>
+    <string name="paywall_subscribe">Подписаться</string>
+    <string name="paywall_restore">Восстановить покупки</string>
+
+    <!-- Settings -->
+    <string name="settings_form_mode">Режим формы по умолчанию</string>
+    <string name="settings_voice_section">Голосовой помощник</string>
+    <string name="settings_subscription_section">Подписка</string>
+    <string name="settings_manage_subscription">Управление подпиской</string>
+    <string name="settings_about_section">О приложении</string>
+    <string name="settings_privacy_policy">Политика конфиденциальности</string>
+    <string name="settings_terms">Условия использования</string>
+    <string name="settings_contact_support">Связаться с поддержкой</string>
+    <string name="settings_share_app">Поделиться FormBuddy</string>
+</resources>

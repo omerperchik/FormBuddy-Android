@@ -1,0 +1,161 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">FormBuddy</string>
+
+    <!-- Tabs -->
+    <string name="tab_docs">दस्तावेज़</string>
+    <string name="tab_profiles">प्रोफ़ाइल</string>
+    <string name="tab_settings">सेटिंग्स</string>
+
+    <!-- Actions -->
+    <string name="action_add">जोड़ें</string>
+    <string name="action_scan">स्कैन</string>
+    <string name="action_upload">अपलोड</string>
+    <string name="action_library">लाइब्रेरी</string>
+    <string name="action_save">सहेजें</string>
+    <string name="action_share">शेयर</string>
+    <string name="action_edit">संपादित करें</string>
+    <string name="action_delete">हटाएं</string>
+    <string name="action_back">वापस</string>
+    <string name="action_close">बंद करें</string>
+    <string name="action_done">पूर्ण</string>
+    <string name="action_cancel">रद्द करें</string>
+    <string name="action_clear">साफ़ करें</string>
+    <string name="action_send">भेजें</string>
+    <string name="action_skip">छोड़ें</string>
+    <string name="action_next">अगला</string>
+    <string name="action_undo">पूर्ववत करें</string>
+    <string name="action_skip_to_end">अंत तक जाएं</string>
+    <string name="action_get_started">शुरू करें</string>
+
+    <!-- Docs -->
+    <string name="docs_empty_title">अभी कोई दस्तावेज़ नहीं</string>
+    <string name="docs_empty_subtitle">शुरू करने के लिए स्कैन करें, अपलोड करें या लाइब्रेरी ब्राउज़ करें</string>
+
+    <!-- Profiles -->
+    <string name="profile_section_personal">व्यक्तिगत</string>
+    <string name="profile_section_family">परिवार</string>
+    <string name="profile_section_business">व्यापार</string>
+    <string name="profile_create_personal">व्यक्तिगत प्रोफ़ाइल बनाएं</string>
+    <string name="profile_add_family">परिवार का सदस्य जोड़ें</string>
+    <string name="profile_add_business">व्यापार प्रोफ़ाइल जोड़ें</string>
+    <string name="profile_personal">व्यक्तिगत प्रोफ़ाइल</string>
+    <string name="profile_family">पारिवारिक प्रोफ़ाइल</string>
+    <string name="profile_business">व्यापार प्रोफ़ाइल</string>
+    <string name="profile_setup">प्रोफ़ाइल सेटअप</string>
+
+    <!-- Profile Fields -->
+    <string name="profile_name_section">नाम</string>
+    <string name="profile_contact_section">संपर्क</string>
+    <string name="profile_address_section">पता</string>
+    <string name="profile_signature_section">हस्ताक्षर</string>
+    <string name="profile_company_section">कंपनी</string>
+    <string name="profile_edit_signature">हस्ताक्षर संपादित करें</string>
+    <string name="profile_biometric_lock">बायोमेट्रिक लॉक</string>
+    <string name="profile_biometric_description">देखने के लिए Face ID या फ़िंगरप्रिंट आवश्यक</string>
+
+    <!-- Field Labels -->
+    <string name="field_first_name">पहला नाम</string>
+    <string name="field_middle_name">मध्य नाम</string>
+    <string name="field_last_name">उपनाम</string>
+    <string name="field_email">ईमेल</string>
+    <string name="field_phone">फ़ोन</string>
+    <string name="field_birth_date">जन्म तिथि</string>
+    <string name="field_home_address">घर का पता</string>
+    <string name="field_work_address">कार्यस्थल का पता</string>
+    <string name="field_city">शहर</string>
+    <string name="field_state">राज्य / प्रांत</string>
+    <string name="field_postal_code">पिन कोड</string>
+    <string name="field_country">देश</string>
+    <string name="field_company_name">कंपनी का नाम</string>
+    <string name="field_tax_id">कर पहचान संख्या</string>
+    <string name="field_registration_number">पंजीकरण संख्या</string>
+    <string name="field_industry">उद्योग</string>
+    <string name="field_business_address">व्यापार का पता</string>
+    <string name="field_business_phone">व्यापार फ़ोन</string>
+    <string name="field_business_email">व्यापार ईमेल</string>
+    <string name="field_website">वेबसाइट</string>
+
+    <!-- Signature -->
+    <string name="signature_title">हस्ताक्षर</string>
+    <string name="signature_placeholder">यहां अपना हस्ताक्षर बनाएं</string>
+    <string name="signature_instruction">नीचे अपना हस्ताक्षर बनाने के लिए अपनी उंगली का उपयोग करें</string>
+
+    <!-- Chat -->
+    <string name="chat_input_placeholder">अपना उत्तर लिखें…</string>
+    <string name="chat_use_suggestion">उपयोग करें: %1$s</string>
+
+    <!-- Filling -->
+    <string name="filling_processing">प्रोसेस हो रहा है…</string>
+    <string name="filling_analyzing">आपके दस्तावेज़ का विश्लेषण हो रहा है…</string>
+    <string name="mode_chat">चैट</string>
+    <string name="mode_voice">आवाज़</string>
+    <string name="mode_agent">एजेंट</string>
+
+    <!-- Voice -->
+    <string name="voice_listening">सुन रहा है…</string>
+    <string name="voice_start">रिकॉर्डिंग शुरू करें</string>
+    <string name="voice_stop">रिकॉर्डिंग बंद करें</string>
+
+    <!-- Agent -->
+    <string name="agent_title">एजेंट मोड</string>
+    <string name="agent_description">AI एजेंट को अपनी प्रोफ़ाइल डेटा का उपयोग करके स्वचालित रूप से फ़ॉर्म भरने दें</string>
+    <string name="agent_using_profile">प्रोफ़ाइल का उपयोग: %1$s</string>
+    <string name="agent_start">ऑटो-फ़िल शुरू करें</string>
+    <string name="agent_no_profile">कृपया पहले एक प्रोफ़ाइल बनाएं</string>
+    <string name="agent_filling">ऑटो-फ़िल हो रहा है…</string>
+    <string name="agent_complete">ऑटो-फ़िल पूर्ण!</string>
+    <string name="agent_remaining">%1$d फ़ील्ड में अभी भी आपके इनपुट की आवश्यकता है</string>
+
+    <!-- Editor -->
+    <string name="editor_rename">दस्तावेज़ का नाम बदलें</string>
+    <string name="editor_document_name">दस्तावेज़ का नाम</string>
+    <string name="editor_delete_title">दस्तावेज़ हटाएं</string>
+    <string name="editor_delete_message">क्या आप वाकई इस दस्तावेज़ को हटाना चाहते हैं? यह पूर्ववत नहीं किया जा सकता।</string>
+    <string name="editor_field_value">फ़ील्ड मान</string>
+
+    <!-- Scanner -->
+    <string name="scanner_instruction">दस्तावेज़ को फ़्रेम के अंदर रखें</string>
+
+    <!-- Library -->
+    <string name="library_title">फ़ॉर्म लाइब्रेरी</string>
+    <string name="library_search_placeholder">फ़ॉर्म खोजें…</string>
+
+    <!-- Onboarding -->
+    <string name="onboarding_title_1">FormBuddy में आपका स्वागत है</string>
+    <string name="onboarding_desc_1">बोलकर, चैट करके, या हमारे AI एजेंट को काम करने दें — कोई भी फ़ॉर्म भरें</string>
+    <string name="onboarding_title_2">आपकी प्रोफ़ाइल, आपका डेटा</string>
+    <string name="onboarding_desc_2">अपनी प्रोफ़ाइल एक बार सेट करें और फ़ॉर्म तुरंत ऑटो-फ़िल करें। सारा डेटा आपके डिवाइस पर रहता है, पूरी तरह एन्क्रिप्टेड</string>
+    <string name="onboarding_title_3">वॉइस असिस्टेंट</string>
+    <string name="onboarding_desc_3">बस बोलें — हमारा वॉइस असिस्टेंट हर फ़ील्ड में स्वाभाविक रूप से आपका मार्गदर्शन करेगा</string>
+    <string name="onboarding_title_4">तैयार हैं</string>
+    <string name="onboarding_desc_4">शुरू करने के लिए दस्तावेज़ स्कैन करें, PDF अपलोड करें, या हमारी लाइब्रेरी से चुनें</string>
+
+    <!-- Paywall -->
+    <string name="paywall_title">FormBuddy Pro अनलॉक करें</string>
+    <string name="paywall_subtitle">प्रीमियम सुविधाओं के साथ फ़ॉर्म तेज़ी से भरें</string>
+    <string name="paywall_feature_agent">एजेंट मोड — प्रोफ़ाइल से ऑटो-फ़िल</string>
+    <string name="paywall_feature_voice">वॉइस मोड — बोलकर फ़ॉर्म भरें</string>
+    <string name="paywall_feature_profiles">उन्नत प्रोफ़ाइल — परिवार &amp; व्यापार</string>
+    <string name="paywall_feature_biometric">बायोमेट्रिक लॉक — अपना डेटा सुरक्षित करें</string>
+    <string name="paywall_plan_weekly">साप्ताहिक</string>
+    <string name="paywall_plan_monthly">मासिक</string>
+    <string name="paywall_plan_yearly">वार्षिक</string>
+    <string name="paywall_price_weekly">$2.99/सप्ताह</string>
+    <string name="paywall_price_monthly">$7.99/माह</string>
+    <string name="paywall_price_yearly">$49.99/वर्ष</string>
+    <string name="paywall_best_value">सर्वोत्तम मूल्य</string>
+    <string name="paywall_subscribe">सब्सक्राइब करें</string>
+    <string name="paywall_restore">खरीदारी पुनर्स्थापित करें</string>
+
+    <!-- Settings -->
+    <string name="settings_form_mode">डिफ़ॉल्ट फ़ॉर्म मोड</string>
+    <string name="settings_voice_section">वॉइस असिस्टेंट</string>
+    <string name="settings_subscription_section">सदस्यता</string>
+    <string name="settings_manage_subscription">सदस्यता प्रबंधित करें</string>
+    <string name="settings_about_section">के बारे में</string>
+    <string name="settings_privacy_policy">गोपनीयता नीति</string>
+    <string name="settings_terms">सेवा की शर्तें</string>
+    <string name="settings_contact_support">सहायता से संपर्क करें</string>
+    <string name="settings_share_app">FormBuddy शेयर करें</string>
+</resources>

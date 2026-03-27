@@ -1,0 +1,161 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">FormBuddy</string>
+
+    <!-- Tabs -->
+    <string name="tab_docs">書類</string>
+    <string name="tab_profiles">プロフィール</string>
+    <string name="tab_settings">設定</string>
+
+    <!-- Actions -->
+    <string name="action_add">追加</string>
+    <string name="action_scan">スキャン</string>
+    <string name="action_upload">アップロード</string>
+    <string name="action_library">ライブラリ</string>
+    <string name="action_save">保存</string>
+    <string name="action_share">共有</string>
+    <string name="action_edit">編集</string>
+    <string name="action_delete">削除</string>
+    <string name="action_back">戻る</string>
+    <string name="action_close">閉じる</string>
+    <string name="action_done">完了</string>
+    <string name="action_cancel">キャンセル</string>
+    <string name="action_clear">クリア</string>
+    <string name="action_send">送信</string>
+    <string name="action_skip">スキップ</string>
+    <string name="action_next">次へ</string>
+    <string name="action_undo">元に戻す</string>
+    <string name="action_skip_to_end">最後にスキップ</string>
+    <string name="action_get_started">始めましょう</string>
+
+    <!-- Docs -->
+    <string name="docs_empty_title">書類がまだありません</string>
+    <string name="docs_empty_subtitle">スキャン、アップロード、またはライブラリを参照して始めましょう</string>
+
+    <!-- Profiles -->
+    <string name="profile_section_personal">個人</string>
+    <string name="profile_section_family">家族</string>
+    <string name="profile_section_business">ビジネス</string>
+    <string name="profile_create_personal">個人プロフィールを作成</string>
+    <string name="profile_add_family">家族を追加</string>
+    <string name="profile_add_business">ビジネスプロフィールを追加</string>
+    <string name="profile_personal">個人プロフィール</string>
+    <string name="profile_family">家族プロフィール</string>
+    <string name="profile_business">ビジネスプロフィール</string>
+    <string name="profile_setup">プロフィール設定</string>
+
+    <!-- Profile Fields -->
+    <string name="profile_name_section">名前</string>
+    <string name="profile_contact_section">連絡先</string>
+    <string name="profile_address_section">住所</string>
+    <string name="profile_signature_section">署名</string>
+    <string name="profile_company_section">会社</string>
+    <string name="profile_edit_signature">署名を編集</string>
+    <string name="profile_biometric_lock">生体認証ロック</string>
+    <string name="profile_biometric_description">表示にFace IDまたは指紋認証が必要</string>
+
+    <!-- Field Labels -->
+    <string name="field_first_name">名</string>
+    <string name="field_middle_name">ミドルネーム</string>
+    <string name="field_last_name">姓</string>
+    <string name="field_email">メールアドレス</string>
+    <string name="field_phone">電話番号</string>
+    <string name="field_birth_date">生年月日</string>
+    <string name="field_home_address">自宅住所</string>
+    <string name="field_work_address">勤務先住所</string>
+    <string name="field_city">市区町村</string>
+    <string name="field_state">都道府県</string>
+    <string name="field_postal_code">郵便番号</string>
+    <string name="field_country">国</string>
+    <string name="field_company_name">会社名</string>
+    <string name="field_tax_id">法人番号</string>
+    <string name="field_registration_number">登録番号</string>
+    <string name="field_industry">業種</string>
+    <string name="field_business_address">会社住所</string>
+    <string name="field_business_phone">会社電話番号</string>
+    <string name="field_business_email">会社メールアドレス</string>
+    <string name="field_website">ウェブサイト</string>
+
+    <!-- Signature -->
+    <string name="signature_title">署名</string>
+    <string name="signature_placeholder">ここに署名を描いてください</string>
+    <string name="signature_instruction">指を使って下に署名を描いてください</string>
+
+    <!-- Chat -->
+    <string name="chat_input_placeholder">回答を入力…</string>
+    <string name="chat_use_suggestion">使用：%1$s</string>
+
+    <!-- Filling -->
+    <string name="filling_processing">処理中…</string>
+    <string name="filling_analyzing">書類を分析中…</string>
+    <string name="mode_chat">チャット</string>
+    <string name="mode_voice">音声</string>
+    <string name="mode_agent">エージェント</string>
+
+    <!-- Voice -->
+    <string name="voice_listening">聞いています…</string>
+    <string name="voice_start">録音開始</string>
+    <string name="voice_stop">録音停止</string>
+
+    <!-- Agent -->
+    <string name="agent_title">エージェントモード</string>
+    <string name="agent_description">AIエージェントがプロフィールデータを使用してフォームを自動入力します</string>
+    <string name="agent_using_profile">使用プロフィール：%1$s</string>
+    <string name="agent_start">自動入力を開始</string>
+    <string name="agent_no_profile">先にプロフィールを作成してください</string>
+    <string name="agent_filling">自動入力中…</string>
+    <string name="agent_complete">自動入力が完了しました！</string>
+    <string name="agent_remaining">あと%1$d件の入力が必要です</string>
+
+    <!-- Editor -->
+    <string name="editor_rename">書類の名前を変更</string>
+    <string name="editor_document_name">書類名</string>
+    <string name="editor_delete_title">書類を削除</string>
+    <string name="editor_delete_message">この書類を削除してもよろしいですか？この操作は取り消せません。</string>
+    <string name="editor_field_value">フィールド値</string>
+
+    <!-- Scanner -->
+    <string name="scanner_instruction">書類をフレーム内に配置してください</string>
+
+    <!-- Library -->
+    <string name="library_title">フォームライブラリ</string>
+    <string name="library_search_placeholder">フォームを検索…</string>
+
+    <!-- Onboarding -->
+    <string name="onboarding_title_1">FormBuddyへようこそ</string>
+    <string name="onboarding_desc_1">会話、チャット、またはAIエージェントに任せて、あらゆるフォームを記入できます</string>
+    <string name="onboarding_title_2">あなたのプロフィール、あなたのデータ</string>
+    <string name="onboarding_desc_2">プロフィールを一度設定すれば、フォームを即座に自動入力。すべてのデータは完全に暗号化されてデバイスに保存されます</string>
+    <string name="onboarding_title_3">音声アシスタント</string>
+    <string name="onboarding_desc_3">話しかけるだけ — 音声アシスタントが各フィールドを自然にガイドします</string>
+    <string name="onboarding_title_4">準備完了</string>
+    <string name="onboarding_desc_4">書類をスキャン、PDFをアップロード、またはライブラリから選んで始めましょう</string>
+
+    <!-- Paywall -->
+    <string name="paywall_title">FormBuddy Proを解除</string>
+    <string name="paywall_subtitle">プレミアム機能でフォーム記入をもっと速く</string>
+    <string name="paywall_feature_agent">エージェントモード — プロフィールから自動入力</string>
+    <string name="paywall_feature_voice">音声モード — 話してフォームを記入</string>
+    <string name="paywall_feature_profiles">高度なプロフィール — 家族 &amp; ビジネス</string>
+    <string name="paywall_feature_biometric">生体認証ロック — データを保護</string>
+    <string name="paywall_plan_weekly">週額</string>
+    <string name="paywall_plan_monthly">月額</string>
+    <string name="paywall_plan_yearly">年額</string>
+    <string name="paywall_price_weekly">$2.99/週</string>
+    <string name="paywall_price_monthly">$7.99/月</string>
+    <string name="paywall_price_yearly">$49.99/年</string>
+    <string name="paywall_best_value">最もお得</string>
+    <string name="paywall_subscribe">登録する</string>
+    <string name="paywall_restore">購入を復元</string>
+
+    <!-- Settings -->
+    <string name="settings_form_mode">デフォルトのフォームモード</string>
+    <string name="settings_voice_section">音声アシスタント</string>
+    <string name="settings_subscription_section">サブスクリプション</string>
+    <string name="settings_manage_subscription">サブスクリプションを管理</string>
+    <string name="settings_about_section">アプリについて</string>
+    <string name="settings_privacy_policy">プライバシーポリシー</string>
+    <string name="settings_terms">利用規約</string>
+    <string name="settings_contact_support">サポートに連絡</string>
+    <string name="settings_share_app">FormBuddyを共有</string>
+</resources>
