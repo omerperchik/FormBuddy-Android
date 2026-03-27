@@ -22,33 +22,40 @@ class OcrService @Inject constructor(
 ) {
     private val textRecognizer = TextRecognition.getClient(TextRecognizerOptions.DEFAULT_OPTIONS)
 
+    companion object {
+        // 2x is sufficient for ML Kit OCR accuracy — 3x wastes 2.25x more memory
+        private const val OCR_SCALE = 2f
+    }
+
     suspend fun enrichFieldLabels(template: FormTemplate, documentData: ByteArray): FormTemplate = withContext(Dispatchers.IO) {
         val tempFile = File.createTempFile("ocr_", ".pdf", context.cacheDir)
         tempFile.writeBytes(documentData)
 
+        var renderer: PdfRenderer? = null
+        var fd: ParcelFileDescriptor? = null
+
         try {
-            val fd = ParcelFileDescriptor.open(tempFile, ParcelFileDescriptor.MODE_READ_ONLY)
-            val renderer = PdfRenderer(fd)
+            fd = ParcelFileDescriptor.open(tempFile, ParcelFileDescriptor.MODE_READ_ONLY)
+            renderer = PdfRenderer(fd)
 
             template.pages.forEach { page ->
                 if (page.index < renderer.pageCount) {
                     val pdfPage = renderer.openPage(page.index)
-                    val scale = 3f // High res for OCR
-                    val bitmap = Bitmap.createBitmap(
-                        (pdfPage.width * scale).toInt(),
-                        (pdfPage.height * scale).toInt(),
-                        Bitmap.Config.ARGB_8888
-                    )
+                    val bitmapWidth = (pdfPage.width * OCR_SCALE).toInt()
+                    val bitmapHeight = (pdfPage.height * OCR_SCALE).toInt()
+
+                    // RGB_565 uses half the memory of ARGB_8888 — OCR doesn't need alpha
+                    val bitmap = Bitmap.createBitmap(bitmapWidth, bitmapHeight, Bitmap.Config.RGB_565)
                     pdfPage.render(bitmap, null, null, PdfRenderer.Page.RENDER_MODE_FOR_DISPLAY)
                     pdfPage.close()
 
                     val ocrResult = recognizeText(bitmap)
                     bitmap.recycle()
 
-                    // Enrich field labels from nearby OCR text
+                    // Use saved dimensions — bitmap is recycled above
                     page.fields.forEach { field ->
                         if (field.label.isBlank() || isGenericLabel(field.label)) {
-                            val nearbyText = findNearbyText(field, ocrResult, bitmap.width, bitmap.height)
+                            val nearbyText = findNearbyText(field, ocrResult, bitmapWidth, bitmapHeight)
                             if (nearbyText.isNotBlank()) {
                                 field.label = nearbyText
                             }
@@ -56,12 +63,13 @@ class OcrService @Inject constructor(
                     }
                 }
             }
+        } catch (_: Exception) {
+        } finally {
+            renderer?.close()
+            fd?.close()
+            tempFile.delete()
+        }
 
-            renderer.close()
-            fd.close()
-        } catch (_: Exception) {}
-
-        tempFile.delete()
         template
     }
 

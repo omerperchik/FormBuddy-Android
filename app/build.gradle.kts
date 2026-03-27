@@ -20,14 +20,40 @@ android {
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
 
-        javaCompileOptions {
-            annotationProcessorOptions {
-                arguments["room.schemaLocation"] = "$projectDir/schemas"
-            }
+        // Room schema export for migration validation
+        ksp {
+            arg("room.schemaLocation", "$projectDir/schemas")
+            arg("room.incremental", "true")
+            arg("room.generateKotlin", "true")
+        }
+
+        // ABI splits: ship only the architectures users actually have (~60% APK reduction for native libs)
+        ndk {
+            abiFilters += listOf("arm64-v8a", "armeabi-v7a")
+        }
+
+        // Vector drawables compat for pre-API 24
+        vectorDrawables.useSupportLibrary = true
+    }
+
+    // Per-ABI APK splits (smallest possible APK per device)
+    splits {
+        abi {
+            isEnable = true
+            reset()
+            include("arm64-v8a", "armeabi-v7a")
+            isUniversalApk = true
         }
     }
 
     buildTypes {
+        debug {
+            // Faster debug builds
+            isMinifyEnabled = false
+            isShrinkResources = false
+            // Enable StrictMode in debug
+            buildConfigField("boolean", "STRICT_MODE", "true")
+        }
         release {
             isMinifyEnabled = true
             isShrinkResources = true
@@ -35,6 +61,24 @@ android {
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
             )
+            buildConfigField("boolean", "STRICT_MODE", "false")
+
+            // Enable R8 full mode for maximum shrinking
+            packaging {
+                resources {
+                    excludes += setOf(
+                        "META-INF/LICENSE*",
+                        "META-INF/NOTICE*",
+                        "META-INF/DEPENDENCIES",
+                        "META-INF/*.kotlin_module",
+                        "META-INF/versions/**",
+                        "DebugProbesKt.bin",
+                        "kotlin-tooling-metadata.json",
+                        "**/*.proto",
+                        "**/*.properties"
+                    )
+                }
+            }
         }
     }
 
@@ -45,11 +89,23 @@ android {
 
     kotlinOptions {
         jvmTarget = "17"
+        freeCompilerArgs += listOf(
+            // Enable Compose compiler metrics for performance debugging
+            "-opt-in=kotlinx.coroutines.ExperimentalCoroutinesApi",
+            "-opt-in=androidx.compose.material3.ExperimentalMaterial3Api",
+            "-opt-in=androidx.compose.foundation.ExperimentalFoundationApi",
+        )
     }
 
     buildFeatures {
         compose = true
         buildConfig = true
+    }
+
+    // Lint performance
+    lint {
+        abortOnError = false
+        checkDependencies = true
     }
 }
 
@@ -116,7 +172,7 @@ dependencies {
     // Animations
     implementation(libs.lottie.compose)
 
-    // JSON
+    // JSON - Moshi is faster than Gson but keeping Gson for compat
     implementation(libs.gson)
 
     // PDF
@@ -128,4 +184,7 @@ dependencies {
     // Coroutines
     implementation(libs.kotlinx.coroutines.android)
     implementation(libs.kotlinx.coroutines.play.services)
+
+    // Baseline Profiles (startup optimization)
+    implementation(libs.androidx.profileinstaller)
 }

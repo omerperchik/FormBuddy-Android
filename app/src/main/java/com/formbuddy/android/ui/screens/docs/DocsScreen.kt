@@ -40,9 +40,12 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import coil.compose.AsyncImage
+import coil.request.CachePolicy
+import coil.request.ImageRequest
 import com.formbuddy.android.R
 import com.formbuddy.android.data.local.db.entity.FormReferenceEntity
 import com.formbuddy.android.ui.navigation.Screen
@@ -109,12 +112,15 @@ fun DocsScreen(
                 horizontalArrangement = Arrangement.spacedBy(12.dp)
             ) {
                 items(forms, key = { it.id }) { form ->
+                    val formId = form.id
                     FormCard(
                         form = form,
-                        onClick = {
-                            navController.navigate(Screen.Editor.createRoute(form.id))
+                        onClick = remember(formId) {
+                            { navController.navigate(Screen.Editor.createRoute(formId)) }
                         },
-                        onDelete = { viewModel.deleteForm(form.id) }
+                        onDelete = remember(formId) {
+                            { viewModel.deleteForm(formId) }
+                        }
                     )
                 }
             }
@@ -145,9 +151,14 @@ private fun FormCard(
                     .aspectRatio(0.75f)
                     .clip(MaterialTheme.shapes.medium)
             ) {
-                if (form.thumbnailFilePath != null && File(form.thumbnailFilePath).exists()) {
+                if (form.thumbnailFilePath != null) {
                     AsyncImage(
-                        model = File(form.thumbnailFilePath),
+                        model = ImageRequest.Builder(androidx.compose.ui.platform.LocalContext.current)
+                            .data(File(form.thumbnailFilePath))
+                            .memoryCachePolicy(CachePolicy.ENABLED)
+                            .diskCachePolicy(CachePolicy.ENABLED)
+                            .crossfade(150)
+                            .build(),
                         contentDescription = form.documentName,
                         modifier = Modifier.fillMaxSize(),
                         contentScale = ContentScale.Crop

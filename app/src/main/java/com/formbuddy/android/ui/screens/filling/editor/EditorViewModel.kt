@@ -37,7 +37,13 @@ class EditorViewModel @Inject constructor(
     private var formId: String = ""
     private var documentData: ByteArray? = null
 
+    companion object {
+        // 1.5x is sharp enough for on-screen display while using ~44% less memory than 2x
+        private const val DISPLAY_SCALE = 1.5f
+    }
+
     fun loadForm(id: String) {
+        if (formId == id) return // Avoid redundant reloads
         formId = id
         viewModelScope.launch {
             val entity = formRepository.getFormById(id) ?: return@launch
@@ -48,33 +54,42 @@ class EditorViewModel @Inject constructor(
     }
 
     private suspend fun renderPages(data: ByteArray) = withContext(Dispatchers.IO) {
+        var renderer: PdfRenderer? = null
+        var fd: ParcelFileDescriptor? = null
+        var tempFile: File? = null
+
         try {
-            val tempFile = File.createTempFile("pdf_", ".pdf", context.cacheDir)
+            tempFile = File.createTempFile("pdf_", ".pdf", context.cacheDir)
             tempFile.writeBytes(data)
-            val fd = ParcelFileDescriptor.open(tempFile, ParcelFileDescriptor.MODE_READ_ONLY)
-            val renderer = PdfRenderer(fd)
+            fd = ParcelFileDescriptor.open(tempFile, ParcelFileDescriptor.MODE_READ_ONLY)
+            renderer = PdfRenderer(fd)
 
             val bitmaps = (0 until renderer.pageCount).map { i ->
                 val page = renderer.openPage(i)
-                val scale = 2f
+                // RGB_565 uses half the memory of ARGB_8888 — fine for document display
                 val bitmap = Bitmap.createBitmap(
-                    (page.width * scale).toInt(),
-                    (page.height * scale).toInt(),
-                    Bitmap.Config.ARGB_8888
+                    (page.width * DISPLAY_SCALE).toInt(),
+                    (page.height * DISPLAY_SCALE).toInt(),
+                    Bitmap.Config.RGB_565
                 )
                 page.render(bitmap, null, null, PdfRenderer.Page.RENDER_MODE_FOR_DISPLAY)
                 page.close()
                 bitmap
             }
 
-            renderer.close()
-            fd.close()
-            tempFile.delete()
-
             _pageBitmaps.value = bitmaps
         } catch (_: Exception) {
             _pageBitmaps.value = emptyList()
+        } finally {
+            renderer?.close()
+            fd?.close()
+            tempFile?.delete()
         }
+    }
+
+    override fun onCleared() {
+        super.onCleared()
+        _pageBitmaps.value.forEach { it?.recycle() }
     }
 
     fun toggleEditing() {

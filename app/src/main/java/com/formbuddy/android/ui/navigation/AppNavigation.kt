@@ -98,16 +98,19 @@ fun FormBuddyNavHost(
     val navController = rememberNavController()
     var showOnboarding by remember { mutableStateOf(false) }
 
-    val bottomNavItems = listOf(
-        BottomNavItem(Screen.Docs, R.string.tab_docs, Icons.Filled.Description, Icons.Outlined.Description),
-        BottomNavItem(Screen.Profiles, R.string.tab_profiles, Icons.Filled.People, Icons.Outlined.People),
-        BottomNavItem(Screen.Settings, R.string.tab_settings, Icons.Filled.Settings, Icons.Outlined.Settings)
-    )
+    val bottomNavItems = remember {
+        listOf(
+            BottomNavItem(Screen.Docs, R.string.tab_docs, Icons.Filled.Description, Icons.Outlined.Description),
+            BottomNavItem(Screen.Profiles, R.string.tab_profiles, Icons.Filled.People, Icons.Outlined.People),
+            BottomNavItem(Screen.Settings, R.string.tab_settings, Icons.Filled.Settings, Icons.Outlined.Settings)
+        )
+    }
 
     val navBackStackEntry by navController.currentBackStackEntryAsState()
     val currentRoute = navBackStackEntry?.destination?.route
 
-    val showBottomBar = currentRoute in listOf(Screen.Docs.route, Screen.Profiles.route, Screen.Settings.route)
+    val bottomBarRoutes = remember { setOf(Screen.Docs.route, Screen.Profiles.route, Screen.Settings.route) }
+    val showBottomBar = currentRoute in bottomBarRoutes
 
     LaunchedEffect(importUri) {
         if (importUri != null) {

@@ -5,4 +5,20 @@
             <certificates src="system" />
         </trust-anchors>
     </base-config>
+
+    <!-- Pin Firebase/Google certificates to prevent MITM attacks -->
+    <domain-config cleartextTrafficPermitted="false">
+        <domain includeSubdomains="true">firebaseio.com</domain>
+        <domain includeSubdomains="true">googleapis.com</domain>
+        <domain includeSubdomains="true">firebase.google.com</domain>
+        <domain includeSubdomains="true">cloudfunctions.net</domain>
+        <pin-set expiration="2027-01-01">
+            <!-- GTS Root R1 — Google's primary root CA -->
+            <pin digest="SHA-256">hxqRlPTu1bMS/0DITB1SSu0vd4u/8l8TjPgfaAp63Gc=</pin>
+            <!-- GTS Root R2 — Google's secondary root CA -->
+            <pin digest="SHA-256">Vfd95BwDeSQo+NUYxVEEb1lqAXcxhlOev5EvKoMi69M=</pin>
+            <!-- GlobalSign Root CA — backup -->
+            <pin digest="SHA-256">iie1VXtL7HzAMF+/PVPR9xzT80kQxdZeJ+zduCB3uj0=</pin>
+        </pin-set>
+    </domain-config>
 </network-security-config>
