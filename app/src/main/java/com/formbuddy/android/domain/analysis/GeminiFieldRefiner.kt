@@ -13,6 +13,7 @@ class GeminiFieldRefiner @Inject constructor() {
     private val model: GenerativeModel? = try {
         GenerativeModel(
             modelName = "gemini-nano",
+            apiKey = "", // On-device model — no API key needed at runtime
             generationConfig = generationConfig {
                 temperature = 0.1f
                 maxOutputTokens = 1024

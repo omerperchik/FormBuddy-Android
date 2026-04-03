@@ -31,7 +31,7 @@ class FirebaseManager @Inject constructor() {
             .call(hashMapOf("documentData" to base64Data))
             .await()
 
-        val responseData = result.data as Map<*, *>
+        val responseData = result.getData() as Map<*, *>
         val processedBase64 = responseData["processedDocument"] as String
         return android.util.Base64.decode(processedBase64, android.util.Base64.NO_WRAP)
     }
@@ -53,7 +53,7 @@ class FirebaseManager @Inject constructor() {
             )
             .await()
 
-        val responseData = result.data as Map<*, *>
+        val responseData = result.getData() as Map<*, *>
         val audioBase64 = responseData["audioData"] as String
         return android.util.Base64.decode(audioBase64, android.util.Base64.NO_WRAP)
     }

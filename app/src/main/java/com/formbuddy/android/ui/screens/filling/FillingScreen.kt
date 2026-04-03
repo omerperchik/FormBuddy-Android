@@ -26,6 +26,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import com.formbuddy.android.R
@@ -91,7 +92,7 @@ fun FillingScreen(
                     Text(
                         text = stringResource(R.string.filling_analyzing),
                         style = MaterialTheme.typography.bodyMedium,
-                        modifier = Modifier.padding(top = androidx.compose.ui.unit.dp(16))
+                        modifier = Modifier.padding(top = 16.dp)
                     )
                 }
             }

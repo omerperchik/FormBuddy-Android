@@ -48,7 +48,6 @@ import androidx.core.content.ContextCompat
 import androidx.navigation.NavHostController
 import com.formbuddy.android.R
 import com.formbuddy.android.ui.navigation.Screen
-import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import java.io.ByteArrayOutputStream
 import java.io.File
 

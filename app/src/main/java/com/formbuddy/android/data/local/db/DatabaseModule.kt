@@ -43,7 +43,7 @@ object DatabaseModule {
         )
             .openHelperFactory(factory)
             // WAL mode: concurrent reads during writes, 2-4x faster queries
-            .setJournalMode(FormBuddyDatabase.JournalMode.WRITE_AHEAD_LOGGING)
+            .setJournalMode(androidx.room.RoomDatabase.JournalMode.WRITE_AHEAD_LOGGING)
             .fallbackToDestructiveMigration()
             .build()
     }
