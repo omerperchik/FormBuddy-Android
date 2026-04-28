@@ -44,7 +44,7 @@ class FormsLibraryViewModel @Inject constructor(
         viewModelScope.launch {
             _isLoading.value = true
             try {
-                val data = formsLibraryRepository.downloadFormDocument(form.documentUrl)
+                val data = formsLibraryRepository.downloadFormDocument(form.downloadUrl)
                 val file = File(context.cacheDir, "${form.id}.pdf")
                 file.writeBytes(data)
                 onReady(file.toURI().toString())

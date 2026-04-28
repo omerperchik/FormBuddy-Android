@@ -42,6 +42,7 @@ import com.formbuddy.android.ui.screens.filling.editor.EditorScreen
 import com.formbuddy.android.ui.screens.library.FormsLibraryScreen
 import com.formbuddy.android.ui.screens.onboarding.OnboardingScreen
 import com.formbuddy.android.ui.screens.paywall.PaywallScreen
+import com.formbuddy.android.ui.screens.privacy.PrivacyAuditScreen
 import com.formbuddy.android.ui.screens.profiles.BusinessProfileScreen
 import com.formbuddy.android.ui.screens.profiles.ProfileChatScreen
 import com.formbuddy.android.ui.screens.profiles.ProfileScreen
@@ -81,6 +82,7 @@ sealed class Screen(val route: String) {
     }
     data object FormsLibrary : Screen("forms_library")
     data object Paywall : Screen("paywall")
+    data object PrivacyAudit : Screen("privacy_audit")
 }
 
 data class BottomNavItem(
@@ -265,6 +267,10 @@ fun FormBuddyNavHost(
 
             composable(Screen.Paywall.route) {
                 PaywallScreen(navController = navController)
+            }
+
+            composable(Screen.PrivacyAudit.route) {
+                PrivacyAuditScreen(navController = navController)
             }
         }
     }

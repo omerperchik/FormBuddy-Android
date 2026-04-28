@@ -162,7 +162,7 @@ private fun LibraryFormCard(
                     overflow = TextOverflow.Ellipsis
                 )
                 Text(
-                    text = form.category,
+                    text = form.agency,
                     style = MaterialTheme.typography.bodySmall,
                     color = MaterialTheme.colorScheme.onSurfaceVariant
                 )

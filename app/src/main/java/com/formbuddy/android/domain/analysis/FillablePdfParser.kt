@@ -94,11 +94,14 @@ class FillablePdfParser @Inject constructor() {
             else -> null
         }
 
+        val pdfFieldName = field.fullyQualifiedName
         val formField = FormField(
-            label = field.partialName ?: field.fullyQualifiedName ?: "",
+            label = field.partialName ?: pdfFieldName ?: "",
             fieldType = fieldType,
             boundingBox = boundingBox,
-            detectedValue = detectedValue
+            detectedValue = detectedValue,
+            pdfFieldName = pdfFieldName,
+            pageIndex = pageIndex
         )
 
         pages[pageIndex].fields.add(formField)

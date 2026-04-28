@@ -40,7 +40,16 @@ data class FormField(
     var confidence: Double? = null,
     var isUserGenerated: Boolean = false,
     var userInputMethod: UserInputMethod? = null,
-    var style: FieldStyle = FieldStyle()
+    var style: FieldStyle = FieldStyle(),
+    /** Fully qualified PDF AcroForm field name (when this field maps to a real
+     *  widget). Empty for user-generated fields added in editor mode.
+     *  Used by [com.formbuddy.android.domain.analysis.PdfExporter] to write
+     *  values back into the original PDF widget tree instead of overlaying
+     *  text on a rendered bitmap. */
+    var pdfFieldName: String? = null,
+    /** Page index this field belongs to. Convenience cache so the exporter
+     *  doesn't have to re-walk pages to find a field's home. */
+    var pageIndex: Int = 0
 ) {
     val displayValue: String
         get() = userValue ?: detectedValue ?: ""

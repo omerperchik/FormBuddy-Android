@@ -48,11 +48,13 @@ import coil.request.CachePolicy
 import coil.request.ImageRequest
 import com.formbuddy.android.R
 import com.formbuddy.android.data.local.db.entity.FormReferenceEntity
+import com.formbuddy.android.data.metrics.formatHuman
 import com.formbuddy.android.ui.navigation.Screen
 import java.io.File
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
+import kotlin.time.Duration.Companion.seconds
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -61,6 +63,7 @@ fun DocsScreen(
     viewModel: DocsViewModel = hiltViewModel()
 ) {
     val forms by viewModel.forms.collectAsState()
+    val timeSavedSeconds by viewModel.timeSavedSeconds.collectAsState()
     val scrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior()
 
     Scaffold(
@@ -102,28 +105,59 @@ fun DocsScreen(
                 }
             }
         } else {
-            LazyVerticalGrid(
-                columns = GridCells.Fixed(2),
+            Column(
                 modifier = Modifier
                     .fillMaxSize()
-                    .padding(padding),
-                contentPadding = PaddingValues(16.dp),
-                verticalArrangement = Arrangement.spacedBy(12.dp),
-                horizontalArrangement = Arrangement.spacedBy(12.dp)
+                    .padding(padding)
             ) {
-                items(forms, key = { it.id }) { form ->
-                    val formId = form.id
-                    FormCard(
-                        form = form,
-                        onClick = remember(formId) {
-                            { navController.navigate(Screen.Editor.createRoute(formId)) }
-                        },
-                        onDelete = remember(formId) {
-                            { viewModel.deleteForm(formId) }
-                        }
-                    )
+                if (timeSavedSeconds > 0) {
+                    TimeSavedBanner(timeSavedSeconds)
+                }
+                LazyVerticalGrid(
+                    columns = GridCells.Fixed(2),
+                    modifier = Modifier.fillMaxSize(),
+                    contentPadding = PaddingValues(16.dp),
+                    verticalArrangement = Arrangement.spacedBy(12.dp),
+                    horizontalArrangement = Arrangement.spacedBy(12.dp)
+                ) {
+                    items(forms, key = { it.id }) { form ->
+                        val formId = form.id
+                        FormCard(
+                            form = form,
+                            onClick = remember(formId) {
+                                { navController.navigate(Screen.Editor.createRoute(formId)) }
+                            },
+                            onDelete = remember(formId) {
+                                { viewModel.deleteForm(formId) }
+                            }
+                        )
+                    }
                 }
             }
+        }
+    }
+}
+
+@Composable
+private fun TimeSavedBanner(seconds: Long) {
+    val human = remember(seconds) { seconds.seconds.formatHuman() }
+    Card(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(16.dp),
+        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.primaryContainer)
+    ) {
+        Column(modifier = Modifier.padding(16.dp)) {
+            Text(
+                text = "You've saved $human",
+                style = MaterialTheme.typography.titleMedium,
+                color = MaterialTheme.colorScheme.onPrimaryContainer
+            )
+            Text(
+                text = "vs. filling these forms by hand.",
+                style = MaterialTheme.typography.bodySmall,
+                color = MaterialTheme.colorScheme.onPrimaryContainer.copy(alpha = 0.8f)
+            )
         }
     }
 }

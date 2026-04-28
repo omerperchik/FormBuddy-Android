@@ -69,7 +69,9 @@ fun DocumentAnalysisView(
     template: FormTemplate,
     documentBytes: ByteArray?,
     selectedFieldId: String? = null,
-    onFieldSelected: (String) -> Unit = {}
+    onFieldSelected: (String) -> Unit = {},
+    editorMode: Boolean = false,
+    onAddFieldAt: ((pageIndex: Int, normalizedX: Double, normalizedY: Double) -> Unit)? = null
 ) {
     val context = LocalContext.current
     val pageBitmaps = remember(documentBytes) { mutableStateOf<List<Bitmap>>(emptyList()) }
@@ -135,7 +137,11 @@ fun DocumentAnalysisView(
                         bitmap = bitmap,
                         page = page,
                         selectedFieldId = selectedFieldId,
-                        onFieldSelected = onFieldSelected
+                        onFieldSelected = onFieldSelected,
+                        editorMode = editorMode,
+                        onLongPress = if (editorMode) {
+                            { nx, ny -> onAddFieldAt?.invoke(page.index, nx, ny) }
+                        } else null
                     )
                 }
             }
@@ -148,7 +154,9 @@ private fun PageWithOverlay(
     bitmap: Bitmap,
     page: FormPage,
     selectedFieldId: String?,
-    onFieldSelected: (String) -> Unit
+    onFieldSelected: (String) -> Unit,
+    editorMode: Boolean,
+    onLongPress: ((normalizedX: Double, normalizedY: Double) -> Unit)?
 ) {
     val aspectRatio = bitmap.width.toFloat() / bitmap.height.toFloat()
     val density = LocalDensity.current
@@ -170,21 +178,31 @@ private fun PageWithOverlay(
         Box(
             modifier = Modifier
                 .fillMaxSize()
-                .pointerInput(page.fields, boxSize) {
-                    detectTapGestures(onTap = { offset ->
-                        val w = boxSize.width
-                        val h = boxSize.height
-                        if (w == 0f || h == 0f) return@detectTapGestures
-                        val hit = page.fields.firstOrNull { field ->
-                            val box = field.contentBoundingBox
-                            val left = box.x.toFloat() * w
-                            val top = box.y.toFloat() * h
-                            val right = left + box.width.toFloat() * w
-                            val bottom = top + box.height.toFloat() * h
-                            offset.x in left..right && offset.y in top..bottom
+                .pointerInput(page.fields, boxSize, editorMode) {
+                    detectTapGestures(
+                        onTap = { offset ->
+                            val w = boxSize.width
+                            val h = boxSize.height
+                            if (w == 0f || h == 0f) return@detectTapGestures
+                            val hit = page.fields.firstOrNull { field ->
+                                val box = field.contentBoundingBox
+                                val left = box.x.toFloat() * w
+                                val top = box.y.toFloat() * h
+                                val right = left + box.width.toFloat() * w
+                                val bottom = top + box.height.toFloat() * h
+                                offset.x in left..right && offset.y in top..bottom
+                            }
+                            hit?.let { onFieldSelected(it.id) }
+                        },
+                        onLongPress = { offset ->
+                            if (editorMode && onLongPress != null && boxSize.width > 0f && boxSize.height > 0f) {
+                                onLongPress(
+                                    (offset.x / boxSize.width).toDouble().coerceIn(0.0, 1.0),
+                                    (offset.y / boxSize.height).toDouble().coerceIn(0.0, 1.0)
+                                )
+                            }
                         }
-                        hit?.let { onFieldSelected(it.id) }
-                    })
+                    )
                 }
                 .drawWithContent {
                     drawContent()

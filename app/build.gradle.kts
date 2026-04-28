@@ -46,6 +46,12 @@ android {
         }
     }
 
+    // Optional cloud-Gemini API key. Read from gradle.properties or env so the key
+    // never ends up in source control. Empty value triggers the heuristic-only path.
+    val geminiKey = (project.findProperty("GEMINI_API_KEY") as String?)
+        ?: System.getenv("GEMINI_API_KEY")
+        ?: ""
+
     buildTypes {
         debug {
             // Faster debug builds
@@ -53,6 +59,7 @@ android {
             isShrinkResources = false
             // Enable StrictMode in debug
             buildConfigField("boolean", "STRICT_MODE", "true")
+            buildConfigField("String", "GEMINI_API_KEY", "\"${geminiKey}\"")
         }
         release {
             isMinifyEnabled = true
@@ -62,6 +69,7 @@ android {
                 "proguard-rules.pro"
             )
             buildConfigField("boolean", "STRICT_MODE", "false")
+            buildConfigField("String", "GEMINI_API_KEY", "\"${geminiKey}\"")
 
             // Enable R8 full mode for maximum shrinking
             packaging {
@@ -154,6 +162,16 @@ dependencies {
 
     // ML Kit
     implementation(libs.mlkit.text.recognition)
+    implementation(libs.mlkit.document.scanner)
+
+    // WorkManager
+    implementation(libs.androidx.work.runtime)
+    implementation(libs.androidx.hilt.work)
+    ksp(libs.androidx.hilt.compiler)
+
+    // Play In-App Review + Integrity
+    implementation(libs.play.review)
+    implementation(libs.play.integrity)
 
     // Firebase
     implementation(platform(libs.firebase.bom))

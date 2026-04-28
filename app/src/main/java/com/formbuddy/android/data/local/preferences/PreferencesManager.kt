@@ -36,6 +36,14 @@ class PreferencesManager @Inject constructor(
         val KEY_IS_LOCAL_PROCESSING_ENABLED = booleanPreferencesKey("is_local_processing_enabled")
         val KEY_FIRST_FORM_SOURCE = stringPreferencesKey("first_form_source")
         val KEY_LAST_REVIEW_REQUEST = longPreferencesKey("last_review_request")
+        val KEY_ONE_SHOT_ENABLED = booleanPreferencesKey("one_shot_enabled")
+    }
+
+    /** Camera-to-filled "one shot": scan → auto-fill from profile → review.
+     *  Defaults to true so the happy path is the default. */
+    val oneShotEnabled: Flow<Boolean> = context.dataStore.data.map { it[KEY_ONE_SHOT_ENABLED] ?: true }
+    suspend fun setOneShotEnabled(enabled: Boolean) {
+        context.dataStore.edit { it[KEY_ONE_SHOT_ENABLED] = enabled }
     }
 
     val didShowOnboarding: Flow<Boolean> = context.dataStore.data.map { it[KEY_DID_SHOW_ONBOARDING] ?: false }

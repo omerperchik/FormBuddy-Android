@@ -5,6 +5,7 @@ import android.net.Uri
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.formbuddy.android.data.local.preferences.PreferencesManager
+import com.formbuddy.android.data.metrics.TimeSavedTracker
 import com.formbuddy.android.data.model.ChatMessage
 import com.formbuddy.android.data.model.ChatSession
 import com.formbuddy.android.data.model.FormField
@@ -12,17 +13,21 @@ import com.formbuddy.android.data.model.FormMode
 import com.formbuddy.android.data.model.FormTemplate
 import com.formbuddy.android.data.model.Profile
 import com.formbuddy.android.data.model.UserInputMethod
+import com.formbuddy.android.data.privacy.PrivacyAuditLog
 import com.formbuddy.android.data.repository.FormRepository
 import com.formbuddy.android.data.repository.ProfileRepository
+import com.formbuddy.android.data.review.InAppReviewManager
 import com.formbuddy.android.domain.analysis.FormAnalyzer
 import com.formbuddy.android.domain.filling.ConversationManager
 import com.formbuddy.android.domain.filling.ResponseClassifier
+import com.formbuddy.android.domain.learning.ProfileLearner
 import com.formbuddy.android.domain.speech.SpeechRecognitionService
 import com.formbuddy.android.domain.tts.TextToSpeechService
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -43,8 +48,26 @@ class FillingViewModel @Inject constructor(
     private val ttsService: TextToSpeechService,
     private val speechService: SpeechRecognitionService,
     private val preferencesManager: PreferencesManager,
+    private val timeSavedTracker: TimeSavedTracker,
+    private val profileLearner: ProfileLearner,
+    private val auditLog: PrivacyAuditLog,
+    private val inAppReviewManager: InAppReviewManager,
     private val context: Context
 ) : ViewModel() {
+
+    private val _showCelebration = MutableStateFlow(false)
+    val showCelebration: StateFlow<Boolean> = _showCelebration
+
+    private val _estimatedSeconds = MutableStateFlow(0L)
+    val estimatedSeconds: StateFlow<Long> = _estimatedSeconds
+
+    /** Editor-mode toggle; mirrors iOS `@AppStorage(.isEditorMode)`. */
+    val editorMode: StateFlow<Boolean> = preferencesManager.isEditorMode
+        .stateIn(viewModelScope, kotlinx.coroutines.flow.SharingStarted.WhileSubscribed(5_000), false)
+
+    fun setEditorMode(enabled: Boolean) {
+        viewModelScope.launch { preferencesManager.setEditorMode(enabled) }
+    }
 
     private val _uiState = MutableStateFlow<FillingUiState>(FillingUiState.Idle)
     val uiState: StateFlow<FillingUiState> = _uiState
@@ -113,12 +136,39 @@ class FillingViewModel @Inject constructor(
             val template = formAnalyzer.analyzeDocument(data)
             _formTemplate.value = template
             initChatSession(template)
+
+            // Camera-to-filled one-shot: if the user has a profile and the setting
+            // is on, fill from profile before they see anything. They land on the
+            // Document tab to *review* rather than the Chat tab to *fill*.
+            val oneShot = preferencesManager.oneShotEnabled.first()
+            if (oneShot && _currentProfile.value != null) {
+                runAgentSilently(template)
+            }
+
             _uiState.value = FillingUiState.Ready
         } catch (e: Exception) {
             _uiState.value = FillingUiState.Error(e.message ?: "Analysis failed")
         }
 
         _isProcessing.value = false
+    }
+
+    private suspend fun runAgentSilently(template: FormTemplate) {
+        val profile = _currentProfile.value ?: return
+        var changed = false
+        for (field in template.allFields) {
+            if (!field.isEmpty) continue
+            val suggested = profile.suggestedValue(field)
+                ?: profileLearner.bestSuggestion(field.fieldSubType)
+            if (!suggested.isNullOrBlank()) {
+                field.userValue = suggested
+                field.userInputMethod = UserInputMethod.PROFILE_AUTOFILL
+                changed = true
+            }
+        }
+        if (changed) {
+            _formTemplate.value = template.copy()
+        }
     }
 
     private fun initChatSession(template: FormTemplate) {
@@ -181,6 +231,7 @@ class FillingViewModel @Inject constructor(
         field.userValue = text
         field.userInputMethod = UserInputMethod.VOICE_FILLED
         _formTemplate.value = _formTemplate.value?.copy() // trigger recomposition
+        viewModelScope.launch { profileLearner.recordAcceptance(field, text) }
         session.currentFieldIndex++
         askNextQuestion()
     }
@@ -192,12 +243,71 @@ class FillingViewModel @Inject constructor(
         field.userInputMethod = UserInputMethod.ACCEPTED_SUGGESTION
         _formTemplate.value = template.copy()
         chatSession?.currentFieldIndex = (chatSession?.currentFieldIndex ?: 0) + 1
+        viewModelScope.launch { profileLearner.recordAcceptance(field, value) }
 
         _chatMessages.value = _chatMessages.value + ChatMessage(
             sender = ChatMessage.Sender.USER,
             content = value
         )
         askNextQuestion()
+    }
+
+    /** Called from the Form list when the user manually edits a field, so the
+     *  learner sees the corrected value win over an earlier suggestion. */
+    fun recordManualEdit(field: FormField, newValue: String) {
+        viewModelScope.launch { profileLearner.recordAcceptance(field, newValue) }
+    }
+
+    /** Called from the chat when the user rejects/edits a suggestion. */
+    fun recordRejection(field: FormField, suggestedValue: String) {
+        viewModelScope.launch { profileLearner.recordRejection(field, suggestedValue) }
+    }
+
+    /**
+     * Editor mode — adds a new user-generated TEXT field on [pageIndex] at the
+     * given normalized coordinates. iOS does the same on long-press in
+     * `DocumentAnalysisView` when `isEditorMode` is on.
+     */
+    fun addUserGeneratedField(pageIndex: Int, normalizedX: Double, normalizedY: Double) {
+        val template = _formTemplate.value ?: return
+        val page = template.pages.getOrNull(pageIndex) ?: return
+        // 12% wide, 5% tall is a good default field box for portrait pages.
+        val width = 0.18
+        val height = 0.045
+        val newField = FormField(
+            label = "New field",
+            isUserGenerated = true,
+            pageIndex = pageIndex,
+            boundingBox = com.formbuddy.android.data.model.BoundingBox(
+                x = (normalizedX - width / 2).coerceIn(0.0, 1.0 - width),
+                y = (normalizedY - height / 2).coerceIn(0.0, 1.0 - height),
+                width = width,
+                height = height
+            )
+        )
+        page.fields.add(newField)
+        _formTemplate.value = template.copy()
+    }
+
+    /** Editor mode — moves [field] up or down within its page. */
+    fun moveField(field: FormField, delta: Int) {
+        val template = _formTemplate.value ?: return
+        val page = template.pages.getOrNull(field.pageIndex) ?: return
+        val idx = page.fields.indexOfFirst { it.id == field.id }
+        if (idx < 0) return
+        val newIdx = (idx + delta).coerceIn(0, page.fields.size - 1)
+        if (newIdx == idx) return
+        val moved = page.fields.removeAt(idx)
+        page.fields.add(newIdx, moved)
+        _formTemplate.value = template.copy()
+    }
+
+    /** Editor mode — removes a user-generated field. */
+    fun removeField(field: FormField) {
+        val template = _formTemplate.value ?: return
+        val page = template.pages.getOrNull(field.pageIndex) ?: return
+        page.fields.removeAll { it.id == field.id }
+        _formTemplate.value = template.copy()
     }
 
     fun undoLastField() {
@@ -271,8 +381,29 @@ class FillingViewModel @Inject constructor(
             val template = _formTemplate.value ?: return@launch
             val data = documentData ?: return@launch
             val id = formRepository.saveForm(template, data, existingFormId)
+
+            // Track time saved + audit + first-save celebration trigger.
+            val filled = template.completedFieldsCount
+            timeSavedTracker.recordCompletion(filled)
+            auditLog.log(
+                PrivacyAuditLog.Category.Storage,
+                destination = "room:forms/$id",
+                description = "Saved form '${template.documentName}' with $filled filled fields"
+            )
+            if (existingFormId == null) {
+                _showCelebration.value = true
+            }
+
             onSaved(id)
         }
+    }
+
+    fun dismissCelebration() {
+        _showCelebration.value = false
+    }
+
+    suspend fun maybeAskForReview(activity: android.app.Activity) {
+        inAppReviewManager.maybeRequestReview(activity)
     }
 
     fun setProfile(profile: Profile) {

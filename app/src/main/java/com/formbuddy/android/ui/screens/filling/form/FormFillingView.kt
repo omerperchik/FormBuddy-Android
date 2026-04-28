@@ -14,8 +14,11 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowDropDown
+import androidx.compose.material.icons.filled.ArrowDropUp
 import androidx.compose.material.icons.filled.CheckBox
 import androidx.compose.material.icons.filled.CheckBoxOutlineBlank
+import androidx.compose.material.icons.filled.Close
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
@@ -60,7 +63,8 @@ fun FormFillingView(
     template: FormTemplate,
     viewModel: FillingViewModel,
     selectedFieldId: String? = null,
-    onFieldSelected: (String) -> Unit = {}
+    onFieldSelected: (String) -> Unit = {},
+    editorMode: Boolean = false
 ) {
     if (template.allFields.isEmpty()) {
         Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
@@ -89,19 +93,21 @@ fun FormFillingView(
                 FieldRow(
                     field = field,
                     isSelected = field.id == selectedFieldId,
+                    editorMode = editorMode,
                     onSelected = { onFieldSelected(field.id) },
                     onValueChange = { newValue ->
                         field.userValue = newValue
-                        if (field.userInputMethod == null) {
-                            field.userInputMethod = null // manual edit
-                        }
                         viewModel.notifyFieldChanged()
+                        viewModel.recordManualEdit(field, newValue)
                     },
                     onCheckboxToggle = { type ->
                         field.style.checkboxType = type
                         field.userInputMethod = null
                         viewModel.notifyFieldChanged()
-                    }
+                    },
+                    onMoveUp = { viewModel.moveField(field, -1) },
+                    onMoveDown = { viewModel.moveField(field, +1) },
+                    onRemove = { viewModel.removeField(field) }
                 )
             }
         }
@@ -112,9 +118,13 @@ fun FormFillingView(
 private fun FieldRow(
     field: FormField,
     isSelected: Boolean,
+    editorMode: Boolean,
     onSelected: () -> Unit,
     onValueChange: (String) -> Unit,
-    onCheckboxToggle: (CheckboxType) -> Unit
+    onCheckboxToggle: (CheckboxType) -> Unit,
+    onMoveUp: () -> Unit,
+    onMoveDown: () -> Unit,
+    onRemove: () -> Unit
 ) {
     val accent = field.fieldType.color()
     Card(
@@ -150,6 +160,20 @@ private fun FieldRow(
                         style = MaterialTheme.typography.labelSmall,
                         color = MaterialTheme.colorScheme.primary
                     )
+                }
+                if (editorMode) {
+                    androidx.compose.foundation.layout.Spacer(Modifier.weight(1f))
+                    IconButton(onClick = onMoveUp) {
+                        Icon(Icons.Filled.ArrowDropUp, contentDescription = "Move up")
+                    }
+                    IconButton(onClick = onMoveDown) {
+                        Icon(Icons.Filled.ArrowDropDown, contentDescription = "Move down")
+                    }
+                    if (field.isUserGenerated) {
+                        IconButton(onClick = onRemove) {
+                            Icon(Icons.Filled.Close, contentDescription = "Remove")
+                        }
+                    }
                 }
             }
 

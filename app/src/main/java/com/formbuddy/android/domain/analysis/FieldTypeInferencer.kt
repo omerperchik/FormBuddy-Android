@@ -217,10 +217,5 @@ class FieldTypeInferencer @Inject constructor(
         )
     }
 
-    private data class Quad<A, B, C, D>(val a: A, val b: B, val c: C, val d: D) {
-        operator fun component1() = a
-        operator fun component2() = b
-        operator fun component3() = c
-        operator fun component4() = d
-    }
+    private data class Quad<A, B, C, D>(val a: A, val b: B, val c: C, val d: D)
 }
