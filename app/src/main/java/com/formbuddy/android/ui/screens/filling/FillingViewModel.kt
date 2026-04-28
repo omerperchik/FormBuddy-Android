@@ -279,6 +279,19 @@ class FillingViewModel @Inject constructor(
         _currentProfile.value = profile
     }
 
+    /** Surface the cached document bytes to UI so the Document tab can render pages. */
+    fun documentBytes(): ByteArray? = documentData
+
+    /**
+     * The Form/Document tabs mutate fields directly on the [FormTemplate] (which is an
+     * `@Observable` data class with mutable members). Compose only recomposes when the
+     * outer state-flow value reference changes, so we publish a fresh `.copy()` after
+     * any in-place edit.
+     */
+    fun notifyFieldChanged() {
+        _formTemplate.value = _formTemplate.value?.copy()
+    }
+
     override fun onCleared() {
         super.onCleared()
         ttsService.shutdown()

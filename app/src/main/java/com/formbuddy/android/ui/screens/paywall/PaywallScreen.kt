@@ -32,6 +32,8 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.remember
@@ -39,13 +41,18 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
+import android.app.Activity
+import android.content.Context
+import android.content.ContextWrapper
 import com.formbuddy.android.R
+import com.formbuddy.android.data.billing.BillingManager
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -54,6 +61,17 @@ fun PaywallScreen(
     viewModel: PaywallViewModel = hiltViewModel()
 ) {
     var selectedPlan by remember { mutableIntStateOf(1) } // 0=weekly, 1=monthly, 2=yearly
+    val offers by viewModel.offers.collectAsState()
+    val isPro by viewModel.isPro.collectAsState()
+    val context = LocalContext.current
+    val activity = remember(context) { context.findActivity() }
+
+    // Auto-dismiss when subscription becomes active.
+    LaunchedEffect(isPro) {
+        if (isPro) navController.popBackStack()
+    }
+
+    val planOrder = listOf(BillingManager.Plan.WEEKLY, BillingManager.Plan.MONTHLY, BillingManager.Plan.YEARLY)
 
     Scaffold(
         topBar = {
@@ -115,28 +133,38 @@ fun PaywallScreen(
 
             Spacer(modifier = Modifier.height(24.dp))
 
-            // Plan selector
-            val plans = listOf(
-                stringResource(R.string.paywall_plan_weekly) to stringResource(R.string.paywall_price_weekly),
-                stringResource(R.string.paywall_plan_monthly) to stringResource(R.string.paywall_price_monthly),
-                stringResource(R.string.paywall_plan_yearly) to stringResource(R.string.paywall_price_yearly)
+            // Plan selector — uses live Google Play prices when available, falling back
+            // to the local resource strings if Play hasn't returned details yet.
+            val planLabels = listOf(
+                stringResource(R.string.paywall_plan_weekly),
+                stringResource(R.string.paywall_plan_monthly),
+                stringResource(R.string.paywall_plan_yearly)
+            )
+            val fallbackPrices = listOf(
+                stringResource(R.string.paywall_price_weekly),
+                stringResource(R.string.paywall_price_monthly),
+                stringResource(R.string.paywall_price_yearly)
             )
 
-            plans.forEachIndexed { index, (name, price) ->
+            planOrder.forEachIndexed { index, plan ->
+                val live = offers.firstOrNull { it.plan == plan }
                 PlanCard(
-                    name = name,
-                    price = price,
+                    name = planLabels[index],
+                    price = live?.formattedPrice ?: fallbackPrices[index],
                     isSelected = index == selectedPlan,
-                    isBestValue = index == 2,
+                    isBestValue = plan == BillingManager.Plan.YEARLY,
                     onClick = { selectedPlan = index }
                 )
-                if (index < plans.size - 1) Spacer(modifier = Modifier.height(8.dp))
+                if (index < planOrder.size - 1) Spacer(modifier = Modifier.height(8.dp))
             }
 
             Spacer(modifier = Modifier.height(24.dp))
 
             Button(
-                onClick = { viewModel.purchase(selectedPlan) },
+                onClick = {
+                    activity?.let { viewModel.purchase(it, planOrder[selectedPlan]) }
+                },
+                enabled = activity != null && offers.isNotEmpty(),
                 modifier = Modifier.fillMaxWidth(),
                 colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.primary)
             ) {
@@ -147,7 +175,7 @@ fun PaywallScreen(
             }
 
             OutlinedButton(
-                onClick = { viewModel.restorePurchases() },
+                onClick = { viewModel.restore() },
                 modifier = Modifier.fillMaxWidth()
             ) {
                 Text(stringResource(R.string.paywall_restore))
@@ -156,6 +184,16 @@ fun PaywallScreen(
             Spacer(modifier = Modifier.height(24.dp))
         }
     }
+}
+
+/** Walks ContextWrappers to find the host Activity (needed for launchBillingFlow). */
+private fun Context.findActivity(): Activity? {
+    var ctx: Context? = this
+    while (ctx is ContextWrapper) {
+        if (ctx is Activity) return ctx
+        ctx = ctx.baseContext
+    }
+    return null
 }
 
 @Composable

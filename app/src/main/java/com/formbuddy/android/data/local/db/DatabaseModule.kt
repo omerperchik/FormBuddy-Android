@@ -19,11 +19,9 @@ import javax.inject.Singleton
 @InstallIn(SingletonComponent::class)
 object DatabaseModule {
 
-    @Provides
-    @Singleton
-    fun provideEncryptionManager(@ApplicationContext context: Context): EncryptionManager {
-        return EncryptionManager(context)
-    }
+    // EncryptionManager has `@Inject constructor` + `@Singleton`, so Hilt provides it
+    // automatically. We don't repeat it here — declaring both yields a duplicate-binding
+    // compile error.
 
     @Provides
     @Singleton

@@ -158,4 +158,64 @@
     <string name="settings_terms">Termos de serviço</string>
     <string name="settings_contact_support">Contatar suporte</string>
     <string name="settings_share_app">Compartilhar FormBuddy</string>
+
+    <string name="field_type_text">Texto</string>
+    <string name="field_type_number">Número</string>
+    <string name="field_type_checkbox">Caixa</string>
+    <string name="field_type_signature">Assinatura</string>
+    <string name="field_type_date">Data</string>
+    <string name="field_type_email">E-mail</string>
+    <string name="field_type_phone">Telefone</string>
+    <string name="field_type_address">Endereço</string>
+
+    <string name="mode_document">Documento</string>
+    <string name="mode_form">Formulário</string>
+
+    <string name="general_alert_title">Algo deu errado</string>
+    <string name="general_alert_message">Tente novamente. Se persistir, entre em contato com o suporte.</string>
+    <string name="action_ok">OK</string>
+    <string name="action_continue">Continuar</string>
+    <string name="action_grant">Permitir</string>
+    <string name="action_settings">Abrir Ajustes</string>
+
+    <string name="permissions_title">Permita o acesso do FormBuddy</string>
+    <string name="permissions_subtitle">Precisamos de algumas permissões para escanear e preencher formulários por voz.</string>
+    <string name="permission_camera_title">Câmera</string>
+    <string name="permission_camera_description">Escaneie formulários em papel com sua câmera</string>
+    <string name="permission_microphone_title">Microfone</string>
+    <string name="permission_microphone_description">Fale para preencher formulários sem usar as mãos</string>
+    <string name="permission_speech_title">Reconhecimento de fala</string>
+    <string name="permission_speech_description">Converta sua voz em valores no dispositivo</string>
+    <string name="permission_notifications_title">Notificações</string>
+    <string name="permission_notifications_description">Te avisamos quando uploads longos terminam</string>
+
+    <string name="hint_email">email,e-mail,correio</string>
+    <string name="hint_phone">phone,telefone,celular,fax,tel</string>
+    <string name="hint_date">date,data,nascimento,aniversário</string>
+    <string name="hint_address">address,endereço,rua,avenida</string>
+    <string name="hint_signature">signature,assinatura,assinar</string>
+    <string name="hint_first_name">first name,nome,primeiro nome</string>
+    <string name="hint_middle_name">middle name,nome do meio</string>
+    <string name="hint_last_name">last name,sobrenome</string>
+    <string name="hint_birth_date">date of birth,data de nascimento</string>
+    <string name="hint_home_address">home address,endereço residencial</string>
+    <string name="hint_work_address">work address,endereço comercial</string>
+    <string name="hint_city">city,cidade,município</string>
+    <string name="hint_state">state,estado,região</string>
+    <string name="hint_country">country,país,nação</string>
+    <string name="hint_postal_code">zip,cep,código postal</string>
+    <string name="hint_company">company,empresa,organização</string>
+    <string name="hint_tax_id">tax id,cnpj,cpf,inscrição estadual</string>
+    <string name="hint_registration">registration number,número de registro</string>
+    <string name="hint_website">website,site,página web,url</string>
+    <string name="hint_industry">industry,indústria,setor</string>
+    <string name="hint_number">number,número,nº,n.º,quantidade</string>
+
+    <string name="form_page_label">Página %1$d</string>
+    <string name="form_field_required">Obrigatório</string>
+    <string name="form_no_fields">Esta página não tem campos detectados.</string>
+
+    <string name="document_zoom_hint">Pinçar para ampliar · pressione e segure para adicionar campo</string>
+    <string name="document_add_field">Adicionar um campo aqui?</string>
+    <string name="document_completion">%1$d de %2$d preenchidos</string>
 </resources>

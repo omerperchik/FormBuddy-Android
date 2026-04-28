@@ -158,4 +158,72 @@
     <string name="settings_terms">Terms of Service</string>
     <string name="settings_contact_support">Contact Support</string>
     <string name="settings_share_app">Share FormBuddy</string>
+
+    <!-- Field type display names (mirrors iOS .fieldTypeText, .fieldTypeNumber, etc.) -->
+    <string name="field_type_text">Text</string>
+    <string name="field_type_number">Number</string>
+    <string name="field_type_checkbox">Checkbox</string>
+    <string name="field_type_signature">Signature</string>
+    <string name="field_type_date">Date</string>
+    <string name="field_type_email">Email</string>
+    <string name="field_type_phone">Phone</string>
+    <string name="field_type_address">Address</string>
+
+    <!-- Filling modes (mirrors iOS DocumentFilling tabs) -->
+    <string name="mode_document">Document</string>
+    <string name="mode_form">Form</string>
+
+    <!-- Generic alerts (mirrors iOS .generalAlertTitle / .generalAlertMessage) -->
+    <string name="general_alert_title">Something went wrong</string>
+    <string name="general_alert_message">Please try again. If the problem persists, contact support.</string>
+    <string name="action_ok">OK</string>
+    <string name="action_continue">Continue</string>
+    <string name="action_grant">Grant</string>
+    <string name="action_settings">Open Settings</string>
+
+    <!-- Permission requests (Onboarding) -->
+    <string name="permissions_title">Allow FormBuddy access</string>
+    <string name="permissions_subtitle">We need a few permissions to help you scan and fill forms by voice.</string>
+    <string name="permission_camera_title">Camera</string>
+    <string name="permission_camera_description">Scan paper forms with your camera</string>
+    <string name="permission_microphone_title">Microphone</string>
+    <string name="permission_microphone_description">Talk to fill forms hands-free</string>
+    <string name="permission_speech_title">Speech Recognition</string>
+    <string name="permission_speech_description">Convert your voice to form values, on-device</string>
+    <string name="permission_notifications_title">Notifications</string>
+    <string name="permission_notifications_description">Let us notify you when long uploads finish</string>
+
+    <!-- Inference keyword hints (locale-aware, loaded by FieldTypeInferencer).
+         Comma-separated; lowercase preferred but case-insensitive at runtime. -->
+    <string name="hint_email">email,e-mail,mail,inbox</string>
+    <string name="hint_phone">phone,mobile,cell,telephone,tel,fax</string>
+    <string name="hint_date">date,birth,dob,born,birthday,issued,expiry,expiration</string>
+    <string name="hint_address">address,addr,street,road,avenue,blvd</string>
+    <string name="hint_signature">signature,sign,initial,initials</string>
+    <string name="hint_first_name">first name,given name,forename,first</string>
+    <string name="hint_middle_name">middle name,middle initial,m.i.,middle</string>
+    <string name="hint_last_name">last name,surname,family name,lastname</string>
+    <string name="hint_birth_date">date of birth,birth date,birthday,dob</string>
+    <string name="hint_home_address">home address,residential address,home</string>
+    <string name="hint_work_address">work address,office address,business address</string>
+    <string name="hint_city">city,town,municipality</string>
+    <string name="hint_state">state,province,region</string>
+    <string name="hint_country">country,nation</string>
+    <string name="hint_postal_code">zip,zipcode,postal code,postcode,zip/postal</string>
+    <string name="hint_company">company,business name,organization,employer</string>
+    <string name="hint_tax_id">tax id,ein,vat,tin,ssn,social security</string>
+    <string name="hint_registration">registration number,license number,reg no,license no</string>
+    <string name="hint_website">website,web,url,homepage</string>
+    <string name="hint_industry">industry,sector,trade,business sector</string>
+    <string name="hint_number">number,no,#,amount,quantity,qty</string>
+
+    <!-- Form filling list -->
+    <string name="form_page_label">Page %1$d</string>
+    <string name="form_field_required">Required</string>
+    <string name="form_no_fields">This page has no detected fields.</string>
+
+    <!-- Document analysis (PDF visual mode) -->
+    <string name="document_zoom_hint">Pinch to zoom · long-press to add a field</string>
+    <string name="document_add_field">Add field here?</string>
+    <string name="document_completion">%1$d of %2$d filled</string>
 </resources>

@@ -158,4 +158,64 @@
     <string name="settings_terms">利用規約</string>
     <string name="settings_contact_support">サポートに連絡</string>
     <string name="settings_share_app">FormBuddyを共有</string>
+
+    <string name="field_type_text">テキスト</string>
+    <string name="field_type_number">数値</string>
+    <string name="field_type_checkbox">チェックボックス</string>
+    <string name="field_type_signature">署名</string>
+    <string name="field_type_date">日付</string>
+    <string name="field_type_email">メール</string>
+    <string name="field_type_phone">電話</string>
+    <string name="field_type_address">住所</string>
+
+    <string name="mode_document">ドキュメント</string>
+    <string name="mode_form">フォーム</string>
+
+    <string name="general_alert_title">問題が発生しました</string>
+    <string name="general_alert_message">もう一度お試しください。問題が続く場合はサポートにご連絡ください。</string>
+    <string name="action_ok">OK</string>
+    <string name="action_continue">続行</string>
+    <string name="action_grant">許可</string>
+    <string name="action_settings">設定を開く</string>
+
+    <string name="permissions_title">FormBuddy にアクセスを許可</string>
+    <string name="permissions_subtitle">スキャンと音声入力のためにいくつかの権限が必要です。</string>
+    <string name="permission_camera_title">カメラ</string>
+    <string name="permission_camera_description">カメラで紙のフォームをスキャン</string>
+    <string name="permission_microphone_title">マイク</string>
+    <string name="permission_microphone_description">声でハンズフリーに入力</string>
+    <string name="permission_speech_title">音声認識</string>
+    <string name="permission_speech_description">端末上で音声をフォーム値に変換</string>
+    <string name="permission_notifications_title">通知</string>
+    <string name="permission_notifications_description">長いアップロードが完了したらお知らせします</string>
+
+    <string name="hint_email">email,メール,Eメール,電子メール</string>
+    <string name="hint_phone">phone,電話,携帯,ファックス,fax</string>
+    <string name="hint_date">date,日付,生年,誕生日</string>
+    <string name="hint_address">address,住所,番地</string>
+    <string name="hint_signature">signature,署名,サイン</string>
+    <string name="hint_first_name">first name,名,下の名前</string>
+    <string name="hint_middle_name">middle name,ミドルネーム</string>
+    <string name="hint_last_name">last name,姓,苗字,氏</string>
+    <string name="hint_birth_date">date of birth,生年月日,誕生日</string>
+    <string name="hint_home_address">home address,自宅住所</string>
+    <string name="hint_work_address">work address,勤務先住所</string>
+    <string name="hint_city">city,市,町,区</string>
+    <string name="hint_state">state,都道府県,県</string>
+    <string name="hint_country">country,国,国名</string>
+    <string name="hint_postal_code">zip,郵便番号,〒</string>
+    <string name="hint_company">company,会社,企業,組織</string>
+    <string name="hint_tax_id">tax id,法人番号,個人番号,マイナンバー</string>
+    <string name="hint_registration">registration number,登録番号</string>
+    <string name="hint_website">website,ウェブサイト,サイト,url</string>
+    <string name="hint_industry">industry,業種,産業</string>
+    <string name="hint_number">number,番号,数</string>
+
+    <string name="form_page_label">ページ %1$d</string>
+    <string name="form_field_required">必須</string>
+    <string name="form_no_fields">このページにフィールドはありません。</string>
+
+    <string name="document_zoom_hint">ピンチで拡大 · 長押しでフィールド追加</string>
+    <string name="document_add_field">ここにフィールドを追加しますか？</string>
+    <string name="document_completion">%2$d 件中 %1$d 件入力済み</string>
 </resources>

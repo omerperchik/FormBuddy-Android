@@ -158,4 +158,65 @@
     <string name="settings_terms">Conditions d\'utilisation</string>
     <string name="settings_contact_support">Contacter le support</string>
     <string name="settings_share_app">Partager FormBuddy</string>
+
+    <!-- Field type display names -->
+    <string name="field_type_text">Texte</string>
+    <string name="field_type_number">Nombre</string>
+    <string name="field_type_checkbox">Case</string>
+    <string name="field_type_signature">Signature</string>
+    <string name="field_type_date">Date</string>
+    <string name="field_type_email">E-mail</string>
+    <string name="field_type_phone">Téléphone</string>
+    <string name="field_type_address">Adresse</string>
+
+    <string name="mode_document">Document</string>
+    <string name="mode_form">Formulaire</string>
+
+    <string name="general_alert_title">Une erreur est survenue</string>
+    <string name="general_alert_message">Veuillez réessayer. Si le problème persiste, contactez le support.</string>
+    <string name="action_ok">OK</string>
+    <string name="action_continue">Continuer</string>
+    <string name="action_grant">Autoriser</string>
+    <string name="action_settings">Ouvrir les Paramètres</string>
+
+    <string name="permissions_title">Autorisez FormBuddy</string>
+    <string name="permissions_subtitle">Quelques autorisations sont nécessaires pour numériser et remplir des formulaires.</string>
+    <string name="permission_camera_title">Caméra</string>
+    <string name="permission_camera_description">Numérisez des formulaires papier avec votre caméra</string>
+    <string name="permission_microphone_title">Microphone</string>
+    <string name="permission_microphone_description">Parlez pour remplir des formulaires mains libres</string>
+    <string name="permission_speech_title">Reconnaissance vocale</string>
+    <string name="permission_speech_description">Convertissez votre voix en valeurs sur l'appareil</string>
+    <string name="permission_notifications_title">Notifications</string>
+    <string name="permission_notifications_description">Recevez une alerte à la fin des envois longs</string>
+
+    <string name="hint_email">email,e-mail,courriel,mél</string>
+    <string name="hint_phone">phone,téléphone,mobile,portable,fax,tél</string>
+    <string name="hint_date">date,naissance,anniversaire</string>
+    <string name="hint_address">address,adresse,rue,avenue,boulevard</string>
+    <string name="hint_signature">signature,signer,paraphe</string>
+    <string name="hint_first_name">first name,prénom</string>
+    <string name="hint_middle_name">middle name,deuxième prénom</string>
+    <string name="hint_last_name">last name,nom de famille,nom</string>
+    <string name="hint_birth_date">date of birth,date de naissance</string>
+    <string name="hint_home_address">home address,adresse personnelle,domicile</string>
+    <string name="hint_work_address">work address,adresse professionnelle</string>
+    <string name="hint_city">city,ville,commune</string>
+    <string name="hint_state">state,région,département</string>
+    <string name="hint_country">country,pays,nation</string>
+    <string name="hint_postal_code">zip,code postal,cp</string>
+    <string name="hint_company">company,entreprise,société,organisation</string>
+    <string name="hint_tax_id">tax id,numéro fiscal,siret,siren,tva</string>
+    <string name="hint_registration">registration number,numéro d'enregistrement,immatriculation</string>
+    <string name="hint_website">website,site web,site,url</string>
+    <string name="hint_industry">industry,industrie,secteur</string>
+    <string name="hint_number">number,numéro,n°,nº,quantité</string>
+
+    <string name="form_page_label">Page %1$d</string>
+    <string name="form_field_required">Requis</string>
+    <string name="form_no_fields">Aucun champ détecté sur cette page.</string>
+
+    <string name="document_zoom_hint">Pincez pour zoomer · maintenez pour ajouter un champ</string>
+    <string name="document_add_field">Ajouter un champ ici ?</string>
+    <string name="document_completion">%1$d sur %2$d remplis</string>
 </resources>

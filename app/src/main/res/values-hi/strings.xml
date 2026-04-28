@@ -158,4 +158,64 @@
     <string name="settings_terms">सेवा की शर्तें</string>
     <string name="settings_contact_support">सहायता से संपर्क करें</string>
     <string name="settings_share_app">FormBuddy शेयर करें</string>
+
+    <string name="field_type_text">टेक्स्ट</string>
+    <string name="field_type_number">नंबर</string>
+    <string name="field_type_checkbox">चेकबॉक्स</string>
+    <string name="field_type_signature">हस्ताक्षर</string>
+    <string name="field_type_date">तारीख</string>
+    <string name="field_type_email">ईमेल</string>
+    <string name="field_type_phone">फ़ोन</string>
+    <string name="field_type_address">पता</string>
+
+    <string name="mode_document">दस्तावेज़</string>
+    <string name="mode_form">फ़ॉर्म</string>
+
+    <string name="general_alert_title">कुछ गड़बड़ हो गई</string>
+    <string name="general_alert_message">कृपया पुनः प्रयास करें। यदि समस्या बनी रहे, तो सहायता से संपर्क करें।</string>
+    <string name="action_ok">ठीक है</string>
+    <string name="action_continue">जारी रखें</string>
+    <string name="action_grant">अनुमति दें</string>
+    <string name="action_settings">सेटिंग्स खोलें</string>
+
+    <string name="permissions_title">FormBuddy को एक्सेस की अनुमति दें</string>
+    <string name="permissions_subtitle">फॉर्म स्कैन और आवाज़ से भरने के लिए हमें कुछ अनुमतियाँ चाहिए।</string>
+    <string name="permission_camera_title">कैमरा</string>
+    <string name="permission_camera_description">कैमरे से कागज़ी फॉर्म स्कैन करें</string>
+    <string name="permission_microphone_title">माइक्रोफ़ोन</string>
+    <string name="permission_microphone_description">हाथ मुक्त फॉर्म भरने के लिए बोलें</string>
+    <string name="permission_speech_title">वाक् पहचान</string>
+    <string name="permission_speech_description">डिवाइस पर आवाज़ को फॉर्म मानों में बदलें</string>
+    <string name="permission_notifications_title">सूचनाएँ</string>
+    <string name="permission_notifications_description">लंबे अपलोड पूरे होने पर सूचित करें</string>
+
+    <string name="hint_email">email,ईमेल,मेल</string>
+    <string name="hint_phone">phone,फ़ोन,मोबाइल,फ़ैक्स</string>
+    <string name="hint_date">date,तारीख,जन्म,जन्मदिन</string>
+    <string name="hint_address">address,पता,सड़क</string>
+    <string name="hint_signature">signature,हस्ताक्षर</string>
+    <string name="hint_first_name">first name,पहला नाम</string>
+    <string name="hint_middle_name">middle name,मध्य नाम</string>
+    <string name="hint_last_name">last name,अंतिम नाम,उपनाम</string>
+    <string name="hint_birth_date">date of birth,जन्म तिथि</string>
+    <string name="hint_home_address">home address,घर का पता</string>
+    <string name="hint_work_address">work address,कार्यस्थल का पता</string>
+    <string name="hint_city">city,शहर,नगर</string>
+    <string name="hint_state">state,राज्य</string>
+    <string name="hint_country">country,देश</string>
+    <string name="hint_postal_code">zip,पिन कोड,डाक कोड</string>
+    <string name="hint_company">company,कंपनी,व्यवसाय</string>
+    <string name="hint_tax_id">tax id,पैन,आधार,gstin</string>
+    <string name="hint_registration">registration number,पंजीकरण संख्या</string>
+    <string name="hint_website">website,वेबसाइट,वेब,url</string>
+    <string name="hint_industry">industry,उद्योग</string>
+    <string name="hint_number">number,नंबर,संख्या</string>
+
+    <string name="form_page_label">पृष्ठ %1$d</string>
+    <string name="form_field_required">आवश्यक</string>
+    <string name="form_no_fields">इस पृष्ठ पर कोई फ़ील्ड नहीं मिली।</string>
+
+    <string name="document_zoom_hint">ज़ूम के लिए पिंच करें · फ़ील्ड जोड़ने के लिए लंबे समय तक दबाएँ</string>
+    <string name="document_add_field">यहाँ फ़ील्ड जोड़ें?</string>
+    <string name="document_completion">%2$d में से %1$d भरे गए</string>
 </resources>

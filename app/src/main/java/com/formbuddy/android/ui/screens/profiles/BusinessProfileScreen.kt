@@ -36,6 +36,7 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import com.formbuddy.android.R
+import com.formbuddy.android.ui.components.BiometricGate
 import com.formbuddy.android.ui.components.FloatingLabelTextField
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -53,6 +54,17 @@ fun BusinessProfileScreen(
 
     val p = profile ?: return
 
+    val title = stringResource(R.string.profile_business)
+    val gateSubtitle = stringResource(R.string.profile_biometric_description)
+    val gateCancel = stringResource(R.string.action_cancel)
+
+    BiometricGate(
+        enabled = p.isPrivate,
+        title = title,
+        subtitle = gateSubtitle,
+        cancelLabel = gateCancel,
+        onCancel = { navController.popBackStack() }
+    ) {
     Scaffold(
         topBar = {
             TopAppBar(
@@ -157,5 +169,6 @@ fun BusinessProfileScreen(
 
             Spacer(modifier = Modifier.height(24.dp))
         }
+    }
     }
 }

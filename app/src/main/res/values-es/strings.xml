@@ -158,4 +158,65 @@
     <string name="settings_terms">Términos de servicio</string>
     <string name="settings_contact_support">Contactar soporte</string>
     <string name="settings_share_app">Compartir FormBuddy</string>
+
+    <!-- Field type display names -->
+    <string name="field_type_text">Texto</string>
+    <string name="field_type_number">Número</string>
+    <string name="field_type_checkbox">Casilla</string>
+    <string name="field_type_signature">Firma</string>
+    <string name="field_type_date">Fecha</string>
+    <string name="field_type_email">Email</string>
+    <string name="field_type_phone">Teléfono</string>
+    <string name="field_type_address">Dirección</string>
+
+    <string name="mode_document">Documento</string>
+    <string name="mode_form">Formulario</string>
+
+    <string name="general_alert_title">Algo salió mal</string>
+    <string name="general_alert_message">Inténtalo de nuevo. Si el problema persiste, contacta con soporte.</string>
+    <string name="action_ok">Aceptar</string>
+    <string name="action_continue">Continuar</string>
+    <string name="action_grant">Permitir</string>
+    <string name="action_settings">Abrir Ajustes</string>
+
+    <string name="permissions_title">Permite el acceso de FormBuddy</string>
+    <string name="permissions_subtitle">Necesitamos algunos permisos para escanear y rellenar formularios por voz.</string>
+    <string name="permission_camera_title">Cámara</string>
+    <string name="permission_camera_description">Escanea formularios en papel con tu cámara</string>
+    <string name="permission_microphone_title">Micrófono</string>
+    <string name="permission_microphone_description">Habla para rellenar formularios sin manos</string>
+    <string name="permission_speech_title">Reconocimiento de voz</string>
+    <string name="permission_speech_description">Convierte tu voz en valores de formulario, en el dispositivo</string>
+    <string name="permission_notifications_title">Notificaciones</string>
+    <string name="permission_notifications_description">Te avisaremos cuando terminen las cargas largas</string>
+
+    <string name="hint_email">email,e-mail,correo,correo electrónico</string>
+    <string name="hint_phone">phone,teléfono,móvil,celular,fax,tel</string>
+    <string name="hint_date">date,fecha,nacimiento,cumpleaños</string>
+    <string name="hint_address">address,dirección,calle,avenida</string>
+    <string name="hint_signature">signature,firma,firmar</string>
+    <string name="hint_first_name">first name,nombre,nombre de pila</string>
+    <string name="hint_middle_name">middle name,segundo nombre</string>
+    <string name="hint_last_name">last name,apellido,apellidos</string>
+    <string name="hint_birth_date">date of birth,fecha de nacimiento</string>
+    <string name="hint_home_address">home address,dirección particular,domicilio</string>
+    <string name="hint_work_address">work address,dirección laboral</string>
+    <string name="hint_city">city,ciudad,localidad</string>
+    <string name="hint_state">state,provincia,región,estado</string>
+    <string name="hint_country">country,país,nación</string>
+    <string name="hint_postal_code">zip,código postal,cp</string>
+    <string name="hint_company">company,empresa,compañía,organización</string>
+    <string name="hint_tax_id">tax id,nif,cif,nie,rfc,cuit</string>
+    <string name="hint_registration">registration number,número de registro,matrícula</string>
+    <string name="hint_website">website,sitio web,página web,url</string>
+    <string name="hint_industry">industry,industria,sector</string>
+    <string name="hint_number">number,número,nº,n.º,cantidad</string>
+
+    <string name="form_page_label">Página %1$d</string>
+    <string name="form_field_required">Obligatorio</string>
+    <string name="form_no_fields">Esta página no tiene campos detectados.</string>
+
+    <string name="document_zoom_hint">Pellizca para acercar · mantén pulsado para añadir un campo</string>
+    <string name="document_add_field">¿Añadir un campo aquí?</string>
+    <string name="document_completion">%1$d de %2$d completados</string>
 </resources>

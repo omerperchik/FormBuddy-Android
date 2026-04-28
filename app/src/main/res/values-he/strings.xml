@@ -158,4 +158,66 @@
     <string name="settings_terms">תנאי שימוש</string>
     <string name="settings_contact_support">צור קשר עם התמיכה</string>
     <string name="settings_share_app">שתף את FormBuddy</string>
+
+    <!-- Field type display names -->
+    <string name="field_type_text">טקסט</string>
+    <string name="field_type_number">מספר</string>
+    <string name="field_type_checkbox">תיבת סימון</string>
+    <string name="field_type_signature">חתימה</string>
+    <string name="field_type_date">תאריך</string>
+    <string name="field_type_email">דוא״ל</string>
+    <string name="field_type_phone">טלפון</string>
+    <string name="field_type_address">כתובת</string>
+
+    <string name="mode_document">מסמך</string>
+    <string name="mode_form">טופס</string>
+
+    <string name="general_alert_title">משהו השתבש</string>
+    <string name="general_alert_message">נסו שוב. אם הבעיה ממשיכה, צרו קשר עם התמיכה.</string>
+    <string name="action_ok">אישור</string>
+    <string name="action_continue">המשך</string>
+    <string name="action_grant">אישור</string>
+    <string name="action_settings">פתח הגדרות</string>
+
+    <string name="permissions_title">אפשרו ל-FormBuddy גישה</string>
+    <string name="permissions_subtitle">נדרשות כמה הרשאות כדי לסרוק ולמלא טפסים בקול.</string>
+    <string name="permission_camera_title">מצלמה</string>
+    <string name="permission_camera_description">סרוק טפסים מודפסים באמצעות המצלמה</string>
+    <string name="permission_microphone_title">מיקרופון</string>
+    <string name="permission_microphone_description">דבר כדי למלא טפסים ללא מגע ידיים</string>
+    <string name="permission_speech_title">זיהוי דיבור</string>
+    <string name="permission_speech_description">המרת הקול שלך לערכי טופס, במכשיר</string>
+    <string name="permission_notifications_title">התראות</string>
+    <string name="permission_notifications_description">קבל התראה כאשר העלאות ארוכות מסתיימות</string>
+
+    <!-- Hebrew inference hints -->
+    <string name="hint_email">email,מייל,דוא״ל,דואר אלקטרוני,אימייל</string>
+    <string name="hint_phone">phone,טלפון,נייד,פלאפון,פקס,טלפון נייד</string>
+    <string name="hint_date">date,תאריך,לידה,יום הולדת,הנפקה,תפוגה</string>
+    <string name="hint_address">address,כתובת,רחוב,שדרה</string>
+    <string name="hint_signature">signature,חתימה,חתום,חתימת</string>
+    <string name="hint_first_name">first name,שם פרטי,שם</string>
+    <string name="hint_middle_name">middle name,שם אמצעי,שם שני</string>
+    <string name="hint_last_name">last name,שם משפחה,משפחה</string>
+    <string name="hint_birth_date">date of birth,תאריך לידה,יום הולדת</string>
+    <string name="hint_home_address">home address,כתובת בית,כתובת מגורים</string>
+    <string name="hint_work_address">work address,כתובת עבודה,כתובת עסק</string>
+    <string name="hint_city">city,עיר,יישוב,מקום מגורים</string>
+    <string name="hint_state">state,מדינה,מחוז,אזור</string>
+    <string name="hint_country">country,מדינה,ארץ,לאום</string>
+    <string name="hint_postal_code">zip,מיקוד,קוד דואר,מיקוד דואר</string>
+    <string name="hint_company">company,חברה,עסק,ארגון,מעסיק</string>
+    <string name="hint_tax_id">tax id,מספר עוסק,ח.פ,ת.ז,מס׳ זהות,תעודת זהות</string>
+    <string name="hint_registration">registration number,מספר רישום,רישיון</string>
+    <string name="hint_website">website,אתר,אתר אינטרנט,כתובת אתר</string>
+    <string name="hint_industry">industry,תעשייה,ענף,תחום</string>
+    <string name="hint_number">number,מספר,מס׳,כמות</string>
+
+    <string name="form_page_label">עמוד %1$d</string>
+    <string name="form_field_required">נדרש</string>
+    <string name="form_no_fields">בעמוד זה לא זוהו שדות.</string>
+
+    <string name="document_zoom_hint">צבוט כדי להגדיל · לחיצה ארוכה כדי להוסיף שדה</string>
+    <string name="document_add_field">להוסיף שדה כאן?</string>
+    <string name="document_completion">%1$d מתוך %2$d הושלמו</string>
 </resources>

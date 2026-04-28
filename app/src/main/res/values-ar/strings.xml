@@ -158,4 +158,64 @@
     <string name="settings_terms">شروط الخدمة</string>
     <string name="settings_contact_support">التواصل مع الدعم</string>
     <string name="settings_share_app">مشاركة FormBuddy</string>
+
+    <string name="field_type_text">نص</string>
+    <string name="field_type_number">رقم</string>
+    <string name="field_type_checkbox">مربع اختيار</string>
+    <string name="field_type_signature">توقيع</string>
+    <string name="field_type_date">تاريخ</string>
+    <string name="field_type_email">بريد إلكتروني</string>
+    <string name="field_type_phone">هاتف</string>
+    <string name="field_type_address">عنوان</string>
+
+    <string name="mode_document">مستند</string>
+    <string name="mode_form">نموذج</string>
+
+    <string name="general_alert_title">حدث خطأ ما</string>
+    <string name="general_alert_message">يرجى المحاولة مرة أخرى. إذا استمرت المشكلة، اتصل بالدعم.</string>
+    <string name="action_ok">موافق</string>
+    <string name="action_continue">متابعة</string>
+    <string name="action_grant">السماح</string>
+    <string name="action_settings">فتح الإعدادات</string>
+
+    <string name="permissions_title">السماح بالوصول إلى FormBuddy</string>
+    <string name="permissions_subtitle">نحتاج بعض الأذونات للمسح وملء النماذج بالصوت.</string>
+    <string name="permission_camera_title">الكاميرا</string>
+    <string name="permission_camera_description">امسح النماذج الورقية باستخدام الكاميرا</string>
+    <string name="permission_microphone_title">الميكروفون</string>
+    <string name="permission_microphone_description">تحدث لملء النماذج دون استخدام اليدين</string>
+    <string name="permission_speech_title">التعرف على الكلام</string>
+    <string name="permission_speech_description">تحويل صوتك إلى قيم نموذج، على الجهاز</string>
+    <string name="permission_notifications_title">الإشعارات</string>
+    <string name="permission_notifications_description">سنخبرك عند انتهاء عمليات الرفع الطويلة</string>
+
+    <string name="hint_email">email,البريد,البريد الإلكتروني,إيميل</string>
+    <string name="hint_phone">phone,هاتف,جوال,فاكس,تليفون</string>
+    <string name="hint_date">date,تاريخ,ميلاد</string>
+    <string name="hint_address">address,عنوان,شارع</string>
+    <string name="hint_signature">signature,توقيع,التوقيع</string>
+    <string name="hint_first_name">first name,الاسم الأول,الاسم</string>
+    <string name="hint_middle_name">middle name,الاسم الأوسط</string>
+    <string name="hint_last_name">last name,اسم العائلة,اللقب</string>
+    <string name="hint_birth_date">date of birth,تاريخ الميلاد</string>
+    <string name="hint_home_address">home address,عنوان المنزل</string>
+    <string name="hint_work_address">work address,عنوان العمل</string>
+    <string name="hint_city">city,مدينة,بلدة</string>
+    <string name="hint_state">state,محافظة,ولاية</string>
+    <string name="hint_country">country,بلد,دولة</string>
+    <string name="hint_postal_code">zip,الرمز البريدي</string>
+    <string name="hint_company">company,شركة,منظمة</string>
+    <string name="hint_tax_id">tax id,رقم ضريبي,الرقم الضريبي</string>
+    <string name="hint_registration">registration number,رقم التسجيل</string>
+    <string name="hint_website">website,موقع,موقع إلكتروني,url</string>
+    <string name="hint_industry">industry,صناعة,قطاع</string>
+    <string name="hint_number">number,رقم,عدد,كمية</string>
+
+    <string name="form_page_label">الصفحة %1$d</string>
+    <string name="form_field_required">مطلوب</string>
+    <string name="form_no_fields">لا توجد حقول مكتشفة في هذه الصفحة.</string>
+
+    <string name="document_zoom_hint">اضغط بإصبعين للتكبير · اضغط مطولاً لإضافة حقل</string>
+    <string name="document_add_field">إضافة حقل هنا؟</string>
+    <string name="document_completion">تم ملء %1$d من %2$d</string>
 </resources>

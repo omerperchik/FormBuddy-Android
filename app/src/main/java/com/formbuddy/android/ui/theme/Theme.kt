@@ -12,11 +12,11 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 
 private val LightColorScheme = lightColorScheme(
-    primary = Primary,
+    primary = AccentLight,
     onPrimary = TextOnPrimary,
     primaryContainer = PrimaryContainer,
     onPrimaryContainer = PrimaryDark,
-    secondary = Secondary,
+    secondary = ProColor,
     secondaryContainer = SecondaryContainer,
     background = Background,
     surface = Surface,
@@ -25,15 +25,15 @@ private val LightColorScheme = lightColorScheme(
     onSurface = TextPrimary,
     onSurfaceVariant = TextSecondary,
     error = Error,
-    outline = Color(0xFFD1D5DB)
+    outline = Separator
 )
 
 private val DarkColorScheme = darkColorScheme(
-    primary = PrimaryLight,
-    onPrimary = Color(0xFF003258),
-    primaryContainer = PrimaryDark,
+    primary = AccentDark,
+    onPrimary = TextOnPrimary,
+    primaryContainer = Color(0xFF1F3FAE),
     onPrimaryContainer = PrimaryContainer,
-    secondary = Color(0xFFB794F6),
+    secondary = ProColor,
     secondaryContainer = Color(0xFF4A1D96),
     background = DarkBackground,
     surface = DarkSurface,
@@ -41,14 +41,16 @@ private val DarkColorScheme = darkColorScheme(
     onBackground = DarkTextPrimary,
     onSurface = DarkTextPrimary,
     onSurfaceVariant = DarkTextSecondary,
-    error = Color(0xFFF87171),
-    outline = Color(0xFF4B5563)
+    error = Error,
+    outline = Color(0xFF38383A)
 )
 
 @Composable
 fun FormBuddyTheme(
     darkTheme: Boolean = isSystemInDarkTheme(),
-    dynamicColor: Boolean = true,
+    // iOS uses a fixed brand palette across the app, so we default dynamic color off
+    // to preserve identity. Callers can opt in if they want Material You.
+    dynamicColor: Boolean = false,
     content: @Composable () -> Unit
 ) {
     val colorScheme = when {

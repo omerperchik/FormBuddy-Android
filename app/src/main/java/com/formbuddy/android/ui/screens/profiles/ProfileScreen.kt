@@ -42,6 +42,7 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import com.formbuddy.android.R
+import com.formbuddy.android.ui.components.BiometricGate
 import com.formbuddy.android.ui.components.FloatingLabelTextField
 import com.formbuddy.android.ui.components.ProBadge
 import com.formbuddy.android.ui.components.SignatureCanvas
@@ -64,12 +65,21 @@ fun ProfileScreen(
 
     val p = profile ?: return
 
+    val title = if (isFamily) stringResource(R.string.profile_family) else stringResource(R.string.profile_personal)
+    val gateSubtitle = stringResource(R.string.profile_biometric_description)
+    val gateCancel = stringResource(R.string.action_cancel)
+
+    BiometricGate(
+        enabled = p.isPrivate,
+        title = title,
+        subtitle = gateSubtitle,
+        cancelLabel = gateCancel,
+        onCancel = { navController.popBackStack() }
+    ) {
     Scaffold(
         topBar = {
             TopAppBar(
-                title = {
-                    Text(if (isFamily) stringResource(R.string.profile_family) else stringResource(R.string.profile_personal))
-                },
+                title = { Text(title) },
                 navigationIcon = {
                     IconButton(onClick = { navController.popBackStack() }) {
                         Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = stringResource(R.string.action_back))
@@ -233,5 +243,6 @@ fun ProfileScreen(
 
             Spacer(modifier = Modifier.height(24.dp))
         }
+    }
     }
 }

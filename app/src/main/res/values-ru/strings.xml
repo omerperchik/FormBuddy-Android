@@ -158,4 +158,64 @@
     <string name="settings_terms">Условия использования</string>
     <string name="settings_contact_support">Связаться с поддержкой</string>
     <string name="settings_share_app">Поделиться FormBuddy</string>
+
+    <string name="field_type_text">Текст</string>
+    <string name="field_type_number">Число</string>
+    <string name="field_type_checkbox">Флажок</string>
+    <string name="field_type_signature">Подпись</string>
+    <string name="field_type_date">Дата</string>
+    <string name="field_type_email">Эл. почта</string>
+    <string name="field_type_phone">Телефон</string>
+    <string name="field_type_address">Адрес</string>
+
+    <string name="mode_document">Документ</string>
+    <string name="mode_form">Форма</string>
+
+    <string name="general_alert_title">Что-то пошло не так</string>
+    <string name="general_alert_message">Попробуйте снова. Если проблема не исчезнет, обратитесь в поддержку.</string>
+    <string name="action_ok">ОК</string>
+    <string name="action_continue">Продолжить</string>
+    <string name="action_grant">Разрешить</string>
+    <string name="action_settings">Открыть настройки</string>
+
+    <string name="permissions_title">Разрешите FormBuddy доступ</string>
+    <string name="permissions_subtitle">Нам нужно несколько разрешений для сканирования и голосового заполнения форм.</string>
+    <string name="permission_camera_title">Камера</string>
+    <string name="permission_camera_description">Сканируйте бумажные формы с помощью камеры</string>
+    <string name="permission_microphone_title">Микрофон</string>
+    <string name="permission_microphone_description">Заполняйте формы голосом, без рук</string>
+    <string name="permission_speech_title">Распознавание речи</string>
+    <string name="permission_speech_description">Преобразование голоса в значения формы на устройстве</string>
+    <string name="permission_notifications_title">Уведомления</string>
+    <string name="permission_notifications_description">Сообщим, когда длинные загрузки завершатся</string>
+
+    <string name="hint_email">email,почта,электронная почта</string>
+    <string name="hint_phone">phone,телефон,мобильный,факс,тел</string>
+    <string name="hint_date">date,дата,рождения,день рождения</string>
+    <string name="hint_address">address,адрес,улица,проспект</string>
+    <string name="hint_signature">signature,подпись,подписать</string>
+    <string name="hint_first_name">first name,имя</string>
+    <string name="hint_middle_name">middle name,отчество</string>
+    <string name="hint_last_name">last name,фамилия</string>
+    <string name="hint_birth_date">date of birth,дата рождения</string>
+    <string name="hint_home_address">home address,домашний адрес</string>
+    <string name="hint_work_address">work address,рабочий адрес</string>
+    <string name="hint_city">city,город,населённый пункт</string>
+    <string name="hint_state">state,область,край,регион</string>
+    <string name="hint_country">country,страна</string>
+    <string name="hint_postal_code">zip,почтовый индекс,индекс</string>
+    <string name="hint_company">company,компания,организация</string>
+    <string name="hint_tax_id">tax id,инн,огрн,кпп</string>
+    <string name="hint_registration">registration number,регистрационный номер</string>
+    <string name="hint_website">website,сайт,веб-сайт,url</string>
+    <string name="hint_industry">industry,отрасль,сектор</string>
+    <string name="hint_number">number,номер,№,количество</string>
+
+    <string name="form_page_label">Страница %1$d</string>
+    <string name="form_field_required">Обязательно</string>
+    <string name="form_no_fields">На этой странице не обнаружено полей.</string>
+
+    <string name="document_zoom_hint">Сведите пальцы, чтобы увеличить · удерживайте, чтобы добавить поле</string>
+    <string name="document_add_field">Добавить поле здесь?</string>
+    <string name="document_completion">Заполнено %1$d из %2$d</string>
 </resources>

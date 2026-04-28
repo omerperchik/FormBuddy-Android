@@ -158,4 +158,64 @@
     <string name="settings_terms">服务条款</string>
     <string name="settings_contact_support">联系支持</string>
     <string name="settings_share_app">分享 FormBuddy</string>
+
+    <string name="field_type_text">文本</string>
+    <string name="field_type_number">数字</string>
+    <string name="field_type_checkbox">复选框</string>
+    <string name="field_type_signature">签名</string>
+    <string name="field_type_date">日期</string>
+    <string name="field_type_email">邮箱</string>
+    <string name="field_type_phone">电话</string>
+    <string name="field_type_address">地址</string>
+
+    <string name="mode_document">文档</string>
+    <string name="mode_form">表单</string>
+
+    <string name="general_alert_title">出错了</string>
+    <string name="general_alert_message">请重试。如果问题持续，请联系支持团队。</string>
+    <string name="action_ok">确定</string>
+    <string name="action_continue">继续</string>
+    <string name="action_grant">允许</string>
+    <string name="action_settings">打开设置</string>
+
+    <string name="permissions_title">允许 FormBuddy 访问</string>
+    <string name="permissions_subtitle">我们需要一些权限来扫描和语音填写表单。</string>
+    <string name="permission_camera_title">摄像头</string>
+    <string name="permission_camera_description">使用摄像头扫描纸质表单</string>
+    <string name="permission_microphone_title">麦克风</string>
+    <string name="permission_microphone_description">用语音免提填写表单</string>
+    <string name="permission_speech_title">语音识别</string>
+    <string name="permission_speech_description">在设备上将语音转换为表单值</string>
+    <string name="permission_notifications_title">通知</string>
+    <string name="permission_notifications_description">长上传完成后通知您</string>
+
+    <string name="hint_email">email,邮箱,电子邮箱,电邮</string>
+    <string name="hint_phone">phone,电话,手机,传真,fax,tel</string>
+    <string name="hint_date">date,日期,出生,生日</string>
+    <string name="hint_address">address,地址,街道</string>
+    <string name="hint_signature">signature,签名,签字</string>
+    <string name="hint_first_name">first name,名,名字</string>
+    <string name="hint_middle_name">middle name,中间名</string>
+    <string name="hint_last_name">last name,姓,姓氏</string>
+    <string name="hint_birth_date">date of birth,出生日期,生日</string>
+    <string name="hint_home_address">home address,家庭住址</string>
+    <string name="hint_work_address">work address,工作地址</string>
+    <string name="hint_city">city,城市,市</string>
+    <string name="hint_state">state,省,省份</string>
+    <string name="hint_country">country,国家</string>
+    <string name="hint_postal_code">zip,邮编,邮政编码</string>
+    <string name="hint_company">company,公司,企业,组织</string>
+    <string name="hint_tax_id">tax id,税号,纳税人识别号</string>
+    <string name="hint_registration">registration number,注册号,登记号</string>
+    <string name="hint_website">website,网站,网址,url</string>
+    <string name="hint_industry">industry,行业,产业</string>
+    <string name="hint_number">number,号码,数量</string>
+
+    <string name="form_page_label">第 %1$d 页</string>
+    <string name="form_field_required">必填</string>
+    <string name="form_no_fields">此页面未检测到字段。</string>
+
+    <string name="document_zoom_hint">捏合缩放 · 长按添加字段</string>
+    <string name="document_add_field">在此添加字段？</string>
+    <string name="document_completion">已填 %1$d / %2$d</string>
 </resources>

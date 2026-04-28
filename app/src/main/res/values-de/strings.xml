@@ -158,4 +158,64 @@
     <string name="settings_terms">Nutzungsbedingungen</string>
     <string name="settings_contact_support">Support kontaktieren</string>
     <string name="settings_share_app">FormBuddy teilen</string>
+
+    <string name="field_type_text">Text</string>
+    <string name="field_type_number">Zahl</string>
+    <string name="field_type_checkbox">Kontrollkästchen</string>
+    <string name="field_type_signature">Unterschrift</string>
+    <string name="field_type_date">Datum</string>
+    <string name="field_type_email">E-Mail</string>
+    <string name="field_type_phone">Telefon</string>
+    <string name="field_type_address">Adresse</string>
+
+    <string name="mode_document">Dokument</string>
+    <string name="mode_form">Formular</string>
+
+    <string name="general_alert_title">Etwas ist schiefgelaufen</string>
+    <string name="general_alert_message">Bitte erneut versuchen. Wenn das Problem bestehen bleibt, kontaktiere den Support.</string>
+    <string name="action_ok">OK</string>
+    <string name="action_continue">Weiter</string>
+    <string name="action_grant">Erlauben</string>
+    <string name="action_settings">Einstellungen öffnen</string>
+
+    <string name="permissions_title">FormBuddy Zugriff erlauben</string>
+    <string name="permissions_subtitle">Wir benötigen einige Berechtigungen, um Formulare zu scannen und per Sprache auszufüllen.</string>
+    <string name="permission_camera_title">Kamera</string>
+    <string name="permission_camera_description">Papierformulare mit der Kamera scannen</string>
+    <string name="permission_microphone_title">Mikrofon</string>
+    <string name="permission_microphone_description">Formulare freihändig per Sprache ausfüllen</string>
+    <string name="permission_speech_title">Spracherkennung</string>
+    <string name="permission_speech_description">Sprache in Formularwerte umwandeln, auf dem Gerät</string>
+    <string name="permission_notifications_title">Benachrichtigungen</string>
+    <string name="permission_notifications_description">Wir benachrichtigen dich, wenn lange Uploads fertig sind</string>
+
+    <string name="hint_email">email,e-mail,mail</string>
+    <string name="hint_phone">phone,telefon,mobil,handy,fax,tel</string>
+    <string name="hint_date">date,datum,geburt,geburtstag</string>
+    <string name="hint_address">address,adresse,straße,strasse</string>
+    <string name="hint_signature">signature,unterschrift,signieren</string>
+    <string name="hint_first_name">first name,vorname</string>
+    <string name="hint_middle_name">middle name,zweiter vorname</string>
+    <string name="hint_last_name">last name,nachname,familienname</string>
+    <string name="hint_birth_date">date of birth,geburtsdatum</string>
+    <string name="hint_home_address">home address,heimadresse,privatadresse</string>
+    <string name="hint_work_address">work address,geschäftsadresse,arbeitsadresse</string>
+    <string name="hint_city">city,stadt,ort</string>
+    <string name="hint_state">state,bundesland,region</string>
+    <string name="hint_country">country,land,nation</string>
+    <string name="hint_postal_code">zip,plz,postleitzahl</string>
+    <string name="hint_company">company,firma,unternehmen,organisation</string>
+    <string name="hint_tax_id">tax id,steuernummer,steuer-id,ust-idnr</string>
+    <string name="hint_registration">registration number,registriernummer,handelsregisternummer</string>
+    <string name="hint_website">website,webseite,homepage,url</string>
+    <string name="hint_industry">industry,branche,sektor</string>
+    <string name="hint_number">number,nummer,nr,anzahl</string>
+
+    <string name="form_page_label">Seite %1$d</string>
+    <string name="form_field_required">Erforderlich</string>
+    <string name="form_no_fields">Auf dieser Seite wurden keine Felder erkannt.</string>
+
+    <string name="document_zoom_hint">Zum Zoomen ziehen · gedrückt halten, um Feld hinzuzufügen</string>
+    <string name="document_add_field">Hier ein Feld hinzufügen?</string>
+    <string name="document_completion">%1$d von %2$d ausgefüllt</string>
 </resources>

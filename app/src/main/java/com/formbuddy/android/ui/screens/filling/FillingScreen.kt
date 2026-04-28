@@ -1,5 +1,6 @@
 package com.formbuddy.android.ui.screens.filling
 
+import androidx.compose.foundation.ScrollState
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -11,9 +12,9 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.ScrollableTabRow
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Tab
-import androidx.compose.material3.TabRow
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
@@ -21,6 +22,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -35,8 +37,16 @@ import com.formbuddy.android.ui.components.FormCompletionCard
 import com.formbuddy.android.ui.navigation.Screen
 import com.formbuddy.android.ui.screens.filling.agent.AgentView
 import com.formbuddy.android.ui.screens.filling.chat.ChatView
+import com.formbuddy.android.ui.screens.filling.document.DocumentAnalysisView
+import com.formbuddy.android.ui.screens.filling.form.FormFillingView
 import com.formbuddy.android.ui.screens.filling.voice.VoiceView
 
+/**
+ * Mirrors iOS `DocumentFillingView` — exposes the document, structured form, and the
+ * conversational filling modes (chat, voice, agent) as scrollable tabs. The first
+ * tabs (Document/Form) match the iOS tab structure exactly; the rest map to iOS
+ * Chat-sheet capabilities surfaced as their own tabs on Android for discoverability.
+ */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun FillingScreen(
@@ -54,6 +64,8 @@ fun FillingScreen(
     LaunchedEffect(Unit) {
         viewModel.initialize(source, uri, formId)
     }
+
+    var selectedFieldId by remember { mutableStateOf<String?>(null) }
 
     Scaffold(
         topBar = {
@@ -96,54 +108,74 @@ fun FillingScreen(
                     )
                 }
             }
-        } else if (formTemplate != null) {
-            val template = formTemplate!!
+            return@Scaffold
+        }
 
-            Column(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .padding(padding)
+        val template = formTemplate ?: return@Scaffold
+
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(padding)
+        ) {
+            FormCompletionCard(
+                completionPercentage = template.completionPercentage,
+                completedFields = template.completedFieldsCount,
+                totalFields = template.totalFieldsCount,
+                modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp)
+            )
+
+            val tabs = remember {
+                listOf(
+                    R.string.mode_document,
+                    R.string.mode_form,
+                    R.string.mode_chat,
+                    R.string.mode_voice,
+                    R.string.mode_agent
+                )
+            }
+            // Default tab follows the user's preferred FormMode setting, mapped onto the
+            // 5-tab Android layout: Chat=2, Voice=3, Agent=4. Document/Form aren't first
+            // class FormMode values yet.
+            var selectedTab by remember(formMode) {
+                mutableIntStateOf(
+                    when (formMode) {
+                        FormMode.CHAT -> 2
+                        FormMode.VOICE -> 3
+                        FormMode.AGENT -> 4
+                    }
+                )
+            }
+
+            ScrollableTabRow(
+                selectedTabIndex = selectedTab,
+                edgePadding = 16.dp
             ) {
-                // Completion card
-                FormCompletionCard(
-                    completionPercentage = template.completionPercentage,
-                    completedFields = template.completedFieldsCount,
-                    totalFields = template.totalFieldsCount,
-                    modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp)
-                )
-
-                // Mode tabs
-                val modes = listOf(
-                    stringResource(R.string.mode_chat),
-                    stringResource(R.string.mode_voice),
-                    stringResource(R.string.mode_agent)
-                )
-                var selectedTab by remember {
-                    mutableIntStateOf(
-                        when (formMode) {
-                            FormMode.CHAT -> 0
-                            FormMode.VOICE -> 1
-                            FormMode.AGENT -> 2
-                        }
+                tabs.forEachIndexed { index, titleRes ->
+                    Tab(
+                        selected = selectedTab == index,
+                        onClick = { selectedTab = index },
+                        text = { Text(stringResource(titleRes)) }
                     )
                 }
+            }
 
-                TabRow(selectedTabIndex = selectedTab) {
-                    modes.forEachIndexed { index, title ->
-                        Tab(
-                            selected = selectedTab == index,
-                            onClick = { selectedTab = index },
-                            text = { Text(title) }
-                        )
-                    }
-                }
-
-                // Mode content
-                when (selectedTab) {
-                    0 -> ChatView(viewModel = viewModel)
-                    1 -> VoiceView(viewModel = viewModel)
-                    2 -> AgentView(viewModel = viewModel)
-                }
+            when (selectedTab) {
+                0 -> DocumentAnalysisView(
+                    template = template,
+                    documentBytes = viewModel.documentBytes(),
+                    selectedFieldId = selectedFieldId,
+                    onFieldSelected = { selectedFieldId = it }
+                )
+                1 -> FormFillingView(
+                    template = template,
+                    viewModel = viewModel,
+                    selectedFieldId = selectedFieldId,
+                    onFieldSelected = { selectedFieldId = it }
+                )
+                2 -> ChatView(viewModel = viewModel)
+                3 -> VoiceView(viewModel = viewModel)
+                4 -> AgentView(viewModel = viewModel)
             }
         }
     }
