@@ -37,6 +37,9 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -51,7 +54,9 @@ import androidx.navigation.NavHostController
 import com.formbuddy.android.BuildConfig
 import com.formbuddy.android.R
 import com.formbuddy.android.data.model.FormMode
+import com.formbuddy.android.ui.components.ios.DefaultFormModeSheet
 import com.formbuddy.android.ui.components.ios.FillinLogo
+import com.formbuddy.android.ui.components.ios.FormModeSheetOption
 import com.formbuddy.android.ui.components.ios.FillinPressContainer
 import com.formbuddy.android.ui.components.ios.FillinSeparator
 import com.formbuddy.android.ui.components.ios.FillinShapes
@@ -83,6 +88,19 @@ fun SettingsScreen(
     val formMode by viewModel.formMode.collectAsState()
     val assistantVoice by viewModel.assistantVoice.collectAsState()
     val context = LocalContext.current
+    var showFormModeSheet by remember { mutableStateOf(false) }
+    var showVoiceSheet by remember { mutableStateOf(false) }
+
+    if (showFormModeSheet) {
+        DefaultFormModeSheet(
+            selected = formMode.toSheetOption(),
+            onSelect = {
+                viewModel.setFormMode(it.toFormMode())
+                showFormModeSheet = false
+            },
+            onDismiss = { showFormModeSheet = false }
+        )
+    }
 
     Box(
         modifier = Modifier
@@ -125,14 +143,15 @@ fun SettingsScreen(
                 SettingsRow(
                     icon = Icons.Filled.GraphicEq,
                     title = "Assistant Voice",
-                    onClick = { navController.navigate(Screen.Settings.route + "/voice") }
+                    trailingText = assistantVoice.replaceFirstChar { it.uppercase() },
+                    onClick = { showVoiceSheet = true }
                 )
                 FillinSeparator(inset = 52.dp)
                 SettingsRow(
                     icon = Icons.Outlined.Description,
                     title = "Default Form Mode",
                     trailingText = formMode.displayName(),
-                    onClick = { navController.navigate(Screen.Settings.route + "/mode") }
+                    onClick = { showFormModeSheet = true }
                 )
                 FillinSeparator(inset = 52.dp)
                 SettingsRow(
@@ -355,4 +374,16 @@ private fun FormMode.displayName(): String = when (this) {
     FormMode.CHAT -> "Chat Mode"
     FormMode.VOICE -> "Voice Mode"
     FormMode.AGENT -> "Agent Mode"
+}
+
+private fun FormMode.toSheetOption(): FormModeSheetOption = when (this) {
+    FormMode.CHAT -> FormModeSheetOption.Chat
+    FormMode.VOICE -> FormModeSheetOption.Voice
+    FormMode.AGENT -> FormModeSheetOption.Agent
+}
+
+private fun FormModeSheetOption.toFormMode(): FormMode = when (this) {
+    FormModeSheetOption.Chat -> FormMode.CHAT
+    FormModeSheetOption.Voice -> FormMode.VOICE
+    FormModeSheetOption.Agent -> FormMode.AGENT
 }

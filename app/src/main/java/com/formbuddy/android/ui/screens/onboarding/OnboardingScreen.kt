@@ -34,11 +34,14 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
+import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
@@ -51,6 +54,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import com.formbuddy.android.R
 import com.formbuddy.android.ui.navigation.Screen
+import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.launch
 
 private sealed interface OnboardingPage {
@@ -79,6 +83,21 @@ fun OnboardingScreen(
 
     val pagerState = rememberPagerState(pageCount = { pages.size })
     val scope = rememberCoroutineScope()
+
+    // Play the opening voice prompt when the user first lands on the welcome page,
+    // and stop when navigating away or when the screen leaves composition.
+    val voiceFallback = stringResource(R.string.onboarding_desc_1)
+    LaunchedEffect(pagerState) {
+        snapshotFlow { pagerState.currentPage }
+            .distinctUntilChanged()
+            .collect { idx ->
+                if (idx == 0) viewModel.playOpeningPrompt(voiceFallback)
+                else viewModel.stopVoiceIntro()
+            }
+    }
+    DisposableEffect(Unit) {
+        onDispose { viewModel.stopVoiceIntro() }
+    }
 
     Column(
         modifier = Modifier

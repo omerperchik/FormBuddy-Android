@@ -9,41 +9,48 @@ import androidx.compose.animation.core.rememberInfiniteTransition
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
-import androidx.compose.animation.scaleIn
-import androidx.compose.animation.scaleOut
+import androidx.compose.animation.slideInVertically
+import androidx.compose.animation.slideOutVertically
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.statusBarsPadding
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.CheckCircle
+import androidx.compose.material.icons.filled.Check
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import com.formbuddy.android.ui.components.ios.FillinFilledButton
+import com.formbuddy.android.ui.components.ios.FillinPressContainer
 import com.formbuddy.android.ui.components.ios.FillinShapes
 import com.formbuddy.android.ui.components.ios.FillinSpacing
+import com.formbuddy.android.ui.theme.ConfettiBlue
+import com.formbuddy.android.ui.theme.ConfettiGreen
+import com.formbuddy.android.ui.theme.ConfettiPink
+import com.formbuddy.android.ui.theme.ConfettiViolet
+import com.formbuddy.android.ui.theme.ConfettiYellow
+import com.formbuddy.android.ui.theme.IMessageBlue
 import kotlinx.coroutines.delay
 import kotlin.math.PI
 import kotlin.math.cos
@@ -51,12 +58,18 @@ import kotlin.math.sin
 import kotlin.random.Random
 
 /**
- * Mirrors iOS `FirstSaveCelebrationOverlay` — a confetti burst with a
- * call-to-action that doubles as the entry point to the Play in-app review.
+ * iOS-matching first-save celebration (IMG_9063).
  *
- * Triggers from the FillingViewModel after the user's first successful save.
- * The animation runs for ~3 s; the dismiss button always appears so the
- * user can opt out immediately.
+ * Visual:
+ *   - Top status-bar-inset RIBBON pill with green check, "Nice work!"
+ *     headline, subtitle "You've just saved your first document.", and a
+ *     blue "Done" link on the right.
+ *   - Confetti exploding from the ribbon outward, falling across the screen
+ *     for ~3.5 s.
+ *   - Tapping anywhere outside the ribbon dismisses; tapping "Done"
+ *     fires the in-app review prompt.
+ *
+ * Replaces the older centered-dialog version that didn't match iOS.
  */
 @Composable
 fun FirstSaveCelebrationOverlay(
@@ -66,66 +79,95 @@ fun FirstSaveCelebrationOverlay(
 ) {
     AnimatedVisibility(
         visible = isVisible,
-        enter = fadeIn() + scaleIn(initialScale = 0.92f),
-        exit = fadeOut() + scaleOut(targetScale = 0.92f)
+        enter = fadeIn(),
+        exit = fadeOut()
     ) {
         Box(
             modifier = Modifier
                 .fillMaxSize()
-                .background(Color.Black.copy(alpha = 0.55f)),
-            contentAlignment = Alignment.Center
+                .background(Color.Black.copy(alpha = 0.18f))
         ) {
+            // Confetti behind everything, ignoring touches.
             Confetti()
 
-            Column(
+            // Top ribbon — slides in from above the status bar.
+            AnimatedVisibility(
+                visible = isVisible,
+                enter = slideInVertically(initialOffsetY = { -it }),
+                exit = slideOutVertically(targetOffsetY = { -it }),
                 modifier = Modifier
-                    .padding(FillinSpacing.padding24)
-                    .fillMaxWidth()
-                    .clip(FillinShapes.large)
-                    .background(MaterialTheme.colorScheme.surface)
-                    .padding(FillinSpacing.padding24),
-                horizontalAlignment = Alignment.CenterHorizontally
+                    .align(Alignment.TopCenter)
+                    .statusBarsPadding()
+                    .padding(horizontal = FillinSpacing.padding16, vertical = FillinSpacing.padding8)
             ) {
-                Icon(
-                    imageVector = Icons.Filled.CheckCircle,
-                    contentDescription = null,
-                    tint = MaterialTheme.colorScheme.primary,
-                    modifier = Modifier.size(64.dp)
-                )
-                Spacer(Modifier.height(FillinSpacing.padding12))
-                Text(
-                    text = "First form saved!",
-                    style = MaterialTheme.typography.headlineSmall,
-                    fontWeight = FontWeight.SemiBold
-                )
-                Spacer(Modifier.height(FillinSpacing.padding8))
-                Text(
-                    text = "Nice work. Loving FormBuddy?",
-                    style = MaterialTheme.typography.bodyMedium,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant,
-                    textAlign = TextAlign.Center
-                )
-                Spacer(Modifier.height(FillinSpacing.padding24))
-                FillinFilledButton(
-                    text = "Rate FormBuddy",
-                    onClick = {
+                Ribbon(
+                    onDone = {
                         onRequestReview()
                         onDismiss()
-                    }
+                    },
+                    onDismiss = onDismiss
                 )
-                Spacer(Modifier.height(FillinSpacing.padding8))
-                androidx.compose.material3.TextButton(onClick = onDismiss) {
-                    Text("Not now")
-                }
             }
+
+            // Tap-anywhere-else dismisser.
+            FillinPressContainer(
+                onClick = onDismiss,
+                modifier = Modifier.fillMaxSize()
+            ) { /* invisible */ }
         }
     }
 
     if (isVisible) {
         LaunchedEffect(Unit) {
-            // Auto-dismiss the curtain after a few seconds if the user does nothing.
             delay(6_000)
             onDismiss()
+        }
+    }
+}
+
+@Composable
+private fun Ribbon(onDone: () -> Unit, onDismiss: () -> Unit) {
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .clip(FillinShapes.capsule)
+            .background(Color(0xFF1F1F1F))
+            .padding(horizontal = FillinSpacing.padding16, vertical = FillinSpacing.padding12),
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        Box(
+            modifier = Modifier
+                .size(28.dp)
+                .clip(CircleShape)
+                .background(ConfettiGreen.copy(alpha = 0.18f)),
+            contentAlignment = Alignment.Center
+        ) {
+            Icon(
+                Icons.Filled.Check,
+                contentDescription = null,
+                tint = ConfettiGreen,
+                modifier = Modifier.size(16.dp)
+            )
+        }
+        Spacer(Modifier.width(FillinSpacing.padding12))
+        Column(modifier = Modifier.weight(1f)) {
+            Text(
+                text = "Nice work! 🎉",
+                color = Color.White,
+                style = MaterialTheme.typography.titleSmall.copy(fontWeight = FontWeight.SemiBold)
+            )
+            Text(
+                text = "You've just saved your first document.",
+                color = Color(0xFF9C9CA1),
+                style = MaterialTheme.typography.bodySmall
+            )
+        }
+        FillinPressContainer(onClick = onDone, modifier = Modifier.padding(start = FillinSpacing.padding8)) {
+            Text(
+                text = "Done",
+                color = IMessageBlue,
+                style = MaterialTheme.typography.bodyLarge.copy(fontWeight = FontWeight.SemiBold)
+            )
         }
     }
 }
@@ -139,16 +181,16 @@ private fun Confetti() {
         animationSpec = infiniteRepeatable(tween(2_500, easing = LinearEasing), RepeatMode.Restart),
         label = "confettiT"
     )
+    val palette = remember {
+        listOf(ConfettiBlue, ConfettiGreen, ConfettiYellow, ConfettiPink, ConfettiViolet)
+    }
     val particles = remember {
         List(60) {
             ConfettiParticle(
                 seedX = Random.nextFloat(),
-                speed = 0.6f + Random.nextFloat() * 0.8f,
+                speed = 0.5f + Random.nextFloat() * 0.8f,
                 drift = (Random.nextFloat() - 0.5f) * 0.4f,
-                hue = listOf(
-                    Color(0xFF34C759), Color(0xFFFF9500), Color(0xFFAF52DE),
-                    Color(0xFF007AFF), Color(0xFFFF3B30)
-                ).random(),
+                hue = palette.random(),
                 size = 4f + Random.nextFloat() * 6f
             )
         }

@@ -25,7 +25,7 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.CameraAlt
-import androidx.compose.material.icons.filled.LibraryBooks
+import androidx.compose.material.icons.automirrored.filled.LibraryBooks
 import androidx.compose.material.icons.filled.UploadFile
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.FloatingActionButtonDefaults
@@ -110,7 +110,7 @@ fun ArcMenu(
                     verticalArrangement = Arrangement.spacedBy(12.dp)
                 ) {
                     ArcMenuItem(
-                        icon = Icons.Filled.LibraryBooks,
+                        icon = Icons.AutoMirrored.Filled.LibraryBooks,
                         label = stringResource(R.string.action_library),
                         onClick = {
                             expanded = false

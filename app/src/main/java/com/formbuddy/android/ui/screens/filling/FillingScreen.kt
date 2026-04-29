@@ -74,16 +74,44 @@ fun FillingScreen(
     }
 
     var selectedFieldId by remember { mutableStateOf<String?>(null) }
+    var showCloseConfirmation by remember { mutableStateOf(false) }
     val showCelebration by viewModel.showCelebration.collectAsState()
     val activity = LocalContext.current.findActivity()
     val scope = rememberCoroutineScope()
+
+    val attemptClose: () -> Unit = {
+        // If there is unsaved progress, prompt; otherwise just leave.
+        if (formTemplate?.allFields?.any { !it.isEmpty } == true) {
+            showCloseConfirmation = true
+        } else {
+            navController.popBackStack()
+        }
+    }
+
+    if (showCloseConfirmation) {
+        com.formbuddy.android.ui.components.ios.FillinAlertDialog(
+            title = "Are you sure you want to close this document?",
+            message = "Your progress will not be saved unless you tap Save.",
+            primaryButtonText = "Save",
+            onPrimary = {
+                viewModel.saveForm {
+                    navController.navigate(Screen.Editor.createRoute(it)) {
+                        popUpTo(Screen.Docs.route)
+                    }
+                }
+            },
+            secondaryButtonText = "Discard",
+            onSecondary = { navController.popBackStack() },
+            onDismiss = { showCloseConfirmation = false }
+        )
+    }
 
     Scaffold(
         topBar = {
             TopAppBar(
                 title = { Text(formTemplate?.documentName ?: stringResource(R.string.filling_processing)) },
                 navigationIcon = {
-                    IconButton(onClick = { navController.popBackStack() }) {
+                    IconButton(onClick = attemptClose) {
                         Icon(Icons.Filled.Close, contentDescription = stringResource(R.string.action_close))
                     }
                 },
