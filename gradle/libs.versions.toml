@@ -29,6 +29,7 @@ accompanist = "0.36.0"
 coroutines = "1.9.0"
 googleServices = "4.4.2"
 fragment = "1.8.5"
+appcompat = "1.7.0"
 work = "2.10.0"
 playReview = "2.0.1"
 playIntegrity = "1.4.0"
@@ -68,6 +69,7 @@ sqlcipher = { group = "net.zetetic", name = "sqlcipher-android", version.ref = "
 security-crypto = { group = "androidx.security", name = "security-crypto", version.ref = "securityCrypto" }
 androidx-biometric = { group = "androidx.biometric", name = "biometric", version.ref = "biometric" }
 androidx-fragment-ktx = { group = "androidx.fragment", name = "fragment-ktx", version.ref = "fragment" }
+androidx-appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "appcompat" }
 
 # CameraX
 camera-core = { group = "androidx.camera", name = "camera-core", version.ref = "cameraX" }

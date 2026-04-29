@@ -53,10 +53,15 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import com.formbuddy.android.BuildConfig
 import com.formbuddy.android.R
+import androidx.appcompat.app.AppCompatDelegate
+import androidx.core.os.LocaleListCompat
 import com.formbuddy.android.data.model.FormMode
 import com.formbuddy.android.ui.components.ios.DefaultFormModeSheet
 import com.formbuddy.android.ui.components.ios.FillinLogo
 import com.formbuddy.android.ui.components.ios.FormModeSheetOption
+import com.formbuddy.android.ui.components.ios.AssistantVoiceSheet
+import com.formbuddy.android.ui.components.ios.LanguageOption
+import com.formbuddy.android.ui.components.ios.LanguageSheet
 import com.formbuddy.android.ui.components.ios.FillinPressContainer
 import com.formbuddy.android.ui.components.ios.FillinSeparator
 import com.formbuddy.android.ui.components.ios.FillinShapes
@@ -90,6 +95,26 @@ fun SettingsScreen(
     val context = LocalContext.current
     var showFormModeSheet by remember { mutableStateOf(false) }
     var showVoiceSheet by remember { mutableStateOf(false) }
+    var showLanguageSheet by remember { mutableStateOf(false) }
+
+    val activeLocaleTag = remember {
+        AppCompatDelegate.getApplicationLocales()
+            .takeIf { !it.isEmpty }
+            ?.get(0)
+            ?.toLanguageTag()
+            ?: LanguageOption.ALL.first().tag
+    }
+
+    if (showLanguageSheet) {
+        LanguageSheet(
+            selectedTag = activeLocaleTag,
+            onSelect = { tag ->
+                AppCompatDelegate.setApplicationLocales(LocaleListCompat.forLanguageTags(tag))
+                showLanguageSheet = false
+            },
+            onDismiss = { showLanguageSheet = false }
+        )
+    }
 
     if (showFormModeSheet) {
         DefaultFormModeSheet(
@@ -99,6 +124,25 @@ fun SettingsScreen(
                 showFormModeSheet = false
             },
             onDismiss = { showFormModeSheet = false }
+        )
+    }
+
+    if (showVoiceSheet) {
+        val playingVoice by viewModel.playingVoice.collectAsState()
+        AssistantVoiceSheet(
+            selectedVoice = assistantVoice,
+            playingVoice = playingVoice,
+            onSelect = {
+                viewModel.setAssistantVoice(it)
+                viewModel.stopVoiceSample()
+                showVoiceSheet = false
+            },
+            onPlay = { viewModel.playVoiceSample(it) },
+            onStop = { viewModel.stopVoiceSample() },
+            onDismiss = {
+                viewModel.stopVoiceSample()
+                showVoiceSheet = false
+            }
         )
     }
 
@@ -157,7 +201,11 @@ fun SettingsScreen(
                 SettingsRow(
                     icon = Icons.Filled.Language,
                     title = "Language",
-                    onClick = { /* system locale picker */ }
+                    trailingText = LanguageOption.ALL
+                        .firstOrNull { it.tag.equals(activeLocaleTag, ignoreCase = true) }
+                        ?.nativeName
+                        ?: activeLocaleTag.uppercase(),
+                    onClick = { showLanguageSheet = true }
                 )
                 FillinSeparator(inset = 52.dp)
                 SettingsRow(

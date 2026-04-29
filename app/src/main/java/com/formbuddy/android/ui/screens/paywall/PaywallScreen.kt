@@ -46,6 +46,7 @@ import com.formbuddy.android.data.billing.BillingManager
 import com.formbuddy.android.ui.components.ios.FillinPressContainer
 import com.formbuddy.android.ui.components.ios.FillinShapes
 import com.formbuddy.android.ui.components.ios.FillinSpacing
+import com.formbuddy.android.ui.components.ios.PaywallDeviceHero
 import com.formbuddy.android.ui.theme.PaywallBottom
 import com.formbuddy.android.ui.theme.PaywallTop
 
@@ -90,6 +91,17 @@ fun PaywallScreen(
                 brush = Brush.verticalGradient(listOf(PaywallTop, PaywallBottom))
             )
     ) {
+        // Layered iOS device hero — fans up-left from the top half so the headline
+        // and feature list sit on top of a faded composition of in-app screenshots.
+        Box(
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(360.dp)
+                .align(Alignment.TopEnd)
+        ) {
+            PaywallDeviceHero()
+        }
+
         // Close button — top-right.
         Box(
             modifier = Modifier

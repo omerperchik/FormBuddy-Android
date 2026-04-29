@@ -292,8 +292,9 @@ private fun UploadRow(
     }
 }
 
+/** Drag handle shared by every Fillin bottom sheet in this package. */
 @Composable
-private fun SheetHandle() {
+internal fun SheetHandle() {
     Box(
         modifier = Modifier
             .padding(top = FillinSpacing.padding8, bottom = FillinSpacing.padding4)

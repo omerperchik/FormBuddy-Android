@@ -152,6 +152,7 @@ dependencies {
     implementation(libs.security.crypto)
     implementation(libs.androidx.biometric)
     implementation(libs.androidx.fragment.ktx)
+    implementation(libs.androidx.appcompat)
 
     // CameraX
     implementation(libs.camera.core)

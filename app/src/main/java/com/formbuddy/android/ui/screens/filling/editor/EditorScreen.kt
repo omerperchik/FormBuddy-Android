@@ -21,6 +21,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.layout.navigationBarsPadding
@@ -225,40 +226,57 @@ fun EditorScreen(
                 .fillMaxSize()
                 .padding(padding)
         ) {
-            // Page thumbnails
+            // Page thumbnails — iOS-styled: white card on black, 8 dp corner radius,
+            // 2 dp blue border on the selected page (no shadow / elevation).
             if (template.pages.size > 1) {
                 LazyRow(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(8.dp),
-                    horizontalArrangement = Arrangement.spacedBy(8.dp)
+                        .background(Color.Black)
+                        .padding(horizontal = FillinSpacing.padding16, vertical = FillinSpacing.padding8),
+                    horizontalArrangement = Arrangement.spacedBy(FillinSpacing.padding8)
                 ) {
                     itemsIndexed(pageBitmaps) { index, bitmap ->
-                        Card(
+                        Box(
                             modifier = Modifier
-                                .width(60.dp)
-                                .clickable { selectedPageIndex = index },
-                            border = if (index == selectedPageIndex)
-                                CardDefaults.outlinedCardBorder()
-                            else null,
-                            elevation = CardDefaults.cardElevation(
-                                defaultElevation = if (index == selectedPageIndex) 4.dp else 1.dp
-                            )
+                                .width(54.dp)
+                                .aspectRatio(0.75f)
+                                .clip(androidx.compose.foundation.shape.RoundedCornerShape(8.dp))
+                                .background(Color.White)
+                                .border(
+                                    width = if (index == selectedPageIndex) 2.dp else 0.5.dp,
+                                    color = if (index == selectedPageIndex) IMessageBlue
+                                            else Color(0xFF38383A),
+                                    shape = androidx.compose.foundation.shape.RoundedCornerShape(8.dp)
+                                )
+                                .clickable { selectedPageIndex = index }
                         ) {
                             if (bitmap != null) {
                                 androidx.compose.foundation.Image(
                                     bitmap = bitmap.asImageBitmap(),
                                     contentDescription = "Page ${index + 1}",
-                                    modifier = Modifier.aspectRatio(0.75f)
+                                    modifier = Modifier.fillMaxSize()
                                 )
                             }
+                            // Page-number chip pinned bottom-right.
+                            Text(
+                                text = "${index + 1}",
+                                color = Color.White,
+                                style = MaterialTheme.typography.labelSmall.copy(fontWeight = FontWeight.SemiBold),
+                                modifier = Modifier
+                                    .align(Alignment.BottomEnd)
+                                    .padding(2.dp)
+                                    .clip(androidx.compose.foundation.shape.RoundedCornerShape(4.dp))
+                                    .background(Color.Black.copy(alpha = 0.55f))
+                                    .padding(horizontal = 4.dp, vertical = 1.dp)
+                            )
                         }
                     }
                 }
             }
 
             // Document view with field overlays
-            ZoomableBox(modifier = Modifier.weight(1f)) {
+            ZoomableBox(modifier = Modifier.weight(1f).background(Color.Black)) {
                 Box(modifier = Modifier.fillMaxSize()) {
                     var canvasSize by remember { mutableStateOf(IntSize.Zero) }
 
@@ -273,8 +291,11 @@ fun EditorScreen(
                         )
                     }
 
-                    // Field overlays
+                    // iOS-style field overlays: pastel translucent fill with a stronger
+                    // accent stroke; the currently-selected field gets a thicker stroke
+                    // so it pops out of the page.
                     val pageFields = template.pages.getOrNull(selectedPageIndex)?.fields ?: emptyList()
+                    val selectedFieldId = editingField?.id
                     Canvas(modifier = Modifier.fillMaxSize()) {
                         pageFields.forEach { field ->
                             val rect = field.boundingBox.scaledTo(
@@ -282,16 +303,17 @@ fun EditorScreen(
                                 canvasSize.height.toFloat()
                             )
                             val (_, color) = fieldTypeIconAndColor(field.fieldType)
+                            val isSelected = field.id == selectedFieldId
                             drawRect(
-                                color = color.copy(alpha = 0.15f),
+                                color = color.copy(alpha = if (isSelected) 0.32f else 0.18f),
                                 topLeft = Offset(rect.left, rect.top),
                                 size = Size(rect.width(), rect.height())
                             )
                             drawRect(
-                                color = color.copy(alpha = 0.6f),
+                                color = color,
                                 topLeft = Offset(rect.left, rect.top),
                                 size = Size(rect.width(), rect.height()),
-                                style = Stroke(width = 1.5f)
+                                style = Stroke(width = if (isSelected) 3f else 1.5f)
                             )
                         }
                     }
