@@ -1,14 +1,18 @@
 package com.formbuddy.android.ui.screens.profiles
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
@@ -33,6 +37,9 @@ import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -42,9 +49,16 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.font.FontWeight
 import com.formbuddy.android.R
 import com.formbuddy.android.data.model.Profile
 import com.formbuddy.android.ui.components.ProBadge
+import com.formbuddy.android.ui.components.ios.FillinLogo
+import com.formbuddy.android.ui.components.ios.FillinProfilePicker
+import com.formbuddy.android.ui.components.ios.FillinProfileSection
+import com.formbuddy.android.ui.components.ios.FillinProfileSections
+import com.formbuddy.android.ui.components.ios.FillinSpacing
 import com.formbuddy.android.ui.navigation.Screen
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -54,26 +68,43 @@ fun ProfilesScreen(
     viewModel: ProfilesViewModel = hiltViewModel()
 ) {
     val profiles by viewModel.profiles.collectAsState()
-    val scrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior()
+    var selectedSection by remember { mutableStateOf(FillinProfileSections.Personal.key) }
 
-    Scaffold(
-        modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
-        topBar = {
-            LargeTopAppBar(
-                title = { Text(stringResource(R.string.tab_profiles)) },
-                scrollBehavior = scrollBehavior,
-                actions = {
-                    IconButton(onClick = { viewModel.addFamilyProfile() }) {
-                        Icon(Icons.Filled.Add, contentDescription = stringResource(R.string.profile_add_family))
-                    }
-                }
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(Color.Black)
+    ) {
+        // Top-left logo + bold "Profile" title (singular, like iOS).
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .statusBarsPadding()
+        ) {
+            FillinLogo(
+                modifier = Modifier.padding(start = FillinSpacing.padding16, top = FillinSpacing.padding8),
+                size = 38.dp
             )
-        }
-    ) { padding ->
+            Text(
+                text = "Profile",
+                color = Color.White,
+                style = MaterialTheme.typography.displayMedium.copy(fontWeight = FontWeight.Bold),
+                modifier = Modifier.padding(
+                    start = FillinSpacing.padding16,
+                    top = FillinSpacing.padding4,
+                    bottom = FillinSpacing.padding8
+                )
+            )
+            FillinProfilePicker(
+                sections = FillinProfileSections.all,
+                selectedKey = selectedSection,
+                onSelect = { selectedSection = it }
+            )
+            Spacer(Modifier.height(FillinSpacing.padding8))
+
         LazyColumn(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(padding)
                 .padding(horizontal = 16.dp),
             verticalArrangement = Arrangement.spacedBy(8.dp)
         ) {
@@ -194,7 +225,8 @@ fun ProfilesScreen(
                 }
             }
         }
-    }
+        } // end Column
+    } // end Box
 }
 
 @Composable

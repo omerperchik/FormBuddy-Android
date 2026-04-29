@@ -104,6 +104,11 @@ fun FillingScreen(
         }
     ) { padding ->
         if (isProcessing) {
+            // iOS-style analyzing overlay with cycling document/chat preview.
+            com.formbuddy.android.ui.components.ios.AnalyzingDocumentOverlay(
+                isVisible = true,
+                onCancel = { navController.popBackStack() }
+            )
             Box(
                 modifier = Modifier
                     .fillMaxSize()

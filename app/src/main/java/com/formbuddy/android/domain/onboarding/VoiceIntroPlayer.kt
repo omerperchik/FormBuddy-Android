@@ -9,18 +9,18 @@ import javax.inject.Inject
 import javax.inject.Singleton
 
 /**
- * Plays the localized voice intro on the onboarding profile-setup page.
+ * Plays the localized voice intro for each profile field during onboarding.
  *
- * iOS ships pre-recorded `.m4a` files under
- * `Fillin/SupportingFiles/Onboarding/ProfileVoiceAssets/{locale}/`. The Android
- * codebase loads the same files from `assets/onboarding/voice/{locale}.m4a`
- * when present; if the locale isn't bundled (because the user hasn't dropped
- * the recordings in yet), we fall back to the system [TextToSpeech] engine
- * and read the localized [introText] string aloud.
+ * Reuses the **exact** mp3 assets shipped with the iOS app
+ * (`Fillin/SupportingFiles/Onboarding/ProfileVoiceAssets/{locale}/profile_onboarding_transcript_{field}_{lang}.mp3`).
+ * We copied them into `app/src/main/assets/onboarding/voice/{locale}/`
+ * unchanged so both platforms read from the same source-of-truth recordings.
  *
- * To bundle real voice files later: drop them in
- *   `app/src/main/assets/onboarding/voice/{en,he,es,...}.m4a`
- * — no other code changes required.
+ * Locale folder naming follows iOS (`pt_br`, `pt_pt`, `zh_hans`) — the
+ * [iosLocaleFolder] mapping converts an Android `Locale` to that name.
+ *
+ * On unsupported locales or missing assets we fall back to the system
+ * [TextToSpeech] engine so the screen still narrates something.
  */
 @Singleton
 class VoiceIntroPlayer @Inject constructor(
@@ -29,29 +29,51 @@ class VoiceIntroPlayer @Inject constructor(
     private var player: MediaPlayer? = null
     private var tts: TextToSpeech? = null
 
-    fun play(locale: Locale, introText: String) {
-        stop()
-        val assetPath = "onboarding/voice/${locale.language}.m4a"
-        val hasAsset = runCatching {
-            context.assets.openFd(assetPath).also { it.close() }
-            true
-        }.getOrDefault(false)
+    enum class Prompt(val key: String) {
+        Opening("opening_prompt"),
+        FirstName("first_name"),
+        MiddleName("middle_name"),
+        LastName("last_name"),
+        Email("email"),
+        Phone("phone"),
+        BirthDate("birth_date"),
+        HomeAddress("home_address"),
+        WorkAddress("work_address"),
+        City("city"),
+        State("state"),
+        Country("country"),
+        PostalCode("postal_code"),
+        Signature("signature"),
+        Closing("closing_prompt"),
+        NoMissingFields("no_missing_fields_prompt"),
+        RepeatUnclear("repeat_unclear_input"),
+        SkipUnclear("skipping_unclear_input")
+    }
 
-        if (hasAsset) {
+    /**
+     * Plays a [Prompt] in the [locale]. If the asset can't be loaded
+     * (locale not bundled, file missing), falls back to TTS reading
+     * [fallbackText] aloud.
+     */
+    fun play(prompt: Prompt, locale: Locale, fallbackText: String) {
+        stop()
+        val folder = iosLocaleFolder(locale)
+        val lang = iosLangCode(locale)
+        val assetPath = "onboarding/voice/$folder/profile_onboarding_transcript_${prompt.key}_$lang.mp3"
+
+        val opened = runCatching {
+            val afd = context.assets.openFd(assetPath)
             player = MediaPlayer().apply {
-                val afd = context.assets.openFd(assetPath)
                 setDataSource(afd.fileDescriptor, afd.startOffset, afd.length)
                 afd.close()
                 setOnPreparedListener { it.start() }
+                setOnCompletionListener { release(); player = null }
                 prepareAsync()
             }
-        } else {
-            tts = TextToSpeech(context) { status ->
-                if (status != TextToSpeech.SUCCESS) return@TextToSpeech
-                tts?.language = locale
-                tts?.speak(introText, TextToSpeech.QUEUE_FLUSH, null, INTRO_UTTERANCE)
-            }
-        }
+            true
+        }.getOrDefault(false)
+
+        if (!opened) playTtsFallback(locale, fallbackText)
     }
 
     fun stop() {
@@ -61,6 +83,46 @@ class VoiceIntroPlayer @Inject constructor(
         runCatching { tts?.stop() }
         runCatching { tts?.shutdown() }
         tts = null
+    }
+
+    private fun playTtsFallback(locale: Locale, text: String) {
+        tts = TextToSpeech(context) { status ->
+            if (status != TextToSpeech.SUCCESS) return@TextToSpeech
+            tts?.language = locale
+            tts?.speak(text, TextToSpeech.QUEUE_FLUSH, null, INTRO_UTTERANCE)
+        }
+    }
+
+    /** Maps `Locale` to the iOS folder name used inside the `assets/onboarding/voice/` tree. */
+    private fun iosLocaleFolder(locale: Locale): String = when (locale.language) {
+        "en" -> "en"
+        "he", "iw" -> "he" // iOS uses `he`; Android historically `iw`
+        "es" -> "es"
+        "fr" -> "fr"
+        "de" -> "de"
+        "ru" -> "ru"
+        "ja" -> "ja"
+        "ar" -> "ar"
+        "hi" -> "hi"
+        "pt" -> if (locale.country.equals("BR", ignoreCase = true)) "pt_br" else "pt_pt"
+        "zh" -> "zh_hans"
+        else -> "en" // fall through to English assets
+    }
+
+    /** Filename suffix per iOS naming convention. */
+    private fun iosLangCode(locale: Locale): String = when (locale.language) {
+        "en" -> "en"
+        "he", "iw" -> "he"
+        "es" -> "es"
+        "fr" -> "fr"
+        "de" -> "de"
+        "ru" -> "ru"
+        "ja" -> "ja"
+        "ar" -> "ar"
+        "hi" -> "hi"
+        "pt" -> if (locale.country.equals("BR", ignoreCase = true)) "pt_br" else "pt_pt"
+        "zh" -> "zh_hans"
+        else -> "en"
     }
 
     companion object {

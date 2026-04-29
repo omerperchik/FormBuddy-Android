@@ -3,26 +3,26 @@ package com.formbuddy.android.ui.navigation
 import android.net.Uri
 import androidx.compose.animation.AnimatedContentTransitionScope
 import androidx.compose.animation.core.tween
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Description
-import androidx.compose.material.icons.filled.People
+import androidx.compose.material.icons.filled.Person
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material.icons.outlined.Description
-import androidx.compose.material.icons.outlined.People
+import androidx.compose.material.icons.outlined.Person
 import androidx.compose.material.icons.outlined.Settings
-import androidx.compose.material3.Icon
-import androidx.compose.material3.NavigationBar
-import androidx.compose.material3.NavigationBarItem
-import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -35,7 +35,9 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.formbuddy.android.R
-import com.formbuddy.android.ui.components.ArcMenu
+import com.formbuddy.android.ui.components.ios.FillinActionMenu
+import com.formbuddy.android.ui.components.ios.FillinTab
+import com.formbuddy.android.ui.components.ios.FillinTabBar
 import com.formbuddy.android.ui.screens.docs.DocsScreen
 import com.formbuddy.android.ui.screens.filling.FillingScreen
 import com.formbuddy.android.ui.screens.filling.editor.EditorScreen
@@ -85,28 +87,26 @@ sealed class Screen(val route: String) {
     data object PrivacyAudit : Screen("privacy_audit")
 }
 
-data class BottomNavItem(
-    val screen: Screen,
-    val labelRes: Int,
-    val selectedIcon: ImageVector,
-    val unselectedIcon: ImageVector
-)
-
 @Composable
 fun FormBuddyNavHost(
     importUri: Uri? = null,
     importMimeType: String? = null
 ) {
     val navController = rememberNavController()
-    var showOnboarding by remember { mutableStateOf(false) }
+    var isMenuExpanded by remember { mutableStateOf(false) }
 
-    val bottomNavItems = remember {
+    val tabs = remember {
         listOf(
-            BottomNavItem(Screen.Docs, R.string.tab_docs, Icons.Filled.Description, Icons.Outlined.Description),
-            BottomNavItem(Screen.Profiles, R.string.tab_profiles, Icons.Filled.People, Icons.Outlined.People),
-            BottomNavItem(Screen.Settings, R.string.tab_settings, Icons.Filled.Settings, Icons.Outlined.Settings)
+            FillinTab("docs", "Docs", Icons.Filled.Description, Icons.Outlined.Description),
+            FillinTab("profiles", "Profiles", Icons.Filled.Person, Icons.Outlined.Person),
+            FillinTab("settings", "Settings", Icons.Filled.Settings, Icons.Outlined.Settings)
         )
     }
+    val tabRouteByKey = mapOf(
+        "docs" to Screen.Docs.route,
+        "profiles" to Screen.Profiles.route,
+        "settings" to Screen.Settings.route
+    )
 
     val navBackStackEntry by navController.currentBackStackEntryAsState()
     val currentRoute = navBackStackEntry?.destination?.route
@@ -120,50 +120,17 @@ fun FormBuddyNavHost(
         }
     }
 
-    Scaffold(
-        bottomBar = {
-            if (showBottomBar) {
-                NavigationBar {
-                    bottomNavItems.forEach { item ->
-                        val selected = currentRoute == item.screen.route
-                        NavigationBarItem(
-                            icon = {
-                                Icon(
-                                    if (selected) item.selectedIcon else item.unselectedIcon,
-                                    contentDescription = stringResource(item.labelRes)
-                                )
-                            },
-                            label = { Text(stringResource(item.labelRes)) },
-                            selected = selected,
-                            onClick = {
-                                navController.navigate(item.screen.route) {
-                                    popUpTo(navController.graph.findStartDestination().id) {
-                                        saveState = true
-                                    }
-                                    launchSingleTop = true
-                                    restoreState = true
-                                }
-                            }
-                        )
-                    }
-                }
-            }
-        },
-        floatingActionButton = {
-            if (showBottomBar) {
-                ArcMenu(
-                    onScanClick = { navController.navigate(Screen.Scanner.route) },
-                    onUploadClick = { /* Handled via activity result */ },
-                    onLibraryClick = { navController.navigate(Screen.FormsLibrary.route) },
-                    navController = navController
-                )
-            }
-        }
-    ) { innerPadding ->
+    val selectedKey = when (currentRoute) {
+        Screen.Profiles.route -> "profiles"
+        Screen.Settings.route -> "settings"
+        else -> "docs"
+    }
+
+    Box(modifier = Modifier.fillMaxSize().background(Color.Black)) {
         NavHost(
             navController = navController,
             startDestination = Screen.Docs.route,
-            modifier = Modifier.padding(innerPadding),
+            modifier = Modifier.fillMaxSize(),
             enterTransition = {
                 slideIntoContainer(AnimatedContentTransitionScope.SlideDirection.Left, tween(300))
             },
@@ -178,7 +145,10 @@ fun FormBuddyNavHost(
             }
         ) {
             composable(Screen.Docs.route) {
-                DocsScreen(navController = navController)
+                DocsScreen(
+                    navController = navController,
+                    onAddDocument = { isMenuExpanded = true }
+                )
             }
 
             composable(Screen.Profiles.route) {
@@ -272,6 +242,47 @@ fun FormBuddyNavHost(
             composable(Screen.PrivacyAudit.route) {
                 PrivacyAuditScreen(navController = navController)
             }
+        }
+
+        // Floating arc menu (Scan / Upload / Library) appears above the tab bar.
+        if (showBottomBar) {
+            FillinActionMenu(
+                visible = isMenuExpanded,
+                onScan = {
+                    isMenuExpanded = false
+                    navController.navigate(Screen.Scanner.route)
+                },
+                onUpload = {
+                    isMenuExpanded = false
+                    // Upload itself is delegated to host activity for content URI picking.
+                    navController.navigate(Screen.Filling.createRoute("upload"))
+                },
+                onLibrary = {
+                    isMenuExpanded = false
+                    navController.navigate(Screen.FormsLibrary.route)
+                },
+                modifier = Modifier.align(Alignment.BottomEnd)
+            )
+        }
+
+        // Floating capsule tab bar + standalone FAB (mirrors iOS ActionButtonTabBar).
+        if (showBottomBar) {
+            FillinTabBar(
+                tabs = tabs,
+                selectedKey = selectedKey,
+                isMenuExpanded = isMenuExpanded,
+                onTabSelected = { key ->
+                    isMenuExpanded = false
+                    val route = tabRouteByKey[key] ?: return@FillinTabBar
+                    navController.navigate(route) {
+                        popUpTo(navController.graph.findStartDestination().id) { saveState = true }
+                        launchSingleTop = true
+                        restoreState = true
+                    }
+                },
+                onFabTap = { isMenuExpanded = !isMenuExpanded },
+                modifier = Modifier.align(Alignment.BottomCenter)
+            )
         }
     }
 }
