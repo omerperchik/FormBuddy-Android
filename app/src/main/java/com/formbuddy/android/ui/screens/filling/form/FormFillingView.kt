@@ -1,5 +1,6 @@
 package com.formbuddy.android.ui.screens.filling.form
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -19,6 +20,7 @@ import androidx.compose.material.icons.filled.ArrowDropUp
 import androidx.compose.material.icons.filled.CheckBox
 import androidx.compose.material.icons.filled.CheckBoxOutlineBlank
 import androidx.compose.material.icons.filled.Close
+import androidx.compose.material.icons.filled.ContentPaste
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
@@ -27,6 +29,10 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -66,6 +72,16 @@ fun FormFillingView(
     onFieldSelected: (String) -> Unit = {},
     editorMode: Boolean = false
 ) {
+    // Read the system clipboard once when the view enters composition.
+    val context = androidx.compose.ui.platform.LocalContext.current
+    val clipboardText = remember { com.formbuddy.android.util.ClipboardSnapshot.read(context) }
+    val clipboardSuggestion: Pair<FormField, String>? = remember(clipboardText, template) {
+        if (clipboardText == null) null
+        else template.allFields.firstOrNull { f ->
+            f.isEmpty && com.formbuddy.android.util.ClipboardSnapshot.matches(clipboardText, f)
+        }?.let { it to clipboardText }
+    }
+    var dismissedClipboard by remember(clipboardText) { mutableStateOf(false) }
     if (template.allFields.isEmpty()) {
         Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
             Text(
@@ -81,6 +97,30 @@ fun FormFillingView(
         contentPadding = PaddingValues(16.dp),
         verticalArrangement = Arrangement.spacedBy(12.dp)
     ) {
+        // Clipboard fall-through — top-of-list chip when an address-/email-/
+        // phone-shaped snippet is on the clipboard and there's a matching empty
+        // field on the form. Tap to fill, X to dismiss.
+        clipboardSuggestion?.let { suggestion ->
+            val target = suggestion.first
+            val text = suggestion.second
+            if (!dismissedClipboard) {
+                item(key = "clipboard-chip") {
+                    ClipboardChip(
+                        snippet = text,
+                        targetLabel = target.label.ifBlank { target.fieldType.name },
+                        onUse = {
+                            target.userValue = text
+                            target.userInputMethod = UserInputMethod.ACCEPTED_SUGGESTION
+                            viewModel.notifyFieldChanged()
+                            viewModel.recordManualEdit(target, text)
+                            dismissedClipboard = true
+                        },
+                        onDismiss = { dismissedClipboard = true }
+                    )
+                }
+            }
+        }
+
         template.pages.forEach { page ->
             item(key = "page-${page.index}") {
                 Text(
@@ -154,13 +194,7 @@ private fun FieldRow(
                     style = MaterialTheme.typography.labelLarge,
                     color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
-                if (field.userInputMethod == UserInputMethod.PROFILE_AUTOFILL) {
-                    Text(
-                        text = " · auto-filled",
-                        style = MaterialTheme.typography.labelSmall,
-                        color = MaterialTheme.colorScheme.primary
-                    )
-                }
+                ProvenanceBadge(field.userInputMethod, field.userValue.isNullOrBlank())
                 if (editorMode) {
                     androidx.compose.foundation.layout.Spacer(Modifier.weight(1f))
                     IconButton(onClick = onMoveUp) {
@@ -227,6 +261,55 @@ private fun FieldRow(
     }
 }
 
+@Composable
+private fun ClipboardChip(
+    snippet: String,
+    targetLabel: String,
+    onUse: () -> Unit,
+    onDismiss: () -> Unit
+) {
+    val preview = if (snippet.length > 32) snippet.take(32) + "…" else snippet
+    androidx.compose.foundation.layout.Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .background(
+                Color(0xFF1183FE).copy(alpha = 0.16f),
+                androidx.compose.foundation.shape.RoundedCornerShape(12.dp)
+            )
+            .padding(12.dp),
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.spacedBy(8.dp)
+    ) {
+        Icon(
+            imageVector = androidx.compose.material.icons.Icons.Filled.ContentPaste,
+            contentDescription = null,
+            tint = Color(0xFF1183FE)
+        )
+        androidx.compose.foundation.layout.Column(modifier = Modifier.weight(1f)) {
+            Text(
+                text = "Paste \"$preview\" into $targetLabel?",
+                style = MaterialTheme.typography.bodyMedium,
+                color = Color(0xFFEBEBF5)
+            )
+            Text(
+                text = "From your clipboard",
+                style = MaterialTheme.typography.labelSmall,
+                color = Color(0xFF9C9CA1)
+            )
+        }
+        androidx.compose.material3.TextButton(onClick = onUse) {
+            Text("Use", color = Color(0xFF1183FE))
+        }
+        IconButton(onClick = onDismiss) {
+            Icon(
+                imageVector = androidx.compose.material.icons.Icons.Filled.Close,
+                contentDescription = "Dismiss",
+                tint = Color(0xFF9C9CA1)
+            )
+        }
+    }
+}
+
 private fun FieldType.color(): Color = when (this) {
     FieldType.TEXT -> TextFieldColor
     FieldType.NUMBER -> NumberFieldColor
@@ -236,4 +319,32 @@ private fun FieldType.color(): Color = when (this) {
     FieldType.DATE -> DateFieldColor
     FieldType.SIGNATURE -> SignatureFieldColor
     FieldType.ADDRESS -> AddressFieldColor
+}
+
+/**
+ * Diff'd-review chip — surfaces *where* a value came from so the user can
+ * scan the form by trust level instead of by field-by-field correctness:
+ *   - profile  → gray "Profile" pill (auto-filled from saved profile)
+ *   - voice    → blue "Voice" pill (filled by speaking)
+ *   - chat     → blue "Suggested" pill (accepted suggestion)
+ *   - manual   → no chip (user typed it themselves; the cleanest case)
+ *   - empty    → orange "Needs you" pill so empty required fields stick out
+ */
+@Composable
+private fun ProvenanceBadge(method: UserInputMethod?, isEmpty: Boolean) {
+    val (label, fg, bg) = when {
+        isEmpty && method == null -> Triple("Needs you", Color(0xFFFF9500), Color(0xFFFF9500).copy(alpha = 0.16f))
+        method == UserInputMethod.PROFILE_AUTOFILL -> Triple("Profile", Color(0xFF9C9CA1), Color(0xFF2C2C2E))
+        method == UserInputMethod.VOICE_FILLED -> Triple("Voice", Color(0xFF1183FE), Color(0xFF1183FE).copy(alpha = 0.16f))
+        method == UserInputMethod.ACCEPTED_SUGGESTION -> Triple("Suggested", Color(0xFF1183FE), Color(0xFF1183FE).copy(alpha = 0.16f))
+        else -> return // manual fill — no chip, "trustworthy by default"
+    }
+    androidx.compose.foundation.layout.Box(
+        modifier = Modifier
+            .padding(start = 6.dp)
+            .background(bg, androidx.compose.foundation.shape.RoundedCornerShape(6.dp))
+            .padding(horizontal = 6.dp, vertical = 1.dp)
+    ) {
+        Text(text = label, style = MaterialTheme.typography.labelSmall, color = fg)
+    }
 }

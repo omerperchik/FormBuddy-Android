@@ -90,7 +90,9 @@ sealed class Screen(val route: String) {
 @Composable
 fun FormBuddyNavHost(
     importUri: Uri? = null,
-    importMimeType: String? = null
+    importMimeType: String? = null,
+    deepLink: com.formbuddy.android.data.share.DeepLink.Parsed =
+        com.formbuddy.android.data.share.DeepLink.Parsed.None
 ) {
     val navController = rememberNavController()
     var isMenuExpanded by remember { mutableStateOf(false) }
@@ -113,6 +115,20 @@ fun FormBuddyNavHost(
 
     val bottomBarRoutes = remember { setOf(Screen.Docs.route, Screen.Profiles.route, Screen.Settings.route) }
     val showBottomBar = currentRoute in bottomBarRoutes
+
+    // Deep-link routing for AppLinks (referral / share-for-fill).
+    val deepLinkActions = androidx.hilt.navigation.compose.hiltViewModel<DeepLinkViewModel>()
+    LaunchedEffect(deepLink) {
+        when (deepLink) {
+            is com.formbuddy.android.data.share.DeepLink.Parsed.Referral ->
+                deepLinkActions.consumeReferral(deepLink.referrerId, deepLink.planCode)
+            is com.formbuddy.android.data.share.DeepLink.Parsed.ShareForFill ->
+                deepLinkActions.consumeShareForFill(deepLink.token) { uri ->
+                    navController.navigate(Screen.Filling.createRoute("share-fill", uri = uri))
+                }
+            com.formbuddy.android.data.share.DeepLink.Parsed.None -> Unit
+        }
+    }
 
     LaunchedEffect(importUri) {
         if (importUri != null) {

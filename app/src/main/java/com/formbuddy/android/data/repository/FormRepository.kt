@@ -94,6 +94,34 @@ class FormRepository @Inject constructor(
         formDao.deleteFormById(id)
     }
 
+    /**
+     * Duplicates a saved form for "fill the same one again" flow.
+     *
+     * Copies the original PDF bytes to a fresh encrypted file but **resets all
+     * field values** so the user starts from a clean slate. Tax docs, expense
+     * reports, recurring insurance forms — same template, new values.
+     *
+     * Returns the new form id, or null if the source is missing.
+     */
+    suspend fun duplicateForm(id: String): String? = withContext(Dispatchers.IO) {
+        val source = formDao.getFormById(id) ?: return@withContext null
+        val template = gson.fromJson(source.formTemplateJson, FormTemplate::class.java)
+        // Reset every field's user-entered value + provenance.
+        for (field in template.allFields) {
+            field.userValue = null
+            field.userInputMethod = null
+        }
+        template.documentName = "${template.documentName} (copy)"
+
+        val originalBytes = encryptionManager.readEncryptedFile(File(source.documentFilePath))
+            ?: return@withContext null
+        return@withContext saveForm(
+            formTemplate = template,
+            documentData = originalBytes,
+            existingId = null
+        )
+    }
+
     suspend fun getDocumentData(id: String): ByteArray? = withContext(Dispatchers.IO) {
         val entity = formDao.getFormById(id) ?: return@withContext null
         encryptionManager.readEncryptedFile(File(entity.documentFilePath))

@@ -70,22 +70,25 @@ class DocumentProcessingWorker @AssistedInject constructor(
         const val WORK_NAME_PREFIX = "doc-process-"
         private const val MAX_RETRIES = 3
 
-        fun enqueue(context: Context, uri: android.net.Uri, expedited: Boolean = false): String {
+        fun enqueue(context: Context, uri: android.net.Uri, expedited: Boolean = true): String {
             val name = WORK_NAME_PREFIX + uri.toString().hashCode()
+            // Any-network: most users open a form on cellular; only fail when offline.
             val constraints = Constraints.Builder()
-                .setRequiredNetworkType(NetworkType.UNMETERED) // prefer Wi-Fi for big PDFs
+                .setRequiredNetworkType(NetworkType.CONNECTED)
                 .build()
             val request = OneTimeWorkRequestBuilder<DocumentProcessingWorker>()
                 .setInputData(Data.Builder().putString(KEY_URI, uri.toString()).build())
                 .setConstraints(constraints)
-                .setBackoffCriteria(BackoffPolicy.EXPONENTIAL, 30, TimeUnit.SECONDS)
+                .setBackoffCriteria(BackoffPolicy.EXPONENTIAL, 15, TimeUnit.SECONDS)
                 .apply {
                     if (expedited) setExpedited(OutOfQuotaPolicy.RUN_AS_NON_EXPEDITED_WORK_REQUEST)
                 }
                 .build()
             WorkManager.getInstance(context).enqueueUniqueWork(
                 name,
-                ExistingWorkPolicy.KEEP,
+                // REPLACE so a re-open of the same URI always triggers a fresh run
+                // instead of returning the previous (possibly failed) result.
+                ExistingWorkPolicy.REPLACE,
                 request
             )
             return name

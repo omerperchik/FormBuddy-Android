@@ -23,6 +23,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.HelpOutline
 import androidx.compose.material.icons.filled.ChevronRight
 import androidx.compose.material.icons.filled.GraphicEq
+import androidx.compose.material.icons.filled.CardGiftcard
 import androidx.compose.material.icons.filled.Language
 import androidx.compose.material.icons.filled.PlayArrow
 import androidx.compose.material.icons.filled.Share
@@ -215,6 +216,18 @@ fun SettingsScreen(
                 )
                 FillinSeparator(inset = 52.dp)
                 SettingsRow(
+                    icon = Icons.Filled.CardGiftcard,
+                    title = "Invite a friend",
+                    subtitle = "Both get 30 days Pro free",
+                    onClick = {
+                        // Build the referral link from the user's UID, then
+                        // open the system share sheet so the user can fire it
+                        // off via WhatsApp / iMessage / email / Slack.
+                        viewModel.shareReferralLink(context)
+                    }
+                )
+                FillinSeparator(inset = 52.dp)
+                SettingsRow(
                     icon = Icons.Filled.Share,
                     title = "Share with friends",
                     onClick = {
@@ -368,6 +381,7 @@ private fun SettingsRow(
     icon: ImageVector,
     title: String,
     trailingText: String? = null,
+    subtitle: String? = null,
     onClick: () -> Unit
 ) {
     FillinPressContainer(
@@ -394,12 +408,20 @@ private fun SettingsRow(
                 )
             }
             Spacer(Modifier.width(FillinSpacing.padding12))
-            Text(
-                text = title,
-                color = Color.White,
-                style = MaterialTheme.typography.bodyLarge,
-                modifier = Modifier.weight(1f)
-            )
+            androidx.compose.foundation.layout.Column(modifier = Modifier.weight(1f)) {
+                Text(
+                    text = title,
+                    color = Color.White,
+                    style = MaterialTheme.typography.bodyLarge
+                )
+                if (subtitle != null) {
+                    Text(
+                        text = subtitle,
+                        color = Color(0xFF9C9CA1),
+                        style = MaterialTheme.typography.bodySmall
+                    )
+                }
+            }
             if (trailingText != null) {
                 Text(
                     text = trailingText,

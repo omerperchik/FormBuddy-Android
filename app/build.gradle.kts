@@ -5,6 +5,7 @@ plugins {
     alias(libs.plugins.hilt.android)
     alias(libs.plugins.ksp)
     alias(libs.plugins.google.services)
+    alias(libs.plugins.firebase.crashlytics)
 }
 
 android {
@@ -52,6 +53,39 @@ android {
         ?: System.getenv("GEMINI_API_KEY")
         ?: ""
 
+    // Release signing — env-driven so the keystore + passwords stay out of source.
+    // Set FORMBUDDY_KEYSTORE / FORMBUDDY_KEYSTORE_PASSWORD / FORMBUDDY_KEY_ALIAS
+    // / FORMBUDDY_KEY_PASSWORD (or matching gradle.properties) to enable signing.
+    // Without them, the release build is unsigned (debug keystore is still used
+    // when building locally for testing).
+    val keystoreFile = (project.findProperty("FORMBUDDY_KEYSTORE") as String?)
+        ?: System.getenv("FORMBUDDY_KEYSTORE")
+    val keystorePassword = (project.findProperty("FORMBUDDY_KEYSTORE_PASSWORD") as String?)
+        ?: System.getenv("FORMBUDDY_KEYSTORE_PASSWORD")
+    val keyAlias = (project.findProperty("FORMBUDDY_KEY_ALIAS") as String?)
+        ?: System.getenv("FORMBUDDY_KEY_ALIAS")
+    val keyPassword = (project.findProperty("FORMBUDDY_KEY_PASSWORD") as String?)
+        ?: System.getenv("FORMBUDDY_KEY_PASSWORD")
+
+    signingConfigs {
+        create("release") {
+            if (keystoreFile != null && keystorePassword != null && keyAlias != null && keyPassword != null) {
+                storeFile = file(keystoreFile)
+                storePassword = keystorePassword
+                this.keyAlias = keyAlias
+                this.keyPassword = keyPassword
+            }
+        }
+    }
+
+    // Bundle config: per-language + per-density + per-ABI splits so Play
+    // delivers the smallest possible APK to each device.
+    bundle {
+        language { enableSplit = true }
+        density  { enableSplit = true }
+        abi      { enableSplit = true }
+    }
+
     buildTypes {
         debug {
             // Faster debug builds
@@ -60,6 +94,10 @@ android {
             // Enable StrictMode in debug
             buildConfigField("boolean", "STRICT_MODE", "true")
             buildConfigField("String", "GEMINI_API_KEY", "\"${geminiKey}\"")
+            // Don't upload Crashlytics mappings on debug
+            configure<com.google.firebase.crashlytics.buildtools.gradle.CrashlyticsExtension> {
+                mappingFileUploadEnabled = false
+            }
         }
         release {
             isMinifyEnabled = true
@@ -70,23 +108,37 @@ android {
             )
             buildConfigField("boolean", "STRICT_MODE", "false")
             buildConfigField("String", "GEMINI_API_KEY", "\"${geminiKey}\"")
-
-            // Enable R8 full mode for maximum shrinking
-            packaging {
-                resources {
-                    excludes += setOf(
-                        "META-INF/LICENSE*",
-                        "META-INF/NOTICE*",
-                        "META-INF/DEPENDENCIES",
-                        "META-INF/*.kotlin_module",
-                        "META-INF/versions/**",
-                        "DebugProbesKt.bin",
-                        "kotlin-tooling-metadata.json",
-                        "**/*.proto",
-                        "**/*.properties"
-                    )
-                }
+            // Sign release builds when a keystore has been provided.
+            if (keystoreFile != null) {
+                signingConfig = signingConfigs.getByName("release")
             }
+
+        }
+    }
+
+    // Global Java-resource packaging rules. Drive + Auth deps ship duplicate
+    // META-INF entries; the AGP merger can't pick a winner without help.
+    packaging {
+        resources {
+            excludes += setOf(
+                "META-INF/INDEX.LIST",
+                "META-INF/DEPENDENCIES",
+                "META-INF/LICENSE*",
+                "META-INF/NOTICE*",
+                "META-INF/*.kotlin_module",
+                "META-INF/versions/**",
+                "META-INF/{AL2.0,LGPL2.1}",
+                "META-INF/io.netty.versions.properties",
+                "DebugProbesKt.bin",
+                "kotlin-tooling-metadata.json"
+            )
+            // Native-lib pickFirst so duplicated SQLCipher / mlkit libs don't fail packaging.
+            pickFirsts += setOf(
+                "lib/arm64-v8a/libsqlcipher.so",
+                "lib/armeabi-v7a/libsqlcipher.so",
+                "lib/x86_64/libsqlcipher.so",
+                "lib/x86/libsqlcipher.so"
+            )
         }
     }
 
@@ -181,12 +233,24 @@ dependencies {
     implementation(libs.firebase.storage)
     implementation(libs.firebase.functions)
     implementation(libs.firebase.config)
+    implementation(libs.firebase.analytics)
+    implementation(libs.firebase.crashlytics)
 
     // Billing
     implementation(libs.play.billing)
 
     // Generative AI (Gemini Nano)
     implementation(libs.generative.ai)
+    // On-device AICore SDK (real Gemini Nano on Pixel 8+/S24+).
+    implementation(libs.aicore)
+
+    // QR generation (share-out + referral).
+    implementation(libs.zxing.core)
+
+    // Drive auto-export (Pro tier).
+    implementation(libs.google.signin)
+    implementation(libs.google.api.client.android)
+    implementation(libs.google.drive.api)
 
     // Image loading
     implementation(libs.coil.compose)

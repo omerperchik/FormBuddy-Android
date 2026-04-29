@@ -30,13 +30,29 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.core.content.ContextCompat
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.runtime.LaunchedEffect
 import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.navigation.NavHostController
 import com.formbuddy.android.ui.components.ios.FillinPressContainer
 import com.formbuddy.android.ui.components.ios.FillinShapes
 import com.formbuddy.android.ui.components.ios.FillinSpacing
 import com.formbuddy.android.ui.navigation.Screen
+import com.google.mlkit.vision.documentscanner.GmsDocumentScannerOptions
+import com.google.mlkit.vision.documentscanner.GmsDocumentScanning
+import com.google.mlkit.vision.documentscanner.GmsDocumentScanningResult
 import java.io.File
+
+/** Walks ContextWrappers to find a real Activity. */
+private fun android.content.Context.findActivity(): android.app.Activity? {
+    var ctx: android.content.Context? = this
+    while (ctx is android.content.ContextWrapper) {
+        if (ctx is android.app.Activity) return ctx
+        ctx = ctx.baseContext
+    }
+    return null
+}
 
 /**
  * iOS-matching document scanner (IMG_9051).
@@ -58,6 +74,58 @@ fun ScannerScreen(
     val context = LocalContext.current
     val lifecycleOwner = LocalLifecycleOwner.current
     var imageCapture by remember { mutableStateOf<ImageCapture?>(null) }
+    var useFallback by remember { mutableStateOf(false) }
+
+    // Try the ML Kit document scanner first — it gives perspective-corrected
+    // PDFs out-of-the-box. If launching the intent fails (e.g. AOSP without
+    // GMS, China-region devices, or the dynamic module isn't available),
+    // we fall back to a CameraX-driven shutter UI.
+    val mlkitLauncher = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.StartIntentSenderForResult()
+    ) { result ->
+        val data = result.data
+        if (data != null) {
+            val scanResult = GmsDocumentScanningResult.fromActivityResultIntent(data)
+            val pdfUri = scanResult?.pdf?.uri
+            if (pdfUri != null) {
+                navController.navigate(Screen.Filling.createRoute("scan", uri = pdfUri.toString()))
+                return@rememberLauncherForActivityResult
+            }
+        }
+        // Cancelled or empty — fall through to CameraX fallback so the
+        // user isn't stuck in a loop.
+        useFallback = true
+    }
+
+    LaunchedEffect(Unit) {
+        if (useFallback) return@LaunchedEffect
+        val options = GmsDocumentScannerOptions.Builder()
+            .setGalleryImportAllowed(true)
+            .setPageLimit(20)
+            .setResultFormats(GmsDocumentScannerOptions.RESULT_FORMAT_PDF)
+            .setScannerMode(GmsDocumentScannerOptions.SCANNER_MODE_FULL)
+            .build()
+        val activity = context.findActivity()
+        if (activity == null) {
+            useFallback = true
+            return@LaunchedEffect
+        }
+        runCatching {
+            GmsDocumentScanning.getClient(options).getStartScanIntent(activity)
+                .addOnSuccessListener { intentSender ->
+                    mlkitLauncher.launch(
+                        androidx.activity.result.IntentSenderRequest.Builder(intentSender).build()
+                    )
+                }
+                .addOnFailureListener { useFallback = true }
+        }.onFailure { useFallback = true }
+    }
+
+    if (!useFallback) {
+        // Render an empty black screen while the ML Kit scanner is loading.
+        Box(modifier = Modifier.fillMaxSize().background(Color.Black))
+        return
+    }
 
     Box(modifier = Modifier.fillMaxSize().background(Color.Black)) {
         // Camera preview.

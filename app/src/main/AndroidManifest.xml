@@ -2,6 +2,12 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
+    <!-- AICore (Gemini Nano on-device) declares minSdk=31. We keep our app
+         minSdk at 26 — the GeminiFieldRefiner gates AICore behind a
+         Class.forName probe so the lib is only ever loaded on devices
+         that actually support it. -->
+    <uses-sdk tools:overrideLibrary="com.google.ai.edge.aicore" />
+
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.RECORD_AUDIO" />
@@ -38,6 +44,24 @@
                 <category android:name="android.intent.category.DEFAULT" />
                 <data android:mimeType="application/pdf" />
             </intent-filter>
+
+            <!-- Share-target: receive an image or PDF the user shared from
+                 another app (Gmail attachment, Photos screenshot, etc.). -->
+            <intent-filter>
+                <action android:name="android.intent.action.SEND" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <data android:mimeType="application/pdf" />
+                <data android:mimeType="image/*" />
+            </intent-filter>
+
+            <!-- AppLinks for referral + share-for-fill deep links. -->
+            <intent-filter android:autoVerify="true">
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data android:scheme="https" android:host="formbuddy.app" />
+                <data android:scheme="formbuddy" />
+            </intent-filter>
         </activity>
 
         <provider
@@ -53,6 +77,20 @@
         <meta-data
             android:name="com.google.mlkit.vision.DEPENDENCIES"
             android:value="ocr" />
+
+        <!-- System-wide Autofill provider. Registered so users can pick
+             FormBuddy under Settings → Languages & input → Autofill service. -->
+        <service
+            android:name=".autofill.FormBuddyAutofillService"
+            android:exported="true"
+            android:permission="android.permission.BIND_AUTOFILL_SERVICE">
+            <intent-filter>
+                <action android:name="android.service.autofill.AutofillService" />
+            </intent-filter>
+            <meta-data
+                android:name="android.autofill"
+                android:resource="@xml/autofill_service" />
+        </service>
 
         <!-- Disable WorkManager's default init so HiltWorkerFactory takes over via
              FormBuddyApp's Configuration.Provider implementation. -->

@@ -27,6 +27,12 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
+import androidx.compose.foundation.combinedClickable
+import androidx.compose.material.icons.filled.ContentCopy
+import androidx.compose.material.icons.filled.Delete
+import androidx.compose.material.icons.filled.Share
+import androidx.compose.material3.DropdownMenu
+import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -113,7 +119,30 @@ fun DocsScreen(
                     DocCard(
                         form = form,
                         onClick = { navController.navigate(Screen.Editor.createRoute(formId)) },
-                        onDelete = { viewModel.deleteForm(formId) }
+                        onDelete = { viewModel.deleteForm(formId) },
+                        onDuplicate = {
+                            viewModel.duplicateForm(formId) { newId ->
+                                if (newId != null) {
+                                    navController.navigate(Screen.Editor.createRoute(newId))
+                                }
+                            }
+                        },
+                        onShareForFill = {
+                            viewModel.shareForFill(formId) { url ->
+                                if (url != null) {
+                                    val intent = android.content.Intent(android.content.Intent.ACTION_SEND).apply {
+                                        type = "text/plain"
+                                        putExtra(
+                                            android.content.Intent.EXTRA_TEXT,
+                                            "Fill out '${form.documentName}' with FormBuddy: $url"
+                                        )
+                                    }
+                                    navController.context.startActivity(
+                                        android.content.Intent.createChooser(intent, null)
+                                    )
+                                }
+                            }
+                        }
                     )
                 }
             }
@@ -313,17 +342,24 @@ private fun StatTile(
     }
 }
 
+@OptIn(androidx.compose.foundation.ExperimentalFoundationApi::class)
 @Composable
 private fun DocCard(
     form: FormReferenceEntity,
     onClick: () -> Unit,
-    onDelete: () -> Unit
+    onDelete: () -> Unit,
+    onDuplicate: () -> Unit,
+    onShareForFill: () -> Unit
 ) {
     val dateFormat = remember { SimpleDateFormat("dd MMM yyyy", Locale.getDefault()) }
+    var showMenu by remember { mutableStateOf(false) }
     Column(
         modifier = Modifier
             .fillMaxWidth()
-            .clickable(onClick = onClick)
+            .combinedClickable(
+                onClick = onClick,
+                onLongClick = { showMenu = true }
+            )
             .clip(FillinShapes.default)
             .background(Color(0xFF1C1C1E))
             .padding(FillinSpacing.padding12)
@@ -370,5 +406,42 @@ private fun DocCard(
             style = MaterialTheme.typography.bodySmall,
             color = MaterialTheme.colorScheme.onSurfaceVariant
         )
+
+        // Long-press context menu — Duplicate / Delete.
+        DropdownMenu(
+            expanded = showMenu,
+            onDismissRequest = { showMenu = false }
+        ) {
+            DropdownMenuItem(
+                text = { Text("Fill again") },
+                onClick = {
+                    showMenu = false
+                    onDuplicate()
+                },
+                leadingIcon = {
+                    Icon(Icons.Filled.ContentCopy, contentDescription = null)
+                }
+            )
+            DropdownMenuItem(
+                text = { Text("Send to a friend to fill") },
+                onClick = {
+                    showMenu = false
+                    onShareForFill()
+                },
+                leadingIcon = {
+                    Icon(Icons.Filled.Share, contentDescription = null)
+                }
+            )
+            DropdownMenuItem(
+                text = { Text("Delete") },
+                onClick = {
+                    showMenu = false
+                    onDelete()
+                },
+                leadingIcon = {
+                    Icon(Icons.Filled.Delete, contentDescription = null)
+                }
+            )
+        }
     }
 }

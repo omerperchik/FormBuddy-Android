@@ -214,6 +214,25 @@ class FirebaseManager @Inject constructor(
         return docRef.id
     }
 
+    /**
+     * Looks up an instant-match template by PDF SHA-256.
+     *
+     * The ingestion pipeline writes `formTemplates/{sha256}` with a `templateJson`
+     * field whose value is the JSON-encoded [com.formbuddy.android.data.model.FormTemplate].
+     * Returns null if no match.
+     */
+    suspend fun fetchInstantMatch(sha256: String): String? {
+        ensureAuthenticated()
+        auditLog.log(
+            PrivacyAuditLog.Category.Cloud,
+            destination = "firestore:formTemplates/$sha256",
+            description = "Instant-match lookup"
+        )
+        val snap = firestore.collection("formTemplates").document(sha256).get().await()
+        if (!snap.exists()) return null
+        return snap.getString("templateJson")
+    }
+
     /** Downloads either a Storage `gs://`/firebasestorage URL or plain HTTPS. */
     suspend fun downloadDocument(url: String): ByteArray = downloadFromUrl(url)
 

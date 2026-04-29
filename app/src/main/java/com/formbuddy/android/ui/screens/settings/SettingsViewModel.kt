@@ -1,12 +1,16 @@
 package com.formbuddy.android.ui.screens.settings
 
 import android.content.Context
+import android.content.Intent
 import android.media.MediaPlayer
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.formbuddy.android.data.local.preferences.PreferencesManager
 import com.formbuddy.android.data.model.FormMode
 import com.formbuddy.android.data.remote.firebase.FirebaseManager
+import com.formbuddy.android.data.share.ReferralService
+import com.formbuddy.android.data.telemetry.Analytics
+import com.formbuddy.android.data.telemetry.Events
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.Dispatchers
@@ -26,6 +30,8 @@ import javax.inject.Inject
 class SettingsViewModel @Inject constructor(
     private val preferencesManager: PreferencesManager,
     private val firebaseManager: FirebaseManager,
+    private val referralService: ReferralService,
+    private val analytics: Analytics,
     @ApplicationContext private val context: Context
 ) : ViewModel() {
 
@@ -98,6 +104,24 @@ class SettingsViewModel @Inject constructor(
         runCatching { samplePlayer?.release() }
         samplePlayer = null
         _playingVoice.value = null
+    }
+
+    /** Builds a referral link from the current user UID and opens the share sheet. */
+    fun shareReferralLink(activityContext: Context) {
+        viewModelScope.launch {
+            val url = runCatching { referralService.buildInviteUrl() }.getOrNull() ?: return@launch
+            analytics.logEvent(Events.REFERRAL_INVITE_SENT)
+            val intent = Intent(Intent.ACTION_SEND).apply {
+                type = "text/plain"
+                putExtra(
+                    Intent.EXTRA_TEXT,
+                    "I've been using FormBuddy to fill paperwork in seconds. " +
+                        "Use my link and we both get 30 days Pro free: $url"
+                )
+                addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+            }
+            activityContext.startActivity(Intent.createChooser(intent, null))
+        }
     }
 
     override fun onCleared() {

@@ -3,7 +3,10 @@ package com.formbuddy.android.ui.screens.filling
 import android.content.Context
 import android.net.Uri
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.asFlow
 import androidx.lifecycle.viewModelScope
+import androidx.work.WorkInfo
+import androidx.work.WorkManager
 import com.formbuddy.android.data.local.preferences.PreferencesManager
 import com.formbuddy.android.data.metrics.TimeSavedTracker
 import com.formbuddy.android.data.model.ChatMessage
@@ -15,8 +18,12 @@ import com.formbuddy.android.data.model.Profile
 import com.formbuddy.android.data.model.UserInputMethod
 import com.formbuddy.android.data.privacy.PrivacyAuditLog
 import com.formbuddy.android.data.repository.FormRepository
+import com.formbuddy.android.data.repository.InstantMatchRepository
 import com.formbuddy.android.data.repository.ProfileRepository
 import com.formbuddy.android.data.review.InAppReviewManager
+import com.formbuddy.android.data.telemetry.Analytics
+import com.formbuddy.android.data.telemetry.Events
+import com.formbuddy.android.data.work.DocumentProcessingWorker
 import com.formbuddy.android.domain.analysis.FormAnalyzer
 import com.formbuddy.android.domain.filling.ConversationManager
 import com.formbuddy.android.domain.filling.ResponseClassifier
@@ -52,6 +59,11 @@ class FillingViewModel @Inject constructor(
     private val profileLearner: ProfileLearner,
     private val auditLog: PrivacyAuditLog,
     private val inAppReviewManager: InAppReviewManager,
+    private val instantMatchRepository: InstantMatchRepository,
+    private val analytics: Analytics,
+    private val driveExportService: com.formbuddy.android.data.drive.DriveExportService,
+    private val pdfExporter: com.formbuddy.android.domain.analysis.PdfExporter,
+    private val billingManager: com.formbuddy.android.data.billing.BillingManager,
     private val context: Context
 ) : ViewModel() {
 
@@ -127,30 +139,82 @@ class FillingViewModel @Inject constructor(
         _isProcessing.value = true
         _uiState.value = FillingUiState.Processing
 
-        try {
-            val uri = Uri.parse(uriString)
-            val data = context.contentResolver.openInputStream(uri)?.readBytes()
-                ?: throw Exception("Cannot read document")
-            documentData = data
+        // 1. Try the SHA-of-PDF instant-match first — popular forms get a
+        //    sub-second fill instead of running the full pipeline.
+        val uri = Uri.parse(uriString)
+        val rawBytes = try {
+            context.contentResolver.openInputStream(uri)?.readBytes()
+        } catch (_: Throwable) { null }
 
-            val template = formAnalyzer.analyzeDocument(data)
-            _formTemplate.value = template
-            initChatSession(template)
-
-            // Camera-to-filled one-shot: if the user has a profile and the setting
-            // is on, fill from profile before they see anything. They land on the
-            // Document tab to *review* rather than the Chat tab to *fill*.
-            val oneShot = preferencesManager.oneShotEnabled.first()
-            if (oneShot && _currentProfile.value != null) {
-                runAgentSilently(template)
+        if (rawBytes != null) {
+            documentData = rawBytes
+            val instant = runCatching {
+                instantMatchRepository.findByPdfBytes(rawBytes)
+            }.getOrNull()
+            if (instant != null) {
+                _formTemplate.value = instant
+                initChatSession(instant)
+                postProcessTemplate(instant)
+                _uiState.value = FillingUiState.Ready
+                _isProcessing.value = false
+                analytics.logEvent(
+                    Events.ANALYSIS_INSTANT_MATCH,
+                    mapOf("pages" to instant.pages.size, "fields" to instant.allFields.size)
+                )
+                return
             }
-
-            _uiState.value = FillingUiState.Ready
-        } catch (e: Exception) {
-            _uiState.value = FillingUiState.Error(e.message ?: "Analysis failed")
         }
 
-        _isProcessing.value = false
+        // 2. Otherwise enqueue the WorkManager job — it survives
+        //    backgrounding, has automatic retries, and writes the
+        //    finished form straight into the encrypted Room DB. The
+        //    screen observes its WorkInfo state machine.
+        val workName = DocumentProcessingWorker.enqueue(context, uri, expedited = true)
+        analytics.logEvent(Events.ANALYSIS_STARTED, mapOf("source" to "uri"))
+
+        viewModelScope.launch {
+            WorkManager.getInstance(context)
+                .getWorkInfosForUniqueWorkLiveData(workName)
+                .asFlow()
+                .collect { infos ->
+                    val info = infos.firstOrNull() ?: return@collect
+                    when (info.state) {
+                        WorkInfo.State.SUCCEEDED -> {
+                            val newId = info.outputData.getString(DocumentProcessingWorker.KEY_FORM_ID)
+                            if (newId != null) {
+                                existingFormId = newId
+                                loadExistingForm(newId)
+                                postProcessTemplate(_formTemplate.value)
+                                analytics.logEvent(
+                                    Events.ANALYSIS_COMPLETED,
+                                    mapOf(
+                                        "form_id" to newId,
+                                        "fields" to (_formTemplate.value?.allFields?.size ?: 0)
+                                    )
+                                )
+                            } else {
+                                _uiState.value = FillingUiState.Error("Worker returned no formId")
+                            }
+                            _isProcessing.value = false
+                        }
+                        WorkInfo.State.FAILED -> {
+                            _uiState.value = FillingUiState.Error("Document analysis failed")
+                            analytics.logEvent("analysis_failed")
+                            _isProcessing.value = false
+                        }
+                        else -> Unit
+                    }
+                }
+        }
+    }
+
+    /** Runs after the template is loaded to apply one-shot autofill. */
+    private suspend fun postProcessTemplate(template: FormTemplate?) {
+        if (template == null) return
+        val oneShot = preferencesManager.oneShotEnabled.first()
+        if (oneShot && _currentProfile.value != null) {
+            runAgentSilently(template)
+        }
     }
 
     private suspend fun runAgentSilently(template: FormTemplate) {
@@ -393,6 +457,29 @@ class FillingViewModel @Inject constructor(
             if (existingFormId == null) {
                 _showCelebration.value = true
             }
+
+            // Pro: auto-export the rendered, filled PDF to the user's Drive
+            // so they don't have to share-to-Drive every time.
+            if (billingManager.isPro.value) {
+                runCatching {
+                    val filledPdf = pdfExporter.exportFilledPdf(data, template)
+                    val uploadId = driveExportService.exportPdfIfEnabled(
+                        pdfBytes = filledPdf.readBytes(),
+                        displayName = template.documentName.ifBlank { "Form $id" }
+                    )
+                    if (uploadId != null) {
+                        analytics.logEvent(
+                            Events.FORM_EXPORTED_TO_DRIVE,
+                            mapOf("form_id" to id, "drive_id" to uploadId)
+                        )
+                    }
+                }
+            }
+
+            analytics.logEvent(
+                Events.FORM_SAVED,
+                mapOf("form_id" to id, "filled_fields" to filled, "is_first_save" to (existingFormId == null))
+            )
 
             onSaved(id)
         }
